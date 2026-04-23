@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Viajero del Tiempo — Lecturas del Destino</title>
+<meta name="description" content="Lecturas del destino. Claridad sobre tu pasado, presente y futuro.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#C9A84C;--gold-light:#E8C97A;--deep:#0A0612;--surface:#130D2A;--surface2:#1C1438;--text:#F0EAD6;--text-muted:#A89CC0;--border:rgba(201,168,76,0.25);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 4rem;background:rgba(10,6,18,0.88);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;}
+  .nav-links{display:flex;gap:2.5rem;}
+  .nav-links a{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.3s;}
+  .nav-links a:hover{color:var(--gold);}
+  .nav-lang{display:flex;gap:0.5rem;}
+  .lang-btn{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);background:none;border:0.5px solid var(--border);padding:0.3rem 0.7rem;cursor:pointer;transition:all 0.3s;font-family:'Montserrat',sans-serif;}
+  .lang-btn.active,.lang-btn:hover{color:var(--gold);border-color:var(--gold);}
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden;}
+  .hero-img{position:absolute;inset:0;background-image:url('viajero_logo.jpg');background-size:cover;background-position:center;filter:brightness(0.35) saturate(0.8);}
+  .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(74,45,156,0.5) 0%,transparent 70%),linear-gradient(to bottom,rgba(10,6,18,0.2) 0%,rgba(10,6,18,0.7) 100%);}
+  .hero-content{position:relative;z-index:2;}
+  .hero-ornament{width:1px;height:80px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);margin:0 auto 2.5rem;}
+  .hero-subtitle{font-size:0.65rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,6rem);font-weight:300;line-height:1.05;margin-bottom:1rem;}
+  .hero-title em{font-style:italic;color:var(--gold-light);}
+  .hero-tagline{font-size:0.8rem;letter-spacing:0.15em;color:var(--text-muted);margin-bottom:3rem;max-width:480px;}
+  .hero-cta{display:inline-block;padding:1rem 3rem;border:1px solid var(--gold);color:var(--gold);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;background:none;font-family:'Montserrat',sans-serif;font-weight:400;transition:all 0.4s;position:relative;overflow:hidden;}
+  .hero-cta::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;z-index:0;}
+  .hero-cta:hover{color:var(--deep);}
+  .hero-cta:hover::before{transform:scaleX(1);}
+  .hero-cta span{position:relative;z-index:1;}
+  .divider{display:flex;align-items:center;gap:1.5rem;padding:0 4rem;margin:0 auto;max-width:900px;}
+  .divider-line{flex:1;height:0.5px;background:var(--border);}
+  .divider-diamond{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);}
+  section{padding:6rem 2rem;}
+  .section-inner{max-width:900px;margin:0 auto;}
+  .section-label{font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;line-height:1.1;margin-bottom:1.5rem;}
+  .section-body{font-size:0.85rem;line-height:1.9;color:var(--text-muted);max-width:580px;}
+  .sobre-mi{background:var(--surface);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
+  .sobre-mi .section-body{max-width:700px;font-style:italic;font-size:0.9rem;line-height:2;}
+  .currency-bar{display:flex;align-items:center;gap:0.5rem;margin-top:2.5rem;flex-wrap:wrap;}
+  .currency-label{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-right:0.5rem;}
+  .currency-btn{font-size:0.65rem;letter-spacing:0.08em;padding:0.4rem 0.9rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);cursor:pointer;transition:all 0.25s;font-family:'Montserrat',sans-serif;}
+  .currency-btn.active{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,0.08);}
+  .instant-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:0.5px solid var(--border);margin-top:2rem;}
+  .instant-card{background:var(--surface2);padding:2rem 1.5rem;position:relative;transition:background 0.3s;cursor:pointer;text-align:center;}
+  .instant-card:hover{background:#221844;}
+  .instant-icon{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);margin-bottom:1rem;font-style:italic;}
+  .instant-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:0.5rem;}
+  .instant-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem;}
+  .instant-price{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--gold-light);}
+  .instant-badge{display:inline-block;font-size:0.6rem;letter-spacing:0.1em;padding:0.2rem 0.8rem;border:0.5px solid var(--gold);color:var(--gold);margin-bottom:1rem;text-transform:uppercase;}
+  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--border);border:0.5px solid var(--border);margin-top:2rem;}
+  .service-card{background:var(--surface);padding:2.5rem 2rem;position:relative;transition:background 0.3s;cursor:pointer;}
+  .service-card:hover{background:var(--surface2);}
+  .service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.3s;}
+  .service-card:hover::before{opacity:1;}
+  .service-num{font-family:'Cormorant Garamond',serif;font-size:0.75rem;color:var(--gold);letter-spacing:0.2em;margin-bottom:1.5rem;}
+  .service-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:0.5rem;line-height:1.2;}
+  .service-desc{font-size:0.75rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.5rem;}
+  .service-price strong{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;display:block;color:var(--gold-light);}
+  .process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:3rem;margin-top:4rem;}
+  .process-step{text-align:center;}
+  .step-circle{width:56px;height:56px;border-radius:50%;border:0.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);}
+  .step-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:0.5rem;}
+  .step-desc{font-size:0.75rem;color:var(--text-muted);line-height:1.7;}
+  .payment-section{background:var(--surface);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
+  .payment-methods{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem;}
+  .payment-badge{padding:0.6rem 1.5rem;border:0.5px solid var(--border);font-size:0.7rem;letter-spacing:0.1em;color:var(--text-muted);display:flex;align-items:center;gap:0.5rem;}
+  .payment-badge span{color:var(--gold);}
+  .cta-section{text-align:center;background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(74,45,156,0.25) 0%,transparent 70%);}
+  .cta-ornament{font-family:'Cormorant Garamond',serif;font-size:4rem;color:rgba(201,168,76,0.15);margin-bottom:1rem;display:block;font-style:italic;}
+  .cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;margin-bottom:1.5rem;}
+  .cta-body{font-size:0.8rem;color:var(--text-muted);margin-bottom:3rem;}
+  .booking-form{max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:1rem;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .form-field{display:flex;flex-direction:column;gap:0.4rem;}
+  .form-label{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);}
+  .form-input,.form-select{background:var(--surface);border:0.5px solid var(--border);color:var(--text);padding:0.8rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:300;outline:none;transition:border-color 0.3s;appearance:none;width:100%;}
+  .form-input:focus,.form-select:focus{border-color:var(--gold);}
+  .form-select option{background:var(--surface);}
+  .extra-fields{display:flex;flex-direction:column;gap:1rem;}
+  .submit-btn{padding:1rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.4s;position:relative;overflow:hidden;margin-top:0.5rem;}
+  .submit-btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;z-index:0;}
+  .submit-btn:hover{color:var(--deep);}
+  .submit-btn:hover::before{transform:scaleX(1);}
+  .submit-btn span{position:relative;z-index:1;}
+  footer{padding:3rem 4rem;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+  .footer-logo{font-family:'Cormorant Garamond',serif;font-size:0.9rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;}
+  .footer-copy{font-size:0.65rem;color:var(--text-muted);}
+  @media(max-width:768px){nav{padding:1rem 1.5rem;}.nav-links{display:none;}.form-row{grid-template-columns:1fr;}footer{padding:2rem 1.5rem;flex-direction:column;text-align:center;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">El Viajero del Tiempo</div>
+  <div class="nav-links">
+    <a href="#instantaneas" id="nav-instant">Lecturas</a>
+    <a href="#servicios" id="nav-services">Servicios</a>
+    <a href="#consulta" id="nav-booking">Reservar</a>
+  </div>
+  <div class="nav-lang">
+    <button class="lang-btn active" onclick="setLang('es')">ES</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-ornament"></div>
+    <p class="hero-subtitle" id="hero-sub">Lecturas del Destino</p>
+    <h1 class="hero-title">El Viajero<br><em>del Tiempo</em></h1>
+    <p class="hero-tagline" id="hero-tag">Claridad sobre tu pasado, presente y futuro a través de la sabiduría de las cartas.</p>
+    <button class="hero-cta" onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})"><span id="hero-btn">Reservar consulta</span></button>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+<section class="sobre-mi">
+  <div class="section-inner">
+    <span class="section-label" id="sm-label">Sobre el Viajero</span>
+    <p class="section-body" id="sm-body">Desde pequeño tengo el don de viajar en el tiempo. Mis especialidades son la psicología, la antropología y la mercadología — tres caminos que convergen en uno solo: entender al ser humano en su totalidad. Creo en la meritocracia. Lo que no se valora, no transforma. Por eso cada consulta es una donación consciente — y cada donación va destinada íntegramente a familias refugiadas de guerra. Mi misión es simple: ayudarte a ver lo que el tiempo ya sabe.</p>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+<section id="instantaneas">
+  <div class="section-inner">
+    <span class="section-label" id="i-label">Lecturas Instantáneas</span>
+    <h2 class="section-title" id="i-title">Respuestas al instante</h2>
+    <p class="section-body" id="i-body">Pagás y recibís tu lectura de forma inmediata. Sin esperas.</p>
+    <div class="currency-bar">
+      <span class="currency-label" id="curr-label">Ver precios en:</span>
+      <button class="currency-btn active" onclick="setCurrency('USD')">USD $</button>
+      <button class="currency-btn" onclick="setCurrency('ARS')">ARS $</button>
+      <button class="currency-btn" onclick="setCurrency('COP')">COP $</button>
+      <button class="currency-btn" onclick="setCurrency('MXN')">MXN $</button>
+      <button class="currency-btn" onclick="setCurrency('EUR')">EUR €</button>
+    </div>
+    <div class="instant-grid" id="instant-grid"></div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+<section id="servicios">
+  <div class="section-inner">
+    <span class="section-label" id="s-label">Servicios</span>
+    <h2 class="section-title" id="s-title">Lo que el tiempo<br>puede revelarte</h2>
+    <p class="section-body" id="s-body">Cada lectura es un viaje único. Seleccioná la consulta que resuene con lo que necesitás saber.</p>
+    <div class="services-grid" id="services-grid"></div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+<section id="proceso">
+  <div class="section-inner">
+    <span class="section-label" id="p-label">El proceso</span>
+    <h2 class="section-title" id="p-title">Cómo funciona</h2>
+    <div class="process-steps" id="process-steps"></div>
+  </div>
+</section>
+
+<section class="payment-section">
+  <div class="section-inner">
+    <span class="section-label" id="pay-label">Formas de pago</span>
+    <h2 class="section-title" style="font-size:1.8rem;" id="pay-title">Pagos seguros,<br>a tu medida</h2>
+    <div class="payment-methods">
+      <div class="payment-badge"><span>●</span> PayPal — USD</div>
+      <div class="payment-badge"><span>●</span> Criptomonedas — USD</div>
+      <div class="payment-badge"><span>●</span> Naranja X — ARS</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="consulta">
+  <div class="section-inner">
+    <span class="cta-ornament">✦</span>
+    <h2 class="cta-title" id="cta-title">Comenzá tu lectura</h2>
+    <p class="cta-body" id="cta-body">Completá el formulario y me pondré en contacto para coordinar tu consulta.</p>
+    <form class="booking-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label" id="fl-name">Nombre completo</label>
+          <input class="form-input" type="text" placeholder="Tu nombre completo" required>
+        </div>
+        <div class="form-field">
+          <label class="form-label" id="fl-dob">Fecha de nacimiento</label>
+          <input class="form-input" type="date" required>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" id="fl-email">Email</label>
+        <input class="form-input" type="email" placeholder="tu@email.com" required>
+      </div>
+      <div class="form-field">
+        <label class="form-label" id="fl-service">Servicio</label>
+        <select class="form-select" id="f-service" onchange="showExtraFields()" required><option value="">— Seleccioná —</option></select>
+      </div>
+      <div class="extra-fields" id="extra-fields"></div>
+      <div class="form-field">
+        <label class="form-label" id="fl-payment">Método de pago</label>
+        <select class="form-select" required>
+          <option value="">— Seleccioná —</option>
+          <option value="paypal">PayPal (USD)</option>
+          <option value="crypto">Criptomonedas (USD)</option>
+          <option value="naranjax">Naranja X (ARS)</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="form-label" id="fl-msg">Consulta (opcional)</label>
+        <input class="form-input" type="text" placeholder="¿Qué querés explorar?">
+      </div>
+      <button type="submit" class="submit-btn"><span id="btn-submit">Enviar solicitud</span></button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">El Viajero del Tiempo</div>
+  <div class="footer-copy">© 2025 El Viajero del Tiempo · el.viajero.del.tiempook@gmail.com</div>
+</footer>
+
+<script>
+const rates={USD:1,ARS:1420,COP:3600,MXN:17.35,EUR:0.92};
+const symbols={USD:'U$S',ARS:'$',COP:'$',MXN:'$',EUR:'€'};
+let cur='USD',lang='es';
+function fmt(usd,c){const v=usd*rates[c];if(c==='USD'||c==='EUR')return symbols[c]+' '+Math.round(v);return symbols[c]+' '+Math.round(v).toLocaleString('es-AR');}
+const iP=[15,25,35];
+const sP=[5,15,55,35,40,40,45,50,12,12,7,12];
+const content={
+  es:{
+    heroSub:"Lecturas del Destino",heroTag:"Claridad sobre tu pasado, presente y futuro a través de la sabiduría de las cartas.",heroBtn:"Reservar consulta",
+    navInstant:"Lecturas",navServices:"Servicios",navBooking:"Reservar",
+    smLabel:"Sobre el Viajero",smBody:"Desde pequeño tengo el don de viajar en el tiempo. Mis especialidades son la psicología, la antropología y la mercadología — tres caminos que convergen en uno solo: entender al ser humano en su totalidad. Creo en la meritocracia. Lo que no se valora, no transforma. Por eso cada consulta es una donación consciente — y cada donación va destinada íntegramente a familias refugiadas de guerra. Mi misión es simple: ayudarte a ver lo que el tiempo ya sabe.",
+    iLabel:"Lecturas Instantáneas",iTitle:"Respuestas al instante",iBody:"Pagás y recibís tu lectura de forma inmediata. Sin esperas.",
+    sLabel:"Servicios",sTitle:"Lo que el tiempo<br>puede revelarte",sBody:"Cada lectura es un viaje único. Seleccioná la consulta que resuene con lo que necesitás saber.",
+    pLabel:"El proceso",pTitle:"Cómo funciona",
+    payLabel:"Formas de pago",payTitle:"Pagos seguros,<br>a tu medida",
+    ctaTitle:"Comenzá tu lectura",ctaBody:"Completá el formulario y me pondré en contacto para coordinar tu consulta.",
+    flName:"Nombre completo",flDob:"Fecha de nacimiento",flEmail:"Email",flService:"Servicio",flPayment:"Método de pago",flMsg:"Consulta (opcional)",btnSubmit:"Enviar solicitud",currLabel:"Ver precios en:",
+    instant:[
+      {icon:"✦",name:"Tirada de Cartas",desc:"Lectura inmediata generada con IA. Recibís tu tirada al instante.",badge:"INSTANTÁNEO"},
+      {icon:"ᚱ",name:"Tirada de Runas",desc:"El antiguo oráculo nórdico responde tus preguntas más urgentes.",badge:"INSTANTÁNEO"},
+      {icon:"✦ᚱ",name:"Combo Cartas + Runas",desc:"La lectura completa. Cartas y Runas juntas para máxima claridad.",badge:"AHORRÁS U$S 5"},
+    ],
+    services:[
+      {num:"01",name:"3 Preguntas",desc:"Respuestas directas de sí o no a tus tres preguntas más urgentes.",extra:null},
+      {num:"02",name:"Consulta Extendida (escrita)",desc:"Lectura profunda por mensaje. Sin horario fijo, recibís tu respuesta completa.",extra:null},
+      {num:"03",name:"Consulta Extendida (llamada)",desc:"Sesión en vivo por llamada telefónica. Previa cita coordinada por email.",extra:null},
+      {num:"04",name:"Mejorar Economía Personal",desc:"Apartá tu consulta y recibirás las indicaciones precisas que las cartas revelan. En 21 a 70 días comenzarás a ver los cambios que tanto necesitás.",extra:null},
+      {num:"05",name:"Regreso de Pareja",desc:"Una vez tomada la consulta, recibirás una guía exacta según lo que el tiempo revela. En 21 a 70 días comenzarás a ver los cambios que tanto esperabas.",extra:"pareja"},
+      {num:"06",name:"Encontrar el Amor",desc:"Las cartas revelan el camino hacia el amor que buscás. En 21 a 70 días comenzarás a ver los cambios.",extra:null},
+      {num:"07",name:"Temas Judiciales",desc:"Completá tus datos y aboná. En menos de 2 horas recibís tu lectura completa con guía precisa. Resultados esperados en 40 a 120 días.",extra:null},
+      {num:"08",name:"Fertilidad & Nuevo Comienzo",desc:"Las cartas revelan los bloqueos que impiden la llegada de una nueva vida. Recibirás una guía personalizada de rituales, hábitos y alineación astral. Resultados en 21 a 70 días.",extra:"pareja"},
+      {num:"09",name:"Bendición y Protección para el Camino",desc:"Para quienes emprenden un nuevo camino. Recibís una lectura de protección y bendición para que el tiempo y las cartas iluminen tu travesía.",extra:null},
+      {num:"10",name:"Limpieza Astral y de Aura",desc:"Liberá las energías que te frenan. Lectura personalizada entregada en menos de 2 horas.",extra:null},
+      {num:"11",name:"Carta Natal Básica",desc:"Sol, Luna y Ascendente. Tu personalidad, emociones y cómo te ven los demás.",extra:"natal"},
+      {num:"12",name:"Carta Natal Extendida",desc:"Mapa completo: 10 planetas, casas astrológicas, aspectos y análisis de propósito de vida, relaciones, dinero y salud.",extra:"natal"},
+    ],
+    steps:[
+      {n:"I",title:"Elegís tu consulta",desc:"Seleccionás el tipo de lectura y el método de pago."},
+      {n:"II",title:"Completás tus datos",desc:"Llenás el formulario con tu información personal."},
+      {n:"III",title:"Confirmamos el turno",desc:"Me comunico por email para coordinar fecha y hora."},
+      {n:"IV",title:"La lectura",desc:"Realizamos la consulta. Recibís tu lectura completa."},
+    ],
+  },
+  en:{
+    heroSub:"Readings of Destiny",heroTag:"Clarity about your past, present and future through the wisdom of the cards.",heroBtn:"Book a consultation",
+    navInstant:"Readings",navServices:"Services",navBooking:"Book",
+    smLabel:"About the Traveler",smBody:"Since childhood I have had the gift of traveling through time. My specialties are psychology, anthropology and marketing — three paths that converge into one: understanding the human being in its entirety. I believe in meritocracy. What is not valued, does not transform. That is why each consultation is a conscious donation — and every donation goes entirely to families who are war refugees. My mission is simple: to help you see what time already knows.",
+    iLabel:"Instant Readings",iTitle:"Answers instantly",iBody:"Pay and receive your reading immediately. No waiting.",
+    sLabel:"Services",sTitle:"What time<br>can reveal to you",sBody:"Each reading is a unique journey. Select the consultation that resonates with what you need to know.",
+    pLabel:"The process",pTitle:"How it works",
+    payLabel:"Payment methods",payTitle:"Secure payments,<br>your way",
+    ctaTitle:"Begin your reading",ctaBody:"Fill out the form and I will contact you to coordinate your consultation.",
+    flName:"Full name",flDob:"Date of birth",flEmail:"Email",flService:"Service",flPayment:"Payment method",flMsg:"Question (optional)",btnSubmit:"Send request",currLabel:"View prices in:",
+    instant:[
+      {icon:"✦",name:"Tarot Card Reading",desc:"Instant AI-generated reading. Receive your tarot spread immediately.",badge:"INSTANT"},
+      {icon:"ᚱ",name:"Rune Reading",desc:"The ancient Nordic oracle answers your most urgent questions.",badge:"INSTANT"},
+      {icon:"✦ᚱ",name:"Cards + Runes Combo",desc:"The complete reading. Cards and Runes together for maximum clarity.",badge:"SAVE U$S 5"},
+    ],
+    services:[
+      {num:"01",name:"3 Questions",desc:"Direct yes or no answers to your three most pressing questions.",extra:null},
+      {num:"02",name:"Extended Consultation (written)",desc:"Deep reading by message. No fixed schedule — you receive your full response.",extra:null},
+      {num:"03",name:"Extended Consultation (call)",desc:"Live session by phone call. Appointment coordinated by email.",extra:null},
+      {num:"04",name:"Improve Personal Economy",desc:"Book your consultation and receive precise guidance from what the cards reveal. In 21 to 70 days you will begin to see the changes you need.",extra:null},
+      {num:"05",name:"Return of a Partner",desc:"Once the consultation is taken, you will receive exact guidance from what time reveals. In 21 to 70 days you will begin to see the changes you were waiting for.",extra:"pareja"},
+      {num:"06",name:"Find Love",desc:"The cards reveal the path to the love you seek. In 21 to 70 days you will begin to see the changes.",extra:null},
+      {num:"07",name:"Legal Matters",desc:"Complete your details and pay. In less than 2 hours you receive your full reading with precise guidance. Expected results in 40 to 120 days.",extra:null},
+      {num:"08",name:"Fertility & New Beginning",desc:"The cards reveal the blockages preventing the arrival of new life. Personalized guidance on rituals, habits and astral alignment. Results in 21 to 70 days.",extra:"pareja"},
+      {num:"09",name:"Blessing & Protection for the Journey",desc:"For those embarking on a new path. Receive a protection and blessing reading so time and cards illuminate your journey.",extra:null},
+      {num:"10",name:"Astral & Aura Cleansing",desc:"Release the energies holding you back. Personalized reading delivered in less than 2 hours.",extra:null},
+      {num:"11",name:"Basic Birth Chart",desc:"Sun, Moon and Ascendant. Your personality, emotions and how others see you.",extra:"natal"},
+      {num:"12",name:"Extended Birth Chart",desc:"Complete map: 10 planets, astrological houses, aspects and analysis of life purpose, relationships, money and health.",extra:"natal"},
+    ],
+    steps:[
+      {n:"I",title:"Choose your consultation",desc:"Select the type of reading and payment method."},
+      {n:"II",title:"Complete your details",desc:"Fill out the form with your personal information."},
+      {n:"III",title:"We confirm the appointment",desc:"I'll contact you by email to coordinate date and time."},
+      {n:"IV",title:"The reading",desc:"We hold the consultation. You receive your full reading."},
+    ],
+  }
+};
+
+function setCurrency(c){
+  cur=c;
+  document.querySelectorAll('.currency-btn').forEach(b=>b.classList.toggle('active',b.textContent.startsWith(c)));
+  renderInstant(content[lang]);renderServices(content[lang]);renderServiceSelect(content[lang]);
+}
+function renderInstant(c){
+  document.getElementById('instant-grid').innerHTML=c.instant.map((s,i)=>`
+    <div class="instant-card">
+      <div class="instant-badge">${s.badge}</div>
+      <div class="instant-icon">${s.icon}</div>
+      <div class="instant-name">${s.name}</div>
+      <div class="instant-desc">${s.desc}</div>
+      <div class="instant-price">${fmt(iP[i],cur)}</div>
+    </div>`).join('');
+}
+function renderServices(c){
+  document.getElementById('services-grid').innerHTML=c.services.map((s,i)=>`
+    <div class="service-card">
+      <div class="service-num">${s.num}</div>
+      <div class="service-name">${s.name}</div>
+      <div class="service-desc">${s.desc}</div>
+      <div class="service-price"><strong>${fmt(sP[i],cur)}</strong></div>
+    </div>`).join('');
+}
+function renderSteps(c){
+  document.getElementById('process-steps').innerHTML=c.steps.map(s=>`
+    <div class="process-step">
+      <div class="step-circle">${s.n}</div>
+      <div class="step-title">${s.title}</div>
+      <div class="step-desc">${s.desc}</div>
+    </div>`).join('');
+}
+function renderServiceSelect(c){
+  const all=[...c.instant.map((s,i)=>({name:s.name,price:iP[i],extra:null})),...c.services.map((s,i)=>({name:s.name,price:sP[i],extra:s.extra}))];
+  document.getElementById('f-service').innerHTML=`<option value="">— ${lang==='es'?'Seleccioná':'Select'} —</option>`+
+    all.map((s,i)=>`<option value="${i}" data-extra="${s.extra||''}">${s.name} — ${fmt(s.price,cur)}</option>`).join('');
+}
+function showExtraFields(){
+  const sel=document.getElementById('f-service');
+  const extra=sel.options[sel.selectedIndex]?.dataset.extra||'';
+  const c=document.getElementById('extra-fields');
+  const es=lang==='es';
+  if(extra==='pareja'){
+    c.innerHTML=`<div class="form-row">
+      <div class="form-field"><label class="form-label">${es?'Nombre completo (otra persona)':'Full name (other person)'}</label><input class="form-input" type="text" placeholder="${es?'Nombre completo':'Full name'}" required></div>
+      <div class="form-field"><label class="form-label">${es?'Fecha de nacimiento (otra persona)':'Date of birth (other person)'}</label><input class="form-input" type="date" required></div>
+    </div>`;
+  } else if(extra==='natal'){
+    c.innerHTML=`<div class="form-row">
+      <div class="form-field"><label class="form-label">${es?'Hora de nacimiento':'Time of birth'}</label><input class="form-input" type="time" required></div>
+      <div class="form-field"><label class="form-label">${es?'Lugar de nacimiento':'Place of birth'}</label><input class="form-input" type="text" placeholder="${es?'Ciudad, País':'City, Country'}" required></div>
+    </div>`;
+  } else { c.innerHTML=''; }
+}
+function setLang(l){
+  lang=l;const c=content[l];
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  document.getElementById('hero-sub').textContent=c.heroSub;
+  document.getElementById('hero-tag').textContent=c.heroTag;
+  document.getElementById('hero-btn').textContent=c.heroBtn;
+  document.getElementById('nav-instant').textContent=c.navInstant;
+  document.getElementById('nav-services').textContent=c.navServices;
+  document.getElementById('nav-booking').textContent=c.navBooking;
+  document.getElementById('sm-label').textContent=c.smLabel;
+  document.getElementById('sm-body').textContent=c.smBody;
+  document.getElementById('i-label').textContent=c.iLabel;
+  document.getElementById('i-title').textContent=c.iTitle;
+  document.getElementById('i-body').textContent=c.iBody;
+  document.getElementById('s-label').textContent=c.sLabel;
+  document.getElementById('s-title').innerHTML=c.sTitle;
+  document.getElementById('s-body').textContent=c.sBody;
+  document.getElementById('p-label').textContent=c.pLabel;
+  document.getElementById('p-title').textContent=c.pTitle;
+  document.getElementById('pay-label').textContent=c.payLabel;
+  document.getElementById('pay-title').innerHTML=c.payTitle;
+  document.getElementById('cta-title').textContent=c.ctaTitle;
+  document.getElementById('cta-body').textContent=c.ctaBody;
+  document.getElementById('fl-name').textContent=c.flName;
+  document.getElementById('fl-dob').textContent=c.flDob;
+  document.getElementById('fl-email').textContent=c.flEmail;
+  document.getElementById('fl-service').textContent=c.flService;
+  document.getElementById('fl-payment').textContent=c.flPayment;
+  document.getElementById('fl-msg').textContent=c.flMsg;
+  document.getElementById('btn-submit').textContent=c.btnSubmit;
+  document.getElementById('curr-label').textContent=c.currLabel;
+  renderInstant(c);renderServices(c);renderSteps(c);renderServiceSelect(c);
+}
+function handleSubmit(e){
+  e.preventDefault();
+  const btn=document.querySelector('.submit-btn span');
+  btn.textContent=lang==='es'?'✓ Solicitud enviada':'✓ Request sent';
+  setTimeout(()=>{btn.textContent=content[lang].btnSubmit;e.target.reset();document.getElementById('extra-fields').innerHTML='';},3000);
+}
+setLang('es');
+</script>
+</body>
+</html>
