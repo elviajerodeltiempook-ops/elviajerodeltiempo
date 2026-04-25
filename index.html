@@ -288,6 +288,39 @@
       <div class="crypto-address">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</div>
       <button onclick="copyAddress()" style="background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.4rem 1rem;font-size:0.62rem;letter-spacing:0.1em;cursor:pointer;font-family:'Montserrat',sans-serif;">Copiar dirección</button>
     </div>
+
+    <!-- PASO 2: SUBIR COMPROBANTE -->
+    <div id="comprobante-section" style="display:none;margin-top:1.5rem;">
+      <div style="height:0.5px;background:var(--border);margin-bottom:1.5rem;"></div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);margin-bottom:0.5rem;font-style:italic;">Una vez realizada tu donación</p>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.2rem;line-height:1.7;">Subí la captura de tu comprobante para que el Viajero confirme tu donación y active tu lectura.</p>
+      <form id="comprobante-form" style="display:flex;flex-direction:column;gap:0.8rem;">
+        <input type="hidden" name="servicio" id="comp-servicio">
+        <input type="hidden" name="monto" id="comp-monto">
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <label style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">Tu nombre o email</label>
+          <input type="text" name="nombre" placeholder="Para que el Viajero sepa quién sos" style="background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.7rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.78rem;outline:none;width:100%;" required>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <label style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">Método de donación usado</label>
+          <select name="metodo" style="background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.7rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.78rem;outline:none;width:100%;appearance:none;">
+            <option value="paypal">PayPal</option>
+            <option value="ars">Pesos AR</option>
+            <option value="usdt">USDT TRC20</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <label style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">Captura del comprobante</label>
+          <input type="file" name="comprobante" accept="image/*" style="background:var(--surface2);border:0.5px solid var(--border);color:var(--text-muted);padding:0.7rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.72rem;outline:none;width:100%;cursor:pointer;" required>
+        </div>
+        <button type="button" onclick="enviarComprobante()" style="padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;margin-top:0.3rem;">Enviar comprobante</button>
+      </form>
+      <div id="comp-success" style="display:none;text-align:center;padding:1.5rem 0;">
+        <div style="font-size:2rem;margin-bottom:0.8rem;">✦</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);font-style:italic;margin-bottom:0.5rem;">Donación recibida</p>
+        <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">El Viajero ha recibido tu comprobante. En breve confirmará tu donación y recibirás acceso a tu lectura personalizada.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -741,12 +774,44 @@ function openModal(name,usdPrice){
   document.getElementById('modal-amount').textContent='U$S '+Math.round(finalPrice)+(discountApplied?' (−10%)':'');
   document.getElementById('modal-paypal').href='https://paypal.me/elviajerodeltempook/'+Math.round(finalPrice);
   document.getElementById('qr-section').style.display='none';
+  document.getElementById('comprobante-section').style.display='block';
+  document.getElementById('comp-success').style.display='none';
+  document.getElementById('comprobante-form').style.display='flex';
+  document.getElementById('comp-servicio').value=name;
+  document.getElementById('comp-monto').value='U$S '+Math.round(finalPrice);
   document.getElementById('payModal').classList.add('open');
 }
 function closeModal(){document.getElementById('payModal').classList.remove('open');}
 function showQR(){document.getElementById('qr-section').style.display='block';}
 function copyAlias(){navigator.clipboard.writeText('ELVIAJERODELTIEMPO');alert('✓ Alias copiado: ELVIAJERODELTIEMPO');}
 function copyAddress(){navigator.clipboard.writeText('TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG');alert('✓ Dirección copiada');}
+
+async function enviarComprobante(){
+  const form=document.getElementById('comprobante-form');
+  const formData=new FormData(form);
+  const btn=form.querySelector('button');
+  btn.textContent='Enviando...';
+  btn.disabled=true;
+  try{
+    const res=await fetch('https://formspree.io/f/meevdqdy',{
+      method:'POST',
+      body:formData,
+      headers:{'Accept':'application/json'}
+    });
+    if(res.ok){
+      document.getElementById('comprobante-form').style.display='none';
+      document.getElementById('comp-success').style.display='block';
+    } else {
+      btn.textContent='Enviar comprobante';
+      btn.disabled=false;
+      alert('Hubo un error. Por favor intentá nuevamente.');
+    }
+  }catch(e){
+    btn.textContent='Enviar comprobante';
+    btn.disabled=false;
+    alert('Hubo un error. Por favor intentá nuevamente.');
+  }
+}
 
 function setCurrency(c){
   cur=c;
