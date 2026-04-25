@@ -810,6 +810,35 @@ function handleSubmit(e){
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 setLang('es');
 
+// DETECCIÓN AUTOMÁTICA DE PAÍS POR IP
+async function detectCountry(){
+  try{
+    const r=await fetch('https://ipapi.co/json/');
+    const d=await r.json();
+    const countryMap={
+      'AR':'ARS','CO':'COP','MX':'MXN',
+      'ES':'EUR','FR':'EUR','DE':'EUR','IT':'EUR','PT':'EUR','NL':'EUR','BE':'EUR','AT':'EUR','GR':'EUR',
+      'US':'USD','CA':'USD','AU':'USD','GB':'USD','JP':'USD','CN':'USD','BR':'USD','CL':'USD','PE':'USD','VE':'USD','EC':'USD','BO':'USD','PY':'USD','UY':'USD','CR':'USD','PA':'USD','GT':'USD','HN':'USD','SV':'USD','NI':'USD','DO':'USD','CU':'USD'
+    };
+    const moneda=countryMap[d.country_code]||'USD';
+    setCurrency(moneda);
+    // Mostrar mensaje sutil
+    const paises={AR:'🇦🇷 Argentina','CO':'🇨🇴 Colombia','MX':'🇲🇽 México','ES':'🇪🇺 España','FR':'🇪🇺 Francia','DE':'🇪🇺 Alemania','US':'🇺🇸 Estados Unidos'};
+    const nombrePais=paises[d.country_code]||d.country_name||'';
+    if(nombrePais){
+      const bar=document.querySelector('.currency-bar');
+      const msg=document.createElement('span');
+      msg.style.cssText='font-size:0.6rem;color:var(--gold);letter-spacing:0.08em;margin-left:0.5rem;';
+      msg.textContent=`📍 ${nombrePais}`;
+      bar.appendChild(msg);
+    }
+  }catch(e){
+    // Si falla la detección, dejamos USD por defecto
+    console.log('Detección de país no disponible');
+  }
+}
+detectCountry();
+
 // ============ SISTEMA DE TIRADAS ============
 let tiradaData={nombre:'',tipo:'',tirada:'',pregunta:''};
 let currentStep=1;
