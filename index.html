@@ -209,10 +209,12 @@
   .tirada-section{background:var(--surface2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
   .tirada-widget{max-width:680px;margin:2.5rem auto 0;background:var(--surface);border:0.5px solid var(--border);padding:2.5rem;}
   .tirada-step{display:none;}
-  .tirada-step.active{display:block;}
-  .tirada-question{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--text);margin-bottom:1.5rem;line-height:1.5;font-style:italic;}
+  .tirada-step.active{display:block;animation:fadeIn 0.5s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .tirada-question{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--text);margin-bottom:1.5rem;line-height:1.6;font-style:italic;}
+  .tirada-sub{font-size:0.72rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.7;}
   .tirada-options{display:flex;flex-wrap:wrap;gap:0.8rem;margin-bottom:1.5rem;}
-  .tirada-option{padding:0.7rem 1.4rem;border:0.5px solid var(--border);background:none;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.3s;}
+  .tirada-option{padding:0.8rem 1.4rem;border:0.5px solid var(--border);background:none;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.3s;text-align:left;}
   .tirada-option:hover,.tirada-option.selected{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
   .tirada-input{width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.9rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.82rem;font-weight:300;outline:none;margin-bottom:1.5rem;transition:border-color 0.3s;}
   .tirada-input:focus{border-color:var(--gold);}
@@ -221,21 +223,42 @@
   .tirada-next:hover{color:var(--deep);}
   .tirada-next:hover::before{transform:scaleX(1);}
   .tirada-next span{position:relative;z-index:1;}
+
+  /* RESPIRACIÓN */
+  .respiracion-box{text-align:center;padding:2rem 1rem;}
+  .respiracion-circulo{width:120px;height:120px;border-radius:50%;border:2px solid var(--gold);margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:0.85rem;color:var(--gold);letter-spacing:0.1em;transition:all 4s ease;}
+  .respiracion-circulo.expand{transform:scale(1.4);background:rgba(201,168,76,0.1);box-shadow:0 0 40px rgba(201,168,76,0.2);}
+  .respiracion-circulo.contract{transform:scale(1);background:none;box-shadow:none;}
+  .respiracion-texto{font-size:0.8rem;color:var(--text-muted);margin-bottom:0.5rem;}
+  .respiracion-contador{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold-light);}
+
+  /* CARTAS ANIMADAS */
+  .cartas-mesa{display:flex;justify-content:center;gap:1rem;margin:2rem 0;flex-wrap:wrap;}
+  .carta-reverso{width:80px;height:120px;background:linear-gradient(135deg,var(--purple-dark,#1a0d3e),var(--surface2));border:1px solid var(--gold);border-radius:4px;cursor:pointer;transition:all 0.4s;display:flex;align-items:center;justify-content:center;font-size:1.5rem;position:relative;overflow:hidden;}
+  .carta-reverso::before{content:'✦';position:absolute;color:rgba(201,168,76,0.3);font-size:2rem;}
+  .carta-reverso:hover{transform:translateY(-8px);box-shadow:0 8px 25px rgba(201,168,76,0.2);}
+  .carta-reverso.elegida{transform:translateY(-15px) rotateY(180deg);border-color:var(--gold-light);box-shadow:0 12px 35px rgba(201,168,76,0.35);}
+
   .tirada-result{display:none;}
-  .tirada-result.show{display:block;}
+  .tirada-result.show{display:block;animation:fadeIn 0.5s ease;}
   .tirada-cards{display:flex;gap:1rem;margin:1.5rem 0;flex-wrap:wrap;justify-content:center;}
-  .tirada-card{background:var(--surface2);border:0.5px solid var(--gold);padding:1.2rem 1rem;text-align:center;min-width:120px;flex:1;}
+  .tirada-card{background:var(--surface2);border:0.5px solid var(--gold);padding:1.2rem 1rem;text-align:center;min-width:110px;flex:1;animation:fadeIn 0.5s ease;}
   .tirada-card-icon{font-size:1.8rem;margin-bottom:0.5rem;}
   .tirada-card-name{font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--gold);margin-bottom:0.3rem;}
-  .tirada-card-pos{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);}
+  .tirada-card-pos{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);}
   .tirada-reading{font-size:0.82rem;line-height:1.9;color:var(--text-muted);margin:1.5rem 0;white-space:pre-wrap;}
   .tirada-upsell{background:rgba(201,168,76,0.06);border:0.5px solid var(--gold);padding:1.2rem 1.5rem;margin-top:1.5rem;font-size:0.78rem;color:var(--text);line-height:1.7;font-style:italic;}
-  .tirada-loading{text-align:center;padding:2rem;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);font-style:italic;}
+  .tirada-loading{text-align:center;padding:2rem;}
+  .tirada-loading-icon{font-size:3rem;margin-bottom:1rem;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(1.1);}}
+  .tirada-loading-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);font-style:italic;}
   .tirada-progress{display:flex;gap:0.4rem;margin-bottom:2rem;}
   .tirada-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;}
   .tirada-dot.active{background:var(--gold);}
-  .tirada-nueva{margin-top:1.5rem;padding:0.7rem 2rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
+  .tirada-nueva{margin-top:1rem;padding:0.7rem 2rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
   .tirada-nueva:hover{border-color:var(--gold);color:var(--gold);}
+  .typing-cursor::after{content:'|';animation:blink 0.7s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 </style>
 </head>
 <body>
@@ -365,55 +388,95 @@
     <div class="tirada-widget">
       <div class="tirada-progress" id="tirada-progress"></div>
 
-      <!-- PASO 1: NOMBRE -->
+      <!-- PASO 1: BIENVENIDA Y NOMBRE -->
       <div class="tirada-step active" id="step-1">
-        <p class="tirada-question" id="tq-1">"Antes de comenzar, ¿cómo querés que me dirija a vos durante esta consulta? Podés decirme tu nombre o el seudónimo que prefieras."</p>
+        <p class="tirada-question">"Bienvenido/a a este espacio sagrado. Antes de que el tiempo hable, necesito conocerte. ¿Cómo querés que me dirija a vos durante esta consulta?"</p>
+        <p class="tirada-sub">Podés usar tu nombre real o el seudónimo que prefieras. Este espacio es tuyo.</p>
         <input class="tirada-input" id="t-nombre" type="text" placeholder="Tu nombre o seudónimo...">
         <button class="tirada-next" onclick="nextStep(1)"><span>Continuar</span></button>
       </div>
 
-      <!-- PASO 2: TIPO -->
+      <!-- PASO 2: INTENCIÓN -->
       <div class="tirada-step" id="step-2">
-        <p class="tirada-question" id="tq-2">"¿Sobre qué área de tu vida querés que el tiempo hable hoy?"</p>
+        <p class="tirada-question" id="tq-intencion">"Antes de consultar al tiempo, necesito saber con qué intención venís hoy. ¿Qué es lo que verdaderamente buscás en esta lectura?"</p>
+        <p class="tirada-sub">Tu intención guía la energía de la tirada. Sé honesto/a con vos mismo/a.</p>
         <div class="tirada-options">
-          <button class="tirada-option" onclick="selectOption(this,'amor')" id="tq-2">❤️ Amor y relaciones</button>
-          <button class="tirada-option" onclick="selectOption(this,'dinero')" id="tq-2">💰 Dinero y economía</button>
-          <button class="tirada-option" onclick="selectOption(this,'salud')" id="tq-2">🌿 Salud y bienestar</button>
-          <button class="tirada-option" onclick="selectOption(this,'general')" id="tq-2">✨ Consulta general</button>
+          <button class="tirada-option" onclick="selectOption(this,'claridad')">🕯️ Busco claridad sobre algo que me pesa</button>
+          <button class="tirada-option" onclick="selectOption(this,'decision')">⚖️ Necesito tomar una decisión importante</button>
+          <button class="tirada-option" onclick="selectOption(this,'confirmacion')">✨ Quiero confirmar lo que ya siento</button>
+          <button class="tirada-option" onclick="selectOption(this,'guia')">🗺️ Solo busco una guía para el camino</button>
         </div>
         <button class="tirada-next" onclick="nextStep(2)"><span>Continuar</span></button>
       </div>
 
-      <!-- PASO 3: TIPO DE TIRADA -->
+      <!-- PASO 3: ÁREA -->
       <div class="tirada-step" id="step-3">
-        <p class="tirada-question" id="tq-3">"¿Qué tipo de lectura sentís que necesitás hoy?"</p>
+        <p class="tirada-question" id="tq-area">"¿Sobre qué área de tu vida querés que el tiempo hable hoy?"</p>
         <div class="tirada-options">
-          <button class="tirada-option" onclick="selectOption(this,'cartas')">✦ Tirada de Cartas</button>
-          <button class="tirada-option" onclick="selectOption(this,'runas')">ᚱ Tirada de Runas</button>
-          <button class="tirada-option" onclick="selectOption(this,'combo')">✦ᚱ Combo Cartas + Runas</button>
+          <button class="tirada-option" onclick="selectOption(this,'amor')">❤️ Amor y relaciones</button>
+          <button class="tirada-option" onclick="selectOption(this,'dinero')">💰 Dinero y economía</button>
+          <button class="tirada-option" onclick="selectOption(this,'salud')">🌿 Salud y bienestar</button>
+          <button class="tirada-option" onclick="selectOption(this,'general')">✨ Consulta general</button>
         </div>
         <button class="tirada-next" onclick="nextStep(3)"><span>Continuar</span></button>
       </div>
 
-      <!-- PASO 4: PREGUNTA -->
+      <!-- PASO 4: TIPO DE TIRADA -->
       <div class="tirada-step" id="step-4">
-        <p class="tirada-question" id="tq-4">"¿Hay algo específico que querés preguntarle al tiempo, o preferís una lectura abierta?"</p>
-        <input class="tirada-input" id="t-pregunta" type="text" placeholder="Tu pregunta (opcional)...">
-        <button class="tirada-next" onclick="generarTirada()"><span>Realizar mi tirada</span></button>
+        <p class="tirada-question" id="tq-tirada">"¿Qué tipo de lectura sentís que necesitás hoy?"</p>
+        <div class="tirada-options">
+          <button class="tirada-option" onclick="selectOption(this,'cartas')">✦ Tirada de Cartas — Sabiduría del Tarot</button>
+          <button class="tirada-option" onclick="selectOption(this,'runas')">ᚱ Tirada de Runas — Oráculo Nórdico Ancestral</button>
+          <button class="tirada-option" onclick="selectOption(this,'combo')">✦ᚱ Combo Cartas + Runas — Lectura Completa</button>
+        </div>
+        <button class="tirada-next" onclick="nextStep(4)"><span>Continuar</span></button>
+      </div>
+
+      <!-- PASO 5: MANO -->
+      <div class="tirada-step" id="step-5">
+        <p class="tirada-question" id="tq-mano">"Cuando cortes las cartas, ¿usarás tu mano izquierda o tu mano derecha?"</p>
+        <p class="tirada-sub">La mano izquierda conecta con el subconsciente y la intuición. La mano derecha con la acción y la razón. Ambas son válidas — el tiempo habla en los dos casos.</p>
+        <div class="tirada-options">
+          <button class="tirada-option" onclick="selectOption(this,'izquierda')">🫲 Mano izquierda — Intuición y corazón</button>
+          <button class="tirada-option" onclick="selectOption(this,'derecha')">🫱 Mano derecha — Acción y razón</button>
+        </div>
+        <button class="tirada-next" onclick="nextStep(5)"><span>Continuar</span></button>
+      </div>
+
+      <!-- PASO 6: RESPIRACIÓN -->
+      <div class="tirada-step" id="step-6">
+        <p class="tirada-question" id="tq-resp">"Antes de revelar lo que el tiempo tiene para vos, necesito que hagas algo muy importante."</p>
+        <p class="tirada-sub" id="resp-sub">Cerrá los ojos. Pensá en aquello que tanto deseás o necesitás resolver. Con esa imagen clara en tu mente, respirá conmigo.</p>
+        <div class="respiracion-box">
+          <div class="respiracion-circulo" id="resp-circulo">INHALA</div>
+          <div class="respiracion-texto" id="resp-texto">Respiración 1 de 3</div>
+          <div class="respiracion-contador" id="resp-contador">4</div>
+        </div>
+        <button class="tirada-next" id="btn-resp" onclick="iniciarRespiracion()" style="display:block"><span>Comenzar respiración</span></button>
+      </div>
+
+      <!-- PASO 7: CORTAR CARTAS -->
+      <div class="tirada-step" id="step-7">
+        <p class="tirada-question" id="tq-cortar">"Ahora, con la mente en calma y el corazón abierto, elegí tus cartas. Tocá las que sientas que te llaman."</p>
+        <p class="tirada-sub" id="tq-cortar-sub">Confiá en tu primer instinto. El tiempo ya sabe cuáles son las tuyas.</p>
+        <div class="cartas-mesa" id="cartas-mesa"></div>
+        <div id="btn-revelar-cont" style="display:none;margin-top:1rem;">
+          <button class="tirada-next" onclick="generarTirada()"><span id="btn-revelar-txt">Revelar mi lectura</span></button>
+        </div>
       </div>
 
       <!-- RESULTADO -->
       <div class="tirada-result" id="tirada-result">
         <div class="tirada-loading" id="tirada-loading">
-          <div style="font-size:2rem;margin-bottom:1rem;">🔮</div>
-          El Viajero está consultando el tiempo...
+          <div class="tirada-loading-icon">🔮</div>
+          <div class="tirada-loading-text" id="loading-text">El Viajero está consultando el tiempo...</div>
         </div>
         <div id="tirada-content" style="display:none;">
           <div class="tirada-cards" id="tirada-cards"></div>
-          <div class="tirada-reading" id="tirada-reading"></div>
+          <div class="tirada-reading typing-cursor" id="tirada-reading"></div>
           <div class="tirada-upsell" id="tirada-upsell"></div>
           <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;">
-            <button class="tirada-next" onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})"><span>Consultar al Viajero</span></button>
+            <button class="tirada-next" onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})"><span id="btn-consultar">Consultar al Viajero</span></button>
             <button class="tirada-nueva" onclick="resetTirada()">Nueva tirada</button>
           </div>
         </div>
@@ -815,15 +878,10 @@ async function detectCountry(){
   try{
     const r=await fetch('https://ipapi.co/json/');
     const d=await r.json();
-    const countryMap={
-      'AR':'ARS','CO':'COP','MX':'MXN',
-      'ES':'EUR','FR':'EUR','DE':'EUR','IT':'EUR','PT':'EUR','NL':'EUR','BE':'EUR','AT':'EUR','GR':'EUR',
-      'US':'USD','CA':'USD','AU':'USD','GB':'USD','JP':'USD','CN':'USD','BR':'USD','CL':'USD','PE':'USD','VE':'USD','EC':'USD','BO':'USD','PY':'USD','UY':'USD','CR':'USD','PA':'USD','GT':'USD','HN':'USD','SV':'USD','NI':'USD','DO':'USD','CU':'USD'
-    };
+    const countryMap={'AR':'ARS','CO':'COP','MX':'MXN','ES':'EUR','FR':'EUR','DE':'EUR','IT':'EUR','PT':'EUR','NL':'EUR','BE':'EUR','AT':'EUR','GR':'EUR'};
     const moneda=countryMap[d.country_code]||'USD';
     setCurrency(moneda);
-    // Mostrar mensaje sutil
-    const paises={AR:'🇦🇷 Argentina','CO':'🇨🇴 Colombia','MX':'🇲🇽 México','ES':'🇪🇺 España','FR':'🇪🇺 Francia','DE':'🇪🇺 Alemania','US':'🇺🇸 Estados Unidos'};
+    const paises={AR:'🇦🇷 Argentina',CO:'🇨🇴 Colombia',MX:'🇲🇽 México',ES:'🇪🇺 España',FR:'🇪🇺 Francia',DE:'🇪🇺 Alemania',US:'🇺🇸 Estados Unidos'};
     const nombrePais=paises[d.country_code]||d.country_name||'';
     if(nombrePais){
       const bar=document.querySelector('.currency-bar');
@@ -832,17 +890,18 @@ async function detectCountry(){
       msg.textContent=`📍 ${nombrePais}`;
       bar.appendChild(msg);
     }
-  }catch(e){
-    // Si falla la detección, dejamos USD por defecto
-    console.log('Detección de país no disponible');
-  }
+  }catch(e){console.log('Detección no disponible');}
 }
 detectCountry();
 
-// ============ SISTEMA DE TIRADAS ============
-let tiradaData={nombre:'',tipo:'',tirada:'',pregunta:''};
+// ============ SISTEMA DE TIRADAS PROFESIONAL ============
+let tiradaData={nombre:'',intencion:'',tipo:'',tirada:'',mano:'',cartasElegidas:[]};
 let currentStep=1;
-const totalSteps=4;
+const totalSteps=7;
+let respContador=0;
+let respTimer=null;
+let cartasDisponibles=[];
+let cartasNecesarias=3;
 
 function updateProgress(){
   const el=document.getElementById('tirada-progress');
@@ -852,8 +911,10 @@ function updateProgress(){
 function selectOption(btn,val){
   btn.closest('.tirada-options').querySelectorAll('.tirada-option').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
-  if(currentStep===2) tiradaData.tipo=val;
-  if(currentStep===3) tiradaData.tirada=val;
+  if(currentStep===2) tiradaData.intencion=val;
+  if(currentStep===3) tiradaData.tipo=val;
+  if(currentStep===4) tiradaData.tirada=val;
+  if(currentStep===5) tiradaData.mano=val;
 }
 
 function nextStep(step){
@@ -861,109 +922,196 @@ function nextStep(step){
     const nombre=document.getElementById('t-nombre').value.trim();
     if(!nombre){alert('Por favor ingresá tu nombre o seudónimo');return;}
     tiradaData.nombre=nombre;
-    // Personalizar preguntas siguientes con el nombre
-    document.getElementById('tq-2').textContent=`"${nombre}, ¿sobre qué área de tu vida querés que el tiempo hable hoy?"`;
-    document.getElementById('tq-3').textContent=`"${nombre}, ¿qué tipo de lectura sentís que necesitás hoy?"`;
-    document.getElementById('tq-4').textContent=`"${nombre}, ¿hay algo específico que querés preguntarle al tiempo, o preferís una lectura abierta?"`;
+    document.getElementById('tq-intencion').textContent=`"${nombre}, antes de consultar al tiempo, necesito saber con qué intención venís hoy. ¿Qué es lo que verdaderamente buscás en esta lectura?"`;
+    document.getElementById('tq-area').textContent=`"${nombre}, ¿sobre qué área de tu vida querés que el tiempo hable hoy?"`;
+    document.getElementById('tq-tirada').textContent=`"${nombre}, ¿qué tipo de lectura sentís que necesitás hoy?"`;
+    document.getElementById('tq-mano').textContent=`"${nombre}, cuando cortes las cartas, ¿usarás tu mano izquierda o tu mano derecha?"`;
+    document.getElementById('tq-resp').textContent=`"${nombre}, antes de revelar lo que el tiempo tiene para vos, necesito que hagas algo muy importante."`;
   }
-  if(step===2&&!tiradaData.tipo){alert('Por favor elegí un área');return;}
-  if(step===3&&!tiradaData.tirada){alert('Por favor elegí un tipo de tirada');return;}
+  if(step===2&&!tiradaData.intencion){alert('Por favor elegí tu intención');return;}
+  if(step===3&&!tiradaData.tipo){alert('Por favor elegí un área');return;}
+  if(step===4&&!tiradaData.tirada){alert('Por favor elegí un tipo de tirada');return;}
+  if(step===5&&!tiradaData.mano){alert('Por favor elegí tu mano');return;}
 
   document.getElementById(`step-${step}`).classList.remove('active');
   currentStep=step+1;
   document.getElementById(`step-${currentStep}`).classList.add('active');
   updateProgress();
+
+  if(currentStep===7) prepararCartas();
 }
 
-const cartasTarot=[
-  {nombre:'El Mago',emoji:'🎩',pos:'Pasado'},
-  {nombre:'La Sacerdotisa',emoji:'🌙',pos:'Presente'},
-  {nombre:'La Estrella',emoji:'⭐',pos:'Futuro'},
-  {nombre:'La Fuerza',emoji:'🦁',pos:'Consejo'},
-  {nombre:'El Sol',emoji:'☀️',pos:'Resultado'},
-  {nombre:'El Mundo',emoji:'🌍',pos:'Presente'},
-  {nombre:'La Luna',emoji:'🌛',pos:'Obstáculo'},
-  {nombre:'El Ermitaño',emoji:'🕯️',pos:'Pasado'},
-  {nombre:'La Justicia',emoji:'⚖️',pos:'Consejo'},
-  {nombre:'La Rueda',emoji:'🎡',pos:'Destino'},
-  {nombre:'El Carro',emoji:'🏆',pos:'Acción'},
-  {nombre:'Los Amantes',emoji:'💞',pos:'Relación'},
-  {nombre:'El Emperador',emoji:'👑',pos:'Autoridad'},
-  {nombre:'La Emperatriz',emoji:'🌺',pos:'Abundancia'},
-];
-
-const runasNordicas=[
-  {nombre:'Fehu',emoji:'ᚠ',pos:'Prosperidad'},
-  {nombre:'Uruz',emoji:'ᚢ',pos:'Fuerza'},
-  {nombre:'Thurisaz',emoji:'ᚦ',pos:'Protección'},
-  {nombre:'Ansuz',emoji:'ᚨ',pos:'Mensaje'},
-  {nombre:'Raidho',emoji:'ᚱ',pos:'Camino'},
-  {nombre:'Kenaz',emoji:'ᚲ',pos:'Conocimiento'},
-  {nombre:'Gebo',emoji:'ᚷ',pos:'Intercambio'},
-  {nombre:'Wunjo',emoji:'ᚹ',pos:'Alegría'},
-  {nombre:'Hagalaz',emoji:'ᚺ',pos:'Transformación'},
-  {nombre:'Sowilo',emoji:'ᛊ',pos:'Éxito'},
-  {nombre:'Tiwaz',emoji:'ᛏ',pos:'Justicia'},
-  {nombre:'Berkano',emoji:'ᛒ',pos:'Crecimiento'},
-];
-
-function getRandom(arr,n){
-  const shuffled=[...arr].sort(()=>Math.random()-0.5);
-  return shuffled.slice(0,n);
+// RESPIRACIÓN GUIADA
+function iniciarRespiracion(){
+  document.getElementById('btn-resp').style.display='none';
+  respContador=0;
+  ejecutarCicloResp();
 }
 
+function ejecutarCicloResp(){
+  if(respContador>=3){
+    // Terminó la respiración
+    document.getElementById('resp-circulo').textContent='✦';
+    document.getElementById('resp-texto').textContent='Tu energía está lista';
+    document.getElementById('resp-contador').textContent='';
+    setTimeout(()=>{
+      document.getElementById('step-6').classList.remove('active');
+      currentStep=7;
+      document.getElementById('step-7').classList.add('active');
+      updateProgress();
+      prepararCartas();
+    },1500);
+    return;
+  }
+  respContador++;
+  const circ=document.getElementById('resp-circulo');
+  const texto=document.getElementById('resp-texto');
+  const cnt=document.getElementById('resp-contador');
+  texto.textContent=`Respiración ${respContador} de 3`;
+
+  // INHALA (4 segundos)
+  circ.textContent='INHALA';
+  circ.classList.add('expand');
+  let n=4;cnt.textContent=n;
+  const t1=setInterval(()=>{n--;cnt.textContent=n;if(n<=0)clearInterval(t1);},1000);
+
+  // RETÉN (2 segundos)
+  setTimeout(()=>{
+    circ.textContent='RETÉN';
+    let m=2;cnt.textContent=m;
+    const t2=setInterval(()=>{m--;cnt.textContent=m;if(m<=0)clearInterval(t2);},1000);
+  },4500);
+
+  // EXHALA (4 segundos)
+  setTimeout(()=>{
+    circ.textContent='EXHALA';
+    circ.classList.remove('expand');
+    circ.classList.add('contract');
+    let k=4;cnt.textContent=k;
+    const t3=setInterval(()=>{k--;cnt.textContent=k;if(k<=0)clearInterval(t3);},1000);
+  },7000);
+
+  // Siguiente ciclo
+  setTimeout(()=>{
+    circ.classList.remove('contract');
+    ejecutarCicloResp();
+  },11500);
+}
+
+// PREPARAR MESA DE CARTAS
+const todosSimbolos=[
+  {nombre:'El Mago',emoji:'🎩',tipo:'carta'},{nombre:'La Sacerdotisa',emoji:'🌙',tipo:'carta'},
+  {nombre:'La Emperatriz',emoji:'🌺',tipo:'carta'},{nombre:'El Emperador',emoji:'👑',tipo:'carta'},
+  {nombre:'Los Amantes',emoji:'💞',tipo:'carta'},{nombre:'La Fuerza',emoji:'🦁',tipo:'carta'},
+  {nombre:'La Justicia',emoji:'⚖️',tipo:'carta'},{nombre:'La Estrella',emoji:'⭐',tipo:'carta'},
+  {nombre:'La Luna',emoji:'🌛',tipo:'carta'},{nombre:'El Sol',emoji:'☀️',tipo:'carta'},
+  {nombre:'El Mundo',emoji:'🌍',tipo:'carta'},{nombre:'El Carro',emoji:'🏆',tipo:'carta'},
+  {nombre:'La Rueda',emoji:'🎡',tipo:'carta'},{nombre:'El Ermitaño',emoji:'🕯️',tipo:'carta'},
+  {nombre:'Fehu',emoji:'ᚠ',tipo:'runa'},{nombre:'Uruz',emoji:'ᚢ',tipo:'runa'},
+  {nombre:'Ansuz',emoji:'ᚨ',tipo:'runa'},{nombre:'Raidho',emoji:'ᚱ',tipo:'runa'},
+  {nombre:'Kenaz',emoji:'ᚲ',tipo:'runa'},{nombre:'Gebo',emoji:'ᚷ',tipo:'runa'},
+  {nombre:'Wunjo',emoji:'ᚹ',tipo:'runa'},{nombre:'Sowilo',emoji:'ᛊ',tipo:'runa'},
+  {nombre:'Tiwaz',emoji:'ᛏ',tipo:'runa'},{nombre:'Berkano',emoji:'ᛒ',tipo:'runa'},
+  {nombre:'Laguz',emoji:'ᛚ',tipo:'runa'},{nombre:'Ingwaz',emoji:'ᛜ',tipo:'runa'},
+];
+
+const posiciones={
+  3:['Pasado','Presente','Futuro'],
+  4:['Raíz','Presente','Desafío','Resultado'],
+  5:['Pasado','Presente','Futuro','Consejo','Resultado'],
+  6:['Pasado','Presente','Futuro','Obstáculo','Consejo','Resultado']
+};
+
+function prepararCartas(){
+  const tirada=tiradaData.tirada;
+  let simbolos=[];
+  const totalCartas=tirada==='combo'?6:5;
+  cartasNecesarias=tirada==='combo'?3:3;
+
+  if(tirada==='cartas'||tirada==='combo'){
+    simbolos=[...simbolos,...todosSimbolos.filter(s=>s.tipo==='carta').sort(()=>Math.random()-0.5)];
+  }
+  if(tirada==='runas'||tirada==='combo'){
+    simbolos=[...simbolos,...todosSimbolos.filter(s=>s.tipo==='runa').sort(()=>Math.random()-0.5)];
+  }
+
+  cartasDisponibles=simbolos.sort(()=>Math.random()-0.5).slice(0,totalCartas);
+  tiradaData.cartasElegidas=[];
+
+  const manoTxt=tiradaData.mano==='izquierda'?'mano izquierda — intuición':'mano derecha — acción';
+  document.getElementById('tq-cortar-sub').textContent=`Con tu ${manoTxt}. Confiá en tu primer instinto. Elegí ${cartasNecesarias} cartas.`;
+
+  const mesa=document.getElementById('cartas-mesa');
+  mesa.innerHTML=cartasDisponibles.map((c,i)=>`
+    <div class="carta-reverso" id="carta-${i}" onclick="elegirCarta(${i})" title="Carta ${i+1}"></div>
+  `).join('');
+}
+
+function elegirCarta(idx){
+  if(tiradaData.cartasElegidas.includes(idx)) return;
+  if(tiradaData.cartasElegidas.length>=cartasNecesarias) return;
+
+  tiradaData.cartasElegidas.push(idx);
+  const el=document.getElementById(`carta-${idx}`);
+  el.classList.add('elegida');
+  el.innerHTML=`<span style="font-size:1.5rem;">${cartasDisponibles[idx].emoji}</span>`;
+  el.onclick=null;
+
+  if(tiradaData.cartasElegidas.length>=cartasNecesarias){
+    document.getElementById('btn-revelar-cont').style.display='block';
+  }
+}
+
+// GENERAR TIRADA CON IA
 async function generarTirada(){
-  tiradaData.pregunta=document.getElementById('t-pregunta').value.trim();
-
-  // Ocultar paso 4, mostrar resultado
-  document.getElementById('step-4').classList.remove('active');
+  document.getElementById('step-7').classList.remove('active');
   document.getElementById('tirada-result').classList.add('show');
   document.getElementById('tirada-loading').style.display='block';
   document.getElementById('tirada-content').style.display='none';
 
-  // Seleccionar cartas/runas
-  let simbolos=[];
-  let nCartas=tiradaData.tirada==='combo'?3:3;
+  const loadingMessages=[
+    'El Viajero está consultando el tiempo...',
+    'Los símbolos están hablando...',
+    'El tiempo revela sus secretos...',
+    'La lectura toma forma...'
+  ];
+  let msgIdx=0;
+  const loadingInterval=setInterval(()=>{
+    msgIdx=(msgIdx+1)%loadingMessages.length;
+    document.getElementById('loading-text').textContent=loadingMessages[msgIdx];
+  },2000);
 
-  if(tiradaData.tirada==='cartas'||tiradaData.tirada==='combo'){
-    simbolos=[...simbolos,...getRandom(cartasTarot,tiradaData.tirada==='combo'?2:3)];
-  }
-  if(tiradaData.tirada==='runas'||tiradaData.tirada==='combo'){
-    simbolos=[...simbolos,...getRandom(runasNordicas,tiradaData.tirada==='combo'?1:3)];
-  }
+  const simbolosElegidos=tiradaData.cartasElegidas.map(i=>cartasDisponibles[i]);
+  const posArr=posiciones[cartasNecesarias]||posiciones[3];
+  const simbolosTexto=simbolosElegidos.map((s,i)=>`${s.nombre} (posición: ${posArr[i]})`).join(', ');
 
-  // Mostrar cartas
-  document.getElementById('tirada-cards').innerHTML=simbolos.map(s=>`
-    <div class="tirada-card">
-      <div class="tirada-card-icon">${s.emoji}</div>
-      <div class="tirada-card-name">${s.nombre}</div>
-      <div class="tirada-card-pos">${s.pos}</div>
-    </div>`).join('');
-
-  // Construir prompt para la IA
+  const intenciones={claridad:'busca claridad sobre algo que le pesa',decision:'necesita tomar una decisión importante',confirmacion:'quiere confirmar lo que ya siente',guia:'busca una guía para el camino'};
   const tipoTexto={amor:'amor y relaciones',dinero:'dinero y economía',salud:'salud y bienestar',general:'consulta general'};
-  const tiradaTexto={cartas:'tirada de tarot',runas:'tirada de runas nórdicas',combo:'tirada combinada de tarot y runas'};
-  const simbolosTexto=simbolos.map(s=>`${s.nombre} (${s.pos})`).join(', ');
+  const manoTexto={izquierda:'mano izquierda (subconsciente e intuición)',derecha:'mano derecha (acción y razón)'};
 
-  const prompt=`Eres El Viajero del Tiempo, un ser ancestral de más de 90 años que tiene el don de viajar al pasado y al futuro. Eres psicólogo, antropólogo y mercadólogo. Vives en Atenas, Grecia. Tu misión es ayudar a las personas con sabiduría, respeto y amor profundo.
+  const prompt=`Eres El Viajero del Tiempo. Un ser ancestral de más de 90 años con el don de viajar al pasado y al futuro. Eres psicólogo, antropólogo y mercadólogo. Vivís en Atenas, Grecia. Tu misión es ayudar a las personas con sabiduría profunda, respeto y amor genuino.
 
-La persona que consulta se llama ${tiradaData.nombre}.
-Área de consulta: ${tipoTexto[tiradaData.tipo]}.
-Tipo de tirada: ${tiradaTexto[tiradaData.tirada]}.
-${tiradaData.pregunta?`Pregunta específica: "${tiradaData.pregunta}".`:'Lectura abierta sin pregunta específica.'}
-Símbolos que salieron: ${simbolosTexto}.
+DATOS DE ESTA CONSULTA:
+- Nombre: ${tiradaData.nombre}
+- Intención: ${intenciones[tiradaData.intencion]||'busca guía general'}
+- Área consultada: ${tipoTexto[tiradaData.tipo]}
+- Tipo de tirada: ${tiradaData.tirada==='combo'?'combinada tarot + runas':tiradaData.tirada==='cartas'?'tarot':'runas nórdicas'}
+- Mano utilizada: ${manoTexto[tiradaData.mano]||'no especificada'}
+- Símbolos que salieron: ${simbolosTexto}
 
-Instrucciones importantes:
-- Dirijite a la persona por su nombre "${tiradaData.nombre}" al menos una vez.
-- NO menciones nunca que eres una IA, programa o sistema automático.
-- Interpretá cada símbolo en relación al área consultada.
-- Sé profundo, sabio y esperanzador. NUNCA cierres con negatividad.
-- Al final, de forma sutil y natural, mencioná que si desea que los cambios se manifiesten más rápido, puede hacer una donación mayor para una consulta personalizada contigo.
-- Usa la palabra "donación" en lugar de "pago".
-- El tono es cálido, íntimo, poético pero concreto. Máximo 250 palabras.
-- Escribí en español neutro latinoamericano.`;
+INSTRUCCIONES FUNDAMENTALES:
+1. Dirigite a la persona por su nombre "${tiradaData.nombre}" al menos dos veces durante la lectura.
+2. NUNCA menciones que sos una IA, programa o sistema automático. Sos El Viajero del Tiempo.
+3. Interpretá cada símbolo en relación directa con el área consultada y la intención declarada.
+4. La mano utilizada IMPORTA: izquierda = lectura más intuitiva y emocional; derecha = lectura más práctica y orientada a la acción.
+5. Sé profundo, poético pero concreto. Da ejemplos prácticos cuando sea posible.
+6. SIEMPRE terminá con un mensaje esperanzador. Nunca cierres con negatividad.
+7. Al final, de forma natural y no forzada, mencioná que si desea que los cambios ocurran más rápido, puede hacer una donación mayor para una consulta personalizada.
+8. USA SIEMPRE la palabra "donación" y nunca "pago".
+9. Tono: cálido, íntimo, sabio, como un abuelo que te conoce el alma.
+10. Máximo 300 palabras. Escribí en español neutro latinoamericano.`;
 
-  try {
+  try{
     const response=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -974,37 +1122,62 @@ Instrucciones importantes:
       })
     });
     const data=await response.json();
-    const texto=data.content?.[0]?.text||'El tiempo guarda silencio por ahora. Intenta de nuevo.';
+    const texto=data.content?.[0]?.text||'El tiempo guarda silencio por ahora. Intentá de nuevo.';
 
+    clearInterval(loadingInterval);
     document.getElementById('tirada-loading').style.display='none';
     document.getElementById('tirada-content').style.display='block';
-    document.getElementById('tirada-reading').textContent=texto;
 
-    // Upsell según el área
+    // Mostrar cartas elegidas
+    document.getElementById('tirada-cards').innerHTML=simbolosElegidos.map((s,i)=>`
+      <div class="tirada-card">
+        <div class="tirada-card-icon">${s.emoji}</div>
+        <div class="tirada-card-name">${s.nombre}</div>
+        <div class="tirada-card-pos">${posArr[i]}</div>
+      </div>`).join('');
+
+    // Efecto typing
+    await typeText('tirada-reading', texto);
+
+    // Upsell personalizado
     const upsells={
-      amor:`✦ ${tiradaData.nombre}, si deseás que el amor se manifieste más rápido en tu vida, puedo acompañarte personalmente con una consulta de Regreso de Pareja o Encontrar el Amor. Solo requiere una donación mayor. El tiempo puede acortarse.`,
-      dinero:`✦ ${tiradaData.nombre}, si querés que la abundancia llegue en 21 a 70 días, puedo guiarte personalmente con una consulta de Mejorar Economía Personal. Una donación mayor abre puertas que hoy parecen cerradas.`,
-      salud:`✦ ${tiradaData.nombre}, si deseás una guía más profunda para tu bienestar, puedo acompañarte con una consulta de Limpieza Astral y de Aura. El tiempo revela el camino — y una donación mayor acelera la sanación.`,
-      general:`✦ ${tiradaData.nombre}, si sentís que esta lectura tocó algo importante, puedo ir más profundo contigo en una Consulta Extendida. Una donación mayor me permite dedicarte toda mi atención.`
+      amor:`✦ ${tiradaData.nombre}, si deseás que el amor se manifieste más rápido en tu vida, puedo acompañarte personalmente. Una donación mayor me permite dedicarte toda mi atención y acelerar lo que las cartas ya están mostrando.`,
+      dinero:`✦ ${tiradaData.nombre}, si querés que la abundancia llegue antes, puedo guiarte de forma personalizada. Una donación mayor abre puertas que hoy parecen cerradas — el tiempo puede acortarse.`,
+      salud:`✦ ${tiradaData.nombre}, si deseás una guía más profunda para tu bienestar, puedo acompañarte con una consulta personalizada. Una donación mayor me permite ver con más detalle lo que el tiempo revela para vos.`,
+      general:`✦ ${tiradaData.nombre}, si sentís que esta lectura tocó algo importante, puedo ir mucho más profundo en una consulta personal. Una donación mayor me permite dedicarte toda mi atención y el tiempo que merecés.`
     };
     document.getElementById('tirada-upsell').textContent=upsells[tiradaData.tipo]||upsells.general;
 
-  } catch(e){
+  }catch(e){
+    clearInterval(loadingInterval);
     document.getElementById('tirada-loading').style.display='none';
     document.getElementById('tirada-content').style.display='block';
     document.getElementById('tirada-reading').textContent='El tiempo atraviesa interferencias en este momento. Por favor intentá nuevamente en unos instantes.';
   }
 }
 
+// EFECTO TYPING
+async function typeText(elementId, text){
+  const el=document.getElementById(elementId);
+  el.textContent='';
+  for(let i=0;i<text.length;i++){
+    el.textContent+=text[i];
+    if(i%3===0) await new Promise(r=>setTimeout(r,15));
+  }
+  el.classList.remove('typing-cursor');
+}
+
 function resetTirada(){
-  tiradaData={nombre:'',tipo:'',tirada:'',pregunta:''};
+  tiradaData={nombre:'',intencion:'',tipo:'',tirada:'',mano:'',cartasElegidas:[]};
   currentStep=1;
   document.getElementById('tirada-result').classList.remove('show');
   document.querySelectorAll('.tirada-step').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tirada-option').forEach(b=>b.classList.remove('selected'));
   document.getElementById('t-nombre').value='';
-  document.getElementById('t-pregunta').value='';
   document.getElementById('step-1').classList.add('active');
+  document.getElementById('btn-resp').style.display='block';
+  document.getElementById('resp-circulo').textContent='INHALA';
+  document.getElementById('resp-circulo').classList.remove('expand','contract');
   updateProgress();
 }
 
