@@ -11,7 +11,7 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;}
-
+ 
   nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(10,6,18,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);}
   .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;}
   .nav-links{display:flex;gap:2rem;}
@@ -23,7 +23,7 @@
   .nav-lang{display:flex;gap:0.5rem;}
   .lang-btn{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);background:none;border:0.5px solid var(--border);padding:0.3rem 0.6rem;cursor:pointer;transition:all 0.3s;font-family:'Montserrat',sans-serif;}
   .lang-btn.active,.lang-btn:hover{color:var(--gold);border-color:var(--gold);}
-
+ 
   .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden;}
   .hero-img{position:absolute;inset:0;background-image:url('viajerologo.jpg');background-size:cover;background-position:center top;filter:brightness(0.3) saturate(0.7);}
   .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(74,45,156,0.55) 0%,transparent 70%),linear-gradient(to bottom,rgba(10,6,18,0.1) 0%,rgba(10,6,18,0.75) 100%);}
@@ -41,26 +41,26 @@
   .hero-cta:hover{color:var(--deep);}
   .hero-cta:hover::before{transform:scaleX(1);}
   .hero-cta span{position:relative;z-index:1;}
-
+ 
   .divider{display:flex;align-items:center;gap:1.5rem;padding:0 4rem;margin:0 auto;max-width:900px;}
   .divider-line{flex:1;height:0.5px;background:var(--border);}
   .divider-diamond{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);}
-
+ 
   section{padding:5rem 2rem;}
   .section-inner{max-width:900px;margin:0 auto;}
   .section-label{font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;}
   .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;line-height:1.1;margin-bottom:1.5rem;}
   .section-body{font-size:0.85rem;line-height:1.9;color:var(--text-muted);max-width:680px;}
-
+ 
   .sobre-mi{background:var(--surface);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
   .sobre-mi .section-body{max-width:700px;font-size:0.9rem;line-height:2;}
   .sobre-mi .quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--gold-light);margin-top:1.5rem;padding-left:1.5rem;border-left:2px solid var(--gold);line-height:1.7;}
-
+ 
   .currency-bar{display:flex;align-items:center;gap:0.5rem;margin-top:2.5rem;flex-wrap:wrap;}
   .currency-label{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-right:0.5rem;}
   .currency-btn{font-size:0.62rem;letter-spacing:0.08em;padding:0.35rem 0.8rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);cursor:pointer;transition:all 0.25s;font-family:'Montserrat',sans-serif;}
   .currency-btn.active{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,0.08);}
-
+ 
   .instant-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:0.5px solid var(--border);margin-top:2rem;}
   .instant-card{background:var(--surface2);padding:2rem 1.5rem;transition:background 0.3s;text-align:center;}
   .instant-card:hover{background:#221844;}
@@ -69,13 +69,13 @@
   .instant-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem;}
   .instant-price{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--gold-light);margin-bottom:1rem;}
   .instant-badge{display:inline-block;font-size:0.58rem;letter-spacing:0.1em;padding:0.2rem 0.8rem;border:0.5px solid var(--gold);color:var(--gold);margin-bottom:1rem;text-transform:uppercase;}
-
+ 
   .pay-btn{display:inline-block;padding:0.6rem 1.5rem;border:1px solid var(--gold);color:var(--gold);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;font-family:'Montserrat',sans-serif;transition:all 0.3s;position:relative;overflow:hidden;cursor:pointer;background:none;}
   .pay-btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;z-index:0;}
   .pay-btn:hover{color:var(--deep);}
   .pay-btn:hover::before{transform:scaleX(1);}
   .pay-btn span{position:relative;z-index:1;}
-
+ 
   .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--border);border:0.5px solid var(--border);margin-top:2rem;}
   .service-card{background:var(--surface);padding:2rem 1.8rem;position:relative;transition:background 0.3s;}
   .service-card:hover{background:var(--surface2);}
@@ -85,7 +85,7 @@
   .service-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:400;margin-bottom:0.5rem;line-height:1.2;}
   .service-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.2rem;}
   .service-price strong{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;display:block;color:var(--gold-light);margin-bottom:0.8rem;}
-
+ 
   /* PLANES MENSUALES */
   .planes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:2.5rem;}
   .plan-card{background:var(--surface);border:0.5px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;transition:border-color 0.3s;}
@@ -99,13 +99,13 @@
   .plan-features li{font-size:0.75rem;color:var(--text-muted);padding:0.4rem 0;border-bottom:0.5px solid var(--border);}
   .plan-features li:last-child{border-bottom:none;}
   .plan-features li::before{content:'✦ ';color:var(--gold);}
-
+ 
   .process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2.5rem;margin-top:4rem;}
   .process-step{text-align:center;}
   .step-circle{width:52px;height:52px;border-radius:50%;border:0.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);}
   .step-title{font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:0.4rem;}
   .step-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.7;}
-
+ 
   .payment-section{background:var(--surface);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
   .payment-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:2.5rem;}
   .payment-card{background:var(--surface2);border:0.5px solid var(--border);padding:2rem;text-align:center;transition:border-color 0.3s;}
@@ -117,12 +117,12 @@
   .payment-action:hover{background:var(--gold);color:var(--deep);}
   .qr-img{width:130px;height:130px;margin:0.5rem auto 1rem;display:block;border:2px solid var(--border);}
   .crypto-address{font-size:0.58rem;color:var(--text-muted);word-break:break-all;margin-bottom:1rem;font-family:monospace;background:rgba(255,255,255,0.05);padding:0.5rem;}
-
+ 
   .social-section{text-align:center;padding:4rem 2rem;background:var(--surface2);border-top:0.5px solid var(--border);}
   .social-links{display:flex;justify-content:center;gap:1rem;margin-top:2rem;flex-wrap:wrap;}
   .social-link{display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1.3rem;border:0.5px solid var(--border);color:var(--text-muted);text-decoration:none;font-size:0.72rem;letter-spacing:0.08em;transition:all 0.3s;}
   .social-link:hover{border-color:var(--gold);color:var(--gold);}
-
+ 
   .cta-section{text-align:center;background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(74,45,156,0.25) 0%,transparent 70%);}
   .cta-ornament{font-family:'Cormorant Garamond',serif;font-size:3.5rem;color:rgba(201,168,76,0.15);margin-bottom:1rem;display:block;font-style:italic;}
   .cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:300;margin-bottom:1.5rem;}
@@ -145,7 +145,7 @@
   .submit-btn:hover{color:var(--deep);}
   .submit-btn:hover::before{transform:scaleX(1);}
   .submit-btn span{position:relative;z-index:1;}
-
+ 
   .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;}
   .modal.open{display:flex;}
   .modal-box{background:var(--surface);border:0.5px solid var(--border);padding:2.5rem;max-width:480px;width:90%;position:relative;}
@@ -158,16 +158,48 @@
   .modal-method-icon{font-size:1.5rem;width:40px;text-align:center;}
   .modal-method-name{font-size:0.8rem;font-weight:500;color:var(--gold);}
   .modal-method-detail{font-size:0.7rem;color:var(--text-muted);}
-
+ 
   footer{padding:2.5rem 3rem;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
   .footer-logo{font-family:'Cormorant Garamond',serif;font-size:0.85rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;}
   .footer-copy{font-size:0.62rem;color:var(--text-muted);}
-
+ 
   @media(max-width:768px){nav{padding:1rem 1.2rem;}.nav-links{display:none;}.nav-social{display:none;}.form-row{grid-template-columns:1fr;}footer{padding:2rem 1.5rem;flex-direction:column;text-align:center;}}
+ 
+  /* TIRADAS AUTOMATICAS */
+  .tirada-section{background:var(--surface2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
+  .tirada-widget{max-width:680px;margin:2.5rem auto 0;background:var(--surface);border:0.5px solid var(--border);padding:2.5rem;}
+  .tirada-step{display:none;}
+  .tirada-step.active{display:block;}
+  .tirada-question{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--text);margin-bottom:1.5rem;line-height:1.5;font-style:italic;}
+  .tirada-options{display:flex;flex-wrap:wrap;gap:0.8rem;margin-bottom:1.5rem;}
+  .tirada-option{padding:0.7rem 1.4rem;border:0.5px solid var(--border);background:none;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.3s;}
+  .tirada-option:hover,.tirada-option.selected{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
+  .tirada-input{width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.9rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.82rem;font-weight:300;outline:none;margin-bottom:1.5rem;transition:border-color 0.3s;}
+  .tirada-input:focus{border-color:var(--gold);}
+  .tirada-next{padding:0.8rem 2.5rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.4s;position:relative;overflow:hidden;}
+  .tirada-next::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;z-index:0;}
+  .tirada-next:hover{color:var(--deep);}
+  .tirada-next:hover::before{transform:scaleX(1);}
+  .tirada-next span{position:relative;z-index:1;}
+  .tirada-result{display:none;}
+  .tirada-result.show{display:block;}
+  .tirada-cards{display:flex;gap:1rem;margin:1.5rem 0;flex-wrap:wrap;justify-content:center;}
+  .tirada-card{background:var(--surface2);border:0.5px solid var(--gold);padding:1.2rem 1rem;text-align:center;min-width:120px;flex:1;}
+  .tirada-card-icon{font-size:1.8rem;margin-bottom:0.5rem;}
+  .tirada-card-name{font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--gold);margin-bottom:0.3rem;}
+  .tirada-card-pos{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);}
+  .tirada-reading{font-size:0.82rem;line-height:1.9;color:var(--text-muted);margin:1.5rem 0;white-space:pre-wrap;}
+  .tirada-upsell{background:rgba(201,168,76,0.06);border:0.5px solid var(--gold);padding:1.2rem 1.5rem;margin-top:1.5rem;font-size:0.78rem;color:var(--text);line-height:1.7;font-style:italic;}
+  .tirada-loading{text-align:center;padding:2rem;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);font-style:italic;}
+  .tirada-progress{display:flex;gap:0.4rem;margin-bottom:2rem;}
+  .tirada-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;}
+  .tirada-dot.active{background:var(--gold);}
+  .tirada-nueva{margin-top:1.5rem;padding:0.7rem 2rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
+  .tirada-nueva:hover{border-color:var(--gold);color:var(--gold);}
 </style>
 </head>
 <body>
-
+ 
 <!-- MODAL PAGO -->
 <div class="modal" id="payModal">
   <div class="modal-box">
@@ -195,15 +227,15 @@
     </div>
   </div>
 </div>
-
+ 
 <nav>
   <div class="nav-logo">El Viajero del Tiempo</div>
   <div class="nav-links">
     <a href="#instantaneas" id="nav-instant">Lecturas</a>
     <a href="#servicios" id="nav-services">Servicios</a>
     <a href="#planes" id="nav-planes">Planes</a>
-    <a href="#pagos" id="nav-pay">Pagos</a>
-    <a href="#consulta" id="nav-booking">Reservar</a>
+    <a href="#donaciones" id="nav-pay">Donaciones</a>
+    <a href="#consulta" id="nav-booking">Donar</a>
   </div>
   <div class="nav-social">
     <a href="https://www.instagram.com/el.viajero.del.tiempook/" target="_blank" title="Instagram">📸</a>
@@ -215,7 +247,7 @@
     <button class="lang-btn" onclick="setLang('en')">EN</button>
   </div>
 </nav>
-
+ 
 <section class="hero">
   <div class="hero-img"></div>
   <div class="hero-overlay"></div>
@@ -226,12 +258,12 @@
     <h1 class="hero-title">El Viajero<br><em>del Tiempo</em></h1>
     <p class="hero-tagline" id="hero-tag">"Ya estuve en tu futuro. Sé lo que viene... y lo que podés manejar."</p>
     <p class="hero-tagline-sub" id="hero-tag-sub">Psicólogo · Antropólogo · Mercadólogo</p>
-    <button class="hero-cta" onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})"><span id="hero-btn">Reservar consulta</span></button>
+    <button class="hero-cta" onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})"><span id="hero-btn">Comenzar mi consulta</span></button>
   </div>
 </section>
-
+ 
 <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
-
+ 
 <section class="sobre-mi">
   <div class="section-inner">
     <span class="section-label" id="sm-label">Sobre el Viajero</span>
@@ -239,16 +271,16 @@
     <p class="quote" id="sm-quote">"Creo en la meritocracia. Lo que no se valora, no transforma. Cada consulta es una donación consciente destinada íntegramente a familias refugiadas de guerra."</p>
   </div>
 </section>
-
+ 
 <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
-
+ 
 <section id="instantaneas">
   <div class="section-inner">
     <span class="section-label" id="i-label">Lecturas Instantáneas</span>
     <h2 class="section-title" id="i-title">Respuestas al instante</h2>
     <p class="section-body" id="i-body">Pagás y recibís tu lectura de forma inmediata. Sin esperas.</p>
     <div class="currency-bar">
-      <span class="currency-label" id="curr-label">Ver precios en:</span>
+      <span class="currency-label" id="curr-label">Ver donación sugerida en:</span>
       <button class="currency-btn active" onclick="setCurrency('USD')">USD $</button>
       <button class="currency-btn" onclick="setCurrency('ARS')">ARS $</button>
       <button class="currency-btn" onclick="setCurrency('COP')">COP $</button>
@@ -258,9 +290,9 @@
     <div class="instant-grid" id="instant-grid"></div>
   </div>
 </section>
-
+ 
 <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
-
+ 
 <section id="servicios">
   <div class="section-inner">
     <span class="section-label" id="s-label">Servicios</span>
@@ -269,9 +301,9 @@
     <div class="services-grid" id="services-grid"></div>
   </div>
 </section>
-
+ 
 <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
-
+ 
 <section id="planes">
   <div class="section-inner">
     <span class="section-label" id="pl-label">Planes Mensuales</span>
@@ -280,9 +312,78 @@
     <div class="planes-grid" id="planes-grid"></div>
   </div>
 </section>
-
+ 
 <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
-
+ 
+<!-- TIRADAS AUTOMATICAS -->
+<section class="tirada-section" id="tirada">
+  <div class="section-inner">
+    <span class="section-label">Tirada Instantánea</span>
+    <h2 class="section-title" style="font-size:2rem;">Recibí tu lectura<br><em style="font-style:italic;color:var(--gold-light)">ahora mismo</em></h2>
+    <p class="section-body">El Viajero te acompaña en este momento. Respondé unas preguntas y recibí tu tirada personalizada al instante.</p>
+ 
+    <div class="tirada-widget">
+      <div class="tirada-progress" id="tirada-progress"></div>
+ 
+      <!-- PASO 1: NOMBRE -->
+      <div class="tirada-step active" id="step-1">
+        <p class="tirada-question" id="tq-1">"Antes de comenzar, ¿cómo querés que me dirija a vos durante esta consulta? Podés decirme tu nombre o el seudónimo que prefieras."</p>
+        <input class="tirada-input" id="t-nombre" type="text" placeholder="Tu nombre o seudónimo...">
+        <button class="tirada-next" onclick="nextStep(1)"><span>Continuar</span></button>
+      </div>
+ 
+      <!-- PASO 2: TIPO -->
+      <div class="tirada-step" id="step-2">
+        <p class="tirada-question" id="tq-2">"¿Sobre qué área de tu vida querés que el tiempo hable hoy?"</p>
+        <div class="tirada-options">
+          <button class="tirada-option" onclick="selectOption(this,'amor')" id="tq-2">❤️ Amor y relaciones</button>
+          <button class="tirada-option" onclick="selectOption(this,'dinero')" id="tq-2">💰 Dinero y economía</button>
+          <button class="tirada-option" onclick="selectOption(this,'salud')" id="tq-2">🌿 Salud y bienestar</button>
+          <button class="tirada-option" onclick="selectOption(this,'general')" id="tq-2">✨ Consulta general</button>
+        </div>
+        <button class="tirada-next" onclick="nextStep(2)"><span>Continuar</span></button>
+      </div>
+ 
+      <!-- PASO 3: TIPO DE TIRADA -->
+      <div class="tirada-step" id="step-3">
+        <p class="tirada-question" id="tq-3">"¿Qué tipo de lectura sentís que necesitás hoy?"</p>
+        <div class="tirada-options">
+          <button class="tirada-option" onclick="selectOption(this,'cartas')">✦ Tirada de Cartas</button>
+          <button class="tirada-option" onclick="selectOption(this,'runas')">ᚱ Tirada de Runas</button>
+          <button class="tirada-option" onclick="selectOption(this,'combo')">✦ᚱ Combo Cartas + Runas</button>
+        </div>
+        <button class="tirada-next" onclick="nextStep(3)"><span>Continuar</span></button>
+      </div>
+ 
+      <!-- PASO 4: PREGUNTA -->
+      <div class="tirada-step" id="step-4">
+        <p class="tirada-question" id="tq-4">"¿Hay algo específico que querés preguntarle al tiempo, o preferís una lectura abierta?"</p>
+        <input class="tirada-input" id="t-pregunta" type="text" placeholder="Tu pregunta (opcional)...">
+        <button class="tirada-next" onclick="generarTirada()"><span>Realizar mi tirada</span></button>
+      </div>
+ 
+      <!-- RESULTADO -->
+      <div class="tirada-result" id="tirada-result">
+        <div class="tirada-loading" id="tirada-loading">
+          <div style="font-size:2rem;margin-bottom:1rem;">🔮</div>
+          El Viajero está consultando el tiempo...
+        </div>
+        <div id="tirada-content" style="display:none;">
+          <div class="tirada-cards" id="tirada-cards"></div>
+          <div class="tirada-reading" id="tirada-reading"></div>
+          <div class="tirada-upsell" id="tirada-upsell"></div>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;">
+            <button class="tirada-next" onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})"><span>Consultar al Viajero</span></button>
+            <button class="tirada-nueva" onclick="resetTirada()">Nueva tirada</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+ 
 <section id="proceso">
   <div class="section-inner">
     <span class="section-label" id="p-label">El proceso</span>
@@ -290,23 +391,23 @@
     <div class="process-steps" id="process-steps"></div>
   </div>
 </section>
-
-<section class="payment-section" id="pagos">
+ 
+<section class="payment-section" id="donaciones">
   <div class="section-inner">
-    <span class="section-label" id="pay-label">Formas de pago</span>
-    <h2 class="section-title" style="font-size:1.8rem;" id="pay-title">Pagos seguros,<br>a tu medida</h2>
+    <span class="section-label" id="pay-label">Medios de donación</span>
+    <h2 class="section-title" style="font-size:1.8rem;" id="pay-title">Donaciones seguras,<br>a tu medida</h2>
     <div class="payment-grid">
       <div class="payment-card">
         <div class="payment-icon">💳</div>
         <div class="payment-name">PayPal</div>
-        <div class="payment-detail">Dólares (USD)<br>Pago seguro e inmediato</div>
-        <a class="payment-action" href="https://paypal.me/elviajerodeltempook" target="_blank">Pagar con PayPal</a>
+        <div class="payment-detail">Dólares (USD)<br>Donación segura e inmediata</div>
+        <a class="payment-action" href="https://paypal.me/elviajerodeltempook" target="_blank">Donar con PayPal</a>
       </div>
       <div class="payment-card">
         <div class="payment-icon">🇦🇷</div>
         <div class="payment-name">Pesos AR</div>
         <div class="payment-detail">Transferencia bancaria Argentina<br>Alias: <strong style="color:var(--gold)">ELVIAJERODELTIEMPO</strong></div>
-        <button class="payment-action" onclick="copyAlias()">Copiar Alias</button>
+        <button class="payment-action" onclick="copyAlias()">Donar en Pesos AR</button>
       </div>
       <div class="payment-card">
         <div class="payment-icon">₮</div>
@@ -319,7 +420,7 @@
     </div>
   </div>
 </section>
-
+ 
 <section class="social-section">
   <div class="section-inner">
     <span class="section-label">Seguinos</span>
@@ -332,11 +433,11 @@
     </div>
   </div>
 </section>
-
+ 
 <section class="cta-section" id="consulta">
   <div class="section-inner">
     <span class="cta-ornament">✦</span>
-    <h2 class="cta-title" id="cta-title">Comenzá tu lectura</h2>
+    <h2 class="cta-title" id="cta-title">Comenzá tu viaje</h2>
     <p class="cta-body" id="cta-body">Completá el formulario y me pondré en contacto para coordinar tu consulta.</p>
     <form class="booking-form" onsubmit="handleSubmit(event)">
       <div class="form-row">
@@ -359,7 +460,7 @@
       </div>
       <div class="extra-fields" id="extra-fields"></div>
       <div class="form-field">
-        <label class="form-label" id="fl-payment">Método de pago</label>
+        <label class="form-label" id="fl-payment">Medio de donación</label>
         <select class="form-select" required>
           <option value="">— Seleccioná —</option>
           <option value="paypal">💳 PayPal (USD)</option>
@@ -379,32 +480,32 @@
         <label class="form-label" id="fl-msg">Consulta (opcional)</label>
         <input class="form-input" type="text" placeholder="¿Qué querés explorar?">
       </div>
-      <button type="submit" class="submit-btn"><span id="btn-submit">Enviar solicitud</span></button>
+      <button type="submit" class="submit-btn"><span id="btn-submit">Enviar mi consulta</span></button>
     </form>
   </div>
 </section>
-
+ 
 <footer>
   <div class="footer-logo">El Viajero del Tiempo</div>
   <div class="footer-copy">© 2026 El Viajero del Tiempo · el.viajero.del.tiempook@gmail.com</div>
 </footer>
-
+ 
 <script>
 const rates={USD:1,ARS:1420,COP:3600,MXN:17.35,EUR:0.92};
 const symbols={USD:'U$S',ARS:'$',COP:'$',MXN:'$',EUR:'€'};
 let cur='USD',lang='es',discountApplied=false;
-
+ 
 // Código de descuento — cupo diario 5 personas
 const DISCOUNT_CODE='AYUDA10';
 const DISCOUNT_PCT=0.10;
 let discountUsedToday=parseInt(localStorage.getItem('discountDate')===new Date().toDateString()?localStorage.getItem('discountCount')||0:0);
-
+ 
 function fmt(usd,c,applyDisc=false){
   let v=usd*(applyDisc&&discountApplied?1-DISCOUNT_PCT:1)*rates[c];
   if(c==='USD'||c==='EUR') return symbols[c]+' '+Math.round(v);
   return symbols[c]+' '+Math.round(v).toLocaleString('es-AR');
 }
-
+ 
 function applyDiscount(){
   const code=document.getElementById('discount-input').value.trim().toUpperCase();
   const msg=document.getElementById('discount-msg');
@@ -428,18 +529,18 @@ function applyDiscount(){
     msg.style.display='block';
   }
 }
-
+ 
 const iP=[15,25,35];
 const sP=[5,15,55,35,40,40,45,50,12,12,7,12];
 const planesPrices=[25,45,75];
-
+ 
 const content={
   es:{
     heroSub:"Lecturas del Destino",
     heroTag:'"Ya estuve en tu futuro. Sé lo que viene... y lo que podés manejar."',
     heroTagSub:"Psicólogo · Antropólogo · Mercadólogo",
-    heroBtn:"Reservar consulta",
-    navInstant:"Lecturas",navServices:"Servicios",navPlanes:"Planes",navPay:"Pagos",navBooking:"Reservar",
+    heroBtn:"Comenzar mi consulta",
+    navInstant:"Lecturas",navServices:"Servicios",navPlanes:"Planes",navPay:"Pagos",navDonateing:"Donar",
     smLabel:"Sobre el Viajero",
     smBody:"Desde pequeño tengo el don de viajar en el tiempo — hacia el pasado y hacia el futuro. Mis especialidades son la psicología, la antropología y la mercadología: tres caminos que convergen en uno solo: entender al ser humano en su totalidad. No siempre digo todo lo que veo. Hay verdades para las que aún no estás preparado. Mi trabajo no es revelarte el futuro — es darte la claridad exacta que necesitás hoy para llegar a donde tenés que llegar.",
     smQuote:'"Creo en la meritocracia. Lo que no se valora, no transforma. Cada consulta es una donación consciente destinada íntegramente a familias refugiadas de guerra."',
@@ -447,9 +548,9 @@ const content={
     sLabel:"Servicios",sTitle:"Lo que el tiempo<br>puede revelarte",sBody:"Cada lectura es un viaje único. Seleccioná la consulta que resuene con lo que necesitás saber.",
     plLabel:"Planes Mensuales",plTitle:"Tiradas diarias,<br>resultados continuos",plBody:"Suscribite y recibí tu lectura diaria todos los días del mes. El tiempo siempre tiene algo que decirte.",
     pLabel:"El proceso",pTitle:"Cómo funciona",
-    payLabel:"Formas de pago",payTitle:"Pagos seguros,<br>a tu medida",
-    ctaTitle:"Comenzá tu lectura",ctaBody:"Completá el formulario y me pondré en contacto para coordinar tu consulta.",
-    flName:"Nombre completo",flDob:"Fecha de nacimiento",flEmail:"Email",flService:"Servicio",flPayment:"Método de pago",flDiscount:"Código de descuento (opcional)",flMsg:"Consulta (opcional)",btnSubmit:"Enviar solicitud",currLabel:"Ver precios en:",
+    payLabel:"Medios de donación",payTitle:"Donaciones seguras,<br>a tu medida",
+    ctaTitle:"Comenzá tu viaje",ctaBody:"Completá el formulario y me pondré en contacto para coordinar tu consulta.",
+    flName:"Nombre completo",flDob:"Fecha de nacimiento",flEmail:"Email",flService:"Servicio",flPayment:"Medio de donación",flDiscount:"Código de descuento (opcional)",flMsg:"Consulta (opcional)",btnSubmit:"Enviar mi consulta",currLabel:"Ver donación sugerida en:",
     instant:[
       {icon:"✦",name:"Tirada de Cartas",desc:"Lectura inmediata generada con IA. Recibís tu tirada al instante.",badge:"INSTANTÁNEO"},
       {icon:"ᚱ",name:"Tirada de Runas",desc:"El antiguo oráculo nórdico responde tus preguntas más urgentes.",badge:"INSTANTÁNEO"},
@@ -470,9 +571,9 @@ const content={
       {num:"12",name:"Carta Natal Extendida",desc:"Mapa completo: 10 planetas, casas astrológicas, aspectos y análisis de propósito de vida, relaciones, dinero y salud.",extra:"natal"},
     ],
     planes:[
-      {name:"Básico",price:25,period:"por mes",badge:null,features:["1 tirada de cartas diaria","Entrega automática por email","Acceso al canal de Telegram"]},
-      {name:"Premium",price:45,period:"por mes",badge:"Más elegido",features:["1 tirada de cartas diaria","1 tirada de runas diaria","Entrega automática por email","Acceso al canal de Telegram","1 consulta escrita al mes"]},
-      {name:"VIP",price:75,period:"por mes",badge:null,features:["Tiradas diarias ilimitadas","Acceso al canal VIP privado","2 consultas escritas al mes","Prioridad en respuestas","Seguimiento personalizado"]},
+      {name:"Básico",price:25,period:"donación mensual",badge:null,features:["1 tirada de cartas diaria","Entrega automática por email","Acceso al canal de Telegram"]},
+      {name:"Premium",price:45,period:"donación mensual",badge:"Más elegido",features:["1 tirada de cartas diaria","1 tirada de runas diaria","Entrega automática por email","Acceso al canal de Telegram","1 consulta escrita al mes"]},
+      {name:"VIP",price:75,period:"donación mensual",badge:null,features:["Tiradas diarias ilimitadas","Acceso al canal VIP privado","2 consultas escritas al mes","Prioridad en respuestas","Seguimiento personalizado"]},
     ],
     steps:[
       {n:"I",title:"Elegís tu consulta",desc:"Seleccionás el tipo de lectura y el método de pago."},
@@ -485,18 +586,18 @@ const content={
     heroSub:"Readings of Destiny",
     heroTag:'"I have already been to your future. I know what is coming... and what you can handle."',
     heroTagSub:"Psychologist · Anthropologist · Marketologist",
-    heroBtn:"Book a consultation",
-    navInstant:"Readings",navServices:"Services",navPlanes:"Plans",navPay:"Payments",navBooking:"Book",
+    heroBtn:"Begin my consultation",
+    navInstant:"Readings",navServices:"Services",navPlanes:"Plans",navPay:"Payments",navDonateing:"Donate",
     smLabel:"About the Traveler",
     smBody:"Since childhood I have had the gift of traveling through time — to the past and to the future. My specialties are psychology, anthropology and marketing: three paths that converge into one: understanding the human being in its entirety. I do not always say everything I see. There are truths you are not yet ready for. My work is not to reveal your future — it is to give you the exact clarity you need today to get where you need to go.",
     smQuote:'"I believe in meritocracy. What is not valued, does not transform. Each consultation is a conscious donation — every donation goes entirely to war refugee families."',
     iLabel:"Instant Readings",iTitle:"Answers instantly",iBody:"Pay and receive your reading immediately. No waiting.",
     sLabel:"Services",sTitle:"What time<br>can reveal to you",sBody:"Each reading is a unique journey. Select the consultation that resonates with what you need to know.",
-    plLabel:"Monthly Plans",plTitle:"Daily readings,<br>continuous results",plBody:"Subscribe and receive your daily reading every day of the month. Time always has something to tell you.",
+    plLabel:"Monthly Plans",plTitle:"Daily readings,<br>continuous results",plBody:"Donate monthly and receive your daily reading every day of the month. Time always has something to tell you.",
     pLabel:"The process",pTitle:"How it works",
-    payLabel:"Payment methods",payTitle:"Secure payments,<br>your way",
-    ctaTitle:"Begin your reading",ctaBody:"Fill out the form and I will contact you to coordinate your consultation.",
-    flName:"Full name",flDob:"Date of birth",flEmail:"Email",flService:"Service",flPayment:"Payment method",flDiscount:"Discount code (optional)",flMsg:"Question (optional)",btnSubmit:"Send request",currLabel:"View prices in:",
+    payLabel:"Donation methods",payTitle:"Secure donations,<br>your way",
+    ctaTitle:"Begin your journey",ctaBody:"Fill out the form and I will contact you to coordinate your consultation.",
+    flName:"Full name",flDob:"Date of birth",flEmail:"Email",flService:"Service",flPayment:"Donation method",flDiscount:"Discount code (optional)",flMsg:"Question (optional)",btnSubmit:"Send my consultation",currLabel:"View suggested donation in:",
     instant:[
       {icon:"✦",name:"Tarot Card Reading",desc:"Instant AI-generated reading. Receive your tarot spread immediately.",badge:"INSTANT"},
       {icon:"ᚱ",name:"Rune Reading",desc:"The ancient Nordic oracle answers your most urgent questions.",badge:"INSTANT"},
@@ -506,7 +607,7 @@ const content={
       {num:"01",name:"3 Concrete Questions",desc:"Three direct yes or no answers. Immediate clarity on what you need to know most.",extra:null},
       {num:"02",name:"Extended Consultation (written)",desc:"Deep reading by message. No fixed schedule — you receive your full response.",extra:null},
       {num:"03",name:"Extended Consultation (call)",desc:"Live session by phone call. Appointment coordinated by email.",extra:null},
-      {num:"04",name:"Improve Personal Economy",desc:"Book your consultation and receive precise guidance from what the cards reveal. In 21 to 70 days you will begin to see the changes you need.",extra:null},
+      {num:"04",name:"Improve Personal Economy",desc:"Donate your consultation and receive precise guidance from what the cards reveal. In 21 to 70 days you will begin to see the changes you need.",extra:null},
       {num:"05",name:"Return of a Partner",desc:"Once the consultation is taken, you will receive exact guidance from what time reveals. In 21 to 70 days you will begin to see the changes you were waiting for.",extra:"pareja"},
       {num:"06",name:"Find Love",desc:"The cards reveal the path to the love you seek. In 21 to 70 days you will begin to see the changes.",extra:null},
       {num:"07",name:"Legal Matters",desc:"Complete your details and pay. In less than 2 hours you receive your full reading. Expected results in 40 to 120 days.",extra:null},
@@ -517,9 +618,9 @@ const content={
       {num:"12",name:"Extended Birth Chart",desc:"Complete map: 10 planets, astrological houses, aspects and analysis of life purpose, relationships, money and health.",extra:"natal"},
     ],
     planes:[
-      {name:"Basic",price:25,period:"per month",badge:null,features:["1 daily tarot reading","Automatic email delivery","Access to Telegram channel"]},
-      {name:"Premium",price:45,period:"per month",badge:"Most popular",features:["1 daily tarot reading","1 daily rune reading","Automatic email delivery","Access to Telegram channel","1 written consultation per month"]},
-      {name:"VIP",price:75,period:"per month",badge:null,features:["Unlimited daily readings","Access to private VIP channel","2 written consultations per month","Priority responses","Personalized follow-up"]},
+      {name:"Basic",price:25,period:"monthly donation",badge:null,features:["1 daily tarot reading","Automatic email delivery","Access to Telegram channel"]},
+      {name:"Premium",price:45,period:"monthly donation",badge:"Most popular",features:["1 daily tarot reading","1 daily rune reading","Automatic email delivery","Access to Telegram channel","1 written consultation monthly donation"]},
+      {name:"VIP",price:75,period:"monthly donation",badge:null,features:["Unlimited daily readings","Access to private VIP channel","2 written consultations monthly donation","Priority responses","Personalized follow-up"]},
     ],
     steps:[
       {n:"I",title:"Choose your consultation",desc:"Select the type of reading and payment method."},
@@ -529,7 +630,7 @@ const content={
     ],
   }
 };
-
+ 
 function openModal(name,usdPrice){
   document.getElementById('modal-service-name').textContent=name;
   const finalPrice=discountApplied?usdPrice*(1-DISCOUNT_PCT):usdPrice;
@@ -542,13 +643,13 @@ function closeModal(){document.getElementById('payModal').classList.remove('open
 function showQR(){document.getElementById('qr-section').style.display='block';}
 function copyAlias(){navigator.clipboard.writeText('ELVIAJERODELTIEMPO');alert('✓ Alias copiado: ELVIAJERODELTIEMPO');}
 function copyAddress(){navigator.clipboard.writeText('TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG');alert('✓ Dirección copiada');}
-
+ 
 function setCurrency(c){
   cur=c;
   document.querySelectorAll('.currency-btn').forEach(b=>b.classList.toggle('active',b.textContent.startsWith(c)));
   renderInstant(content[lang]);renderServices(content[lang]);renderPlanes(content[lang]);renderServiceSelect(content[lang]);
 }
-
+ 
 function renderInstant(c){
   document.getElementById('instant-grid').innerHTML=c.instant.map((s,i)=>`
     <div class="instant-card">
@@ -557,10 +658,10 @@ function renderInstant(c){
       <div class="instant-name">${s.name}</div>
       <div class="instant-desc">${s.desc}</div>
       <div class="instant-price">${fmt(iP[i],cur)}</div>
-      <button class="pay-btn" onclick="openModal('${s.name}',${iP[i]})"><span>${lang==='es'?'Reservar':'Book'}</span></button>
+      <button class="pay-btn" onclick="openModal('${s.name}',${iP[i]})"><span>${lang==='es'?'Donar':'Donate'}</span></button>
     </div>`).join('');
 }
-
+ 
 function renderServices(c){
   document.getElementById('services-grid').innerHTML=c.services.map((s,i)=>`
     <div class="service-card">
@@ -568,10 +669,10 @@ function renderServices(c){
       <div class="service-name">${s.name}</div>
       <div class="service-desc">${s.desc}</div>
       <div class="service-price"><strong>${fmt(sP[i],cur)}</strong></div>
-      <button class="pay-btn" onclick="openModal('${s.name}',${sP[i]})"><span>${lang==='es'?'Reservar':'Book'}</span></button>
+      <button class="pay-btn" onclick="openModal('${s.name}',${sP[i]})"><span>${lang==='es'?'Donar':'Donate'}</span></button>
     </div>`).join('');
 }
-
+ 
 function renderPlanes(c){
   document.getElementById('planes-grid').innerHTML=c.planes.map((p,i)=>`
     <div class="plan-card ${p.badge?'destacado':''}">
@@ -580,10 +681,10 @@ function renderPlanes(c){
       <div class="plan-price">${fmt(planesPrices[i],cur)}</div>
       <div class="plan-period">${p.period}</div>
       <ul class="plan-features">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
-      <button class="pay-btn" onclick="openModal('Plan ${p.name}',${planesPrices[i]})"><span>${lang==='es'?'Suscribirme':'Subscribe'}</span></button>
+      <button class="pay-btn" onclick="openModal('Plan ${p.name}',${planesPrices[i]})"><span>${lang==='es'?'Donar mensualmente':'Donate monthly'}</span></button>
     </div>`).join('');
 }
-
+ 
 function renderSteps(c){
   document.getElementById('process-steps').innerHTML=c.steps.map(s=>`
     <div class="process-step">
@@ -592,13 +693,13 @@ function renderSteps(c){
       <div class="step-desc">${s.desc}</div>
     </div>`).join('');
 }
-
+ 
 function renderServiceSelect(c){
   const all=[...c.instant.map((s,i)=>({name:s.name,price:iP[i],extra:null})),...c.services.map((s,i)=>({name:s.name,price:sP[i],extra:s.extra})),...c.planes.map((s,i)=>({name:'Plan '+s.name,price:planesPrices[i],extra:null}))];
   document.getElementById('f-service').innerHTML=`<option value="">— ${lang==='es'?'Seleccioná':'Select'} —</option>`+
     all.map((s,i)=>`<option value="${i}" data-extra="${s.extra||''}">${s.name} — ${fmt(s.price,cur)}</option>`).join('');
 }
-
+ 
 function showExtraFields(){
   const sel=document.getElementById('f-service');
   const extra=sel.options[sel.selectedIndex]?.dataset.extra||'';
@@ -616,7 +717,7 @@ function showExtraFields(){
     </div>`;
   } else { c.innerHTML=''; }
 }
-
+ 
 function setLang(l){
   lang=l;const c=content[l];
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
@@ -628,7 +729,7 @@ function setLang(l){
   document.getElementById('nav-services').textContent=c.navServices;
   document.getElementById('nav-planes').textContent=c.navPlanes;
   document.getElementById('nav-pay').textContent=c.navPay;
-  document.getElementById('nav-booking').textContent=c.navBooking;
+  document.getElementById('nav-booking').textContent=c.navDonateing;
   document.getElementById('sm-label').textContent=c.smLabel;
   document.getElementById('sm-body').textContent=c.smBody;
   document.getElementById('sm-quote').textContent=c.smQuote;
@@ -658,7 +759,7 @@ function setLang(l){
   document.getElementById('curr-label').textContent=c.currLabel;
   renderInstant(c);renderServices(c);renderPlanes(c);renderSteps(c);renderServiceSelect(c);
 }
-
+ 
 function handleSubmit(e){
   e.preventDefault();
   const btn=document.querySelector('.submit-btn span');
@@ -667,6 +768,177 @@ function handleSubmit(e){
 }
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 setLang('es');
+ 
+// ============ SISTEMA DE TIRADAS ============
+let tiradaData={nombre:'',tipo:'',tirada:'',pregunta:''};
+let currentStep=1;
+const totalSteps=4;
+ 
+function updateProgress(){
+  const el=document.getElementById('tirada-progress');
+  el.innerHTML=Array.from({length:totalSteps},(_,i)=>`<div class="tirada-dot ${i<currentStep?'active':''}"></div>`).join('');
+}
+ 
+function selectOption(btn,val){
+  btn.closest('.tirada-options').querySelectorAll('.tirada-option').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  if(currentStep===2) tiradaData.tipo=val;
+  if(currentStep===3) tiradaData.tirada=val;
+}
+ 
+function nextStep(step){
+  if(step===1){
+    const nombre=document.getElementById('t-nombre').value.trim();
+    if(!nombre){alert('Por favor ingresá tu nombre o seudónimo');return;}
+    tiradaData.nombre=nombre;
+    // Personalizar preguntas siguientes con el nombre
+    document.getElementById('tq-2').textContent=`"${nombre}, ¿sobre qué área de tu vida querés que el tiempo hable hoy?"`;
+    document.getElementById('tq-3').textContent=`"${nombre}, ¿qué tipo de lectura sentís que necesitás hoy?"`;
+    document.getElementById('tq-4').textContent=`"${nombre}, ¿hay algo específico que querés preguntarle al tiempo, o preferís una lectura abierta?"`;
+  }
+  if(step===2&&!tiradaData.tipo){alert('Por favor elegí un área');return;}
+  if(step===3&&!tiradaData.tirada){alert('Por favor elegí un tipo de tirada');return;}
+ 
+  document.getElementById(`step-${step}`).classList.remove('active');
+  currentStep=step+1;
+  document.getElementById(`step-${currentStep}`).classList.add('active');
+  updateProgress();
+}
+ 
+const cartasTarot=[
+  {nombre:'El Mago',emoji:'🎩',pos:'Pasado'},
+  {nombre:'La Sacerdotisa',emoji:'🌙',pos:'Presente'},
+  {nombre:'La Estrella',emoji:'⭐',pos:'Futuro'},
+  {nombre:'La Fuerza',emoji:'🦁',pos:'Consejo'},
+  {nombre:'El Sol',emoji:'☀️',pos:'Resultado'},
+  {nombre:'El Mundo',emoji:'🌍',pos:'Presente'},
+  {nombre:'La Luna',emoji:'🌛',pos:'Obstáculo'},
+  {nombre:'El Ermitaño',emoji:'🕯️',pos:'Pasado'},
+  {nombre:'La Justicia',emoji:'⚖️',pos:'Consejo'},
+  {nombre:'La Rueda',emoji:'🎡',pos:'Destino'},
+  {nombre:'El Carro',emoji:'🏆',pos:'Acción'},
+  {nombre:'Los Amantes',emoji:'💞',pos:'Relación'},
+  {nombre:'El Emperador',emoji:'👑',pos:'Autoridad'},
+  {nombre:'La Emperatriz',emoji:'🌺',pos:'Abundancia'},
+];
+ 
+const runasNordicas=[
+  {nombre:'Fehu',emoji:'ᚠ',pos:'Prosperidad'},
+  {nombre:'Uruz',emoji:'ᚢ',pos:'Fuerza'},
+  {nombre:'Thurisaz',emoji:'ᚦ',pos:'Protección'},
+  {nombre:'Ansuz',emoji:'ᚨ',pos:'Mensaje'},
+  {nombre:'Raidho',emoji:'ᚱ',pos:'Camino'},
+  {nombre:'Kenaz',emoji:'ᚲ',pos:'Conocimiento'},
+  {nombre:'Gebo',emoji:'ᚷ',pos:'Intercambio'},
+  {nombre:'Wunjo',emoji:'ᚹ',pos:'Alegría'},
+  {nombre:'Hagalaz',emoji:'ᚺ',pos:'Transformación'},
+  {nombre:'Sowilo',emoji:'ᛊ',pos:'Éxito'},
+  {nombre:'Tiwaz',emoji:'ᛏ',pos:'Justicia'},
+  {nombre:'Berkano',emoji:'ᛒ',pos:'Crecimiento'},
+];
+ 
+function getRandom(arr,n){
+  const shuffled=[...arr].sort(()=>Math.random()-0.5);
+  return shuffled.slice(0,n);
+}
+ 
+async function generarTirada(){
+  tiradaData.pregunta=document.getElementById('t-pregunta').value.trim();
+ 
+  // Ocultar paso 4, mostrar resultado
+  document.getElementById('step-4').classList.remove('active');
+  document.getElementById('tirada-result').classList.add('show');
+  document.getElementById('tirada-loading').style.display='block';
+  document.getElementById('tirada-content').style.display='none';
+ 
+  // Seleccionar cartas/runas
+  let simbolos=[];
+  let nCartas=tiradaData.tirada==='combo'?3:3;
+ 
+  if(tiradaData.tirada==='cartas'||tiradaData.tirada==='combo'){
+    simbolos=[...simbolos,...getRandom(cartasTarot,tiradaData.tirada==='combo'?2:3)];
+  }
+  if(tiradaData.tirada==='runas'||tiradaData.tirada==='combo'){
+    simbolos=[...simbolos,...getRandom(runasNordicas,tiradaData.tirada==='combo'?1:3)];
+  }
+ 
+  // Mostrar cartas
+  document.getElementById('tirada-cards').innerHTML=simbolos.map(s=>`
+    <div class="tirada-card">
+      <div class="tirada-card-icon">${s.emoji}</div>
+      <div class="tirada-card-name">${s.nombre}</div>
+      <div class="tirada-card-pos">${s.pos}</div>
+    </div>`).join('');
+ 
+  // Construir prompt para la IA
+  const tipoTexto={amor:'amor y relaciones',dinero:'dinero y economía',salud:'salud y bienestar',general:'consulta general'};
+  const tiradaTexto={cartas:'tirada de tarot',runas:'tirada de runas nórdicas',combo:'tirada combinada de tarot y runas'};
+  const simbolosTexto=simbolos.map(s=>`${s.nombre} (${s.pos})`).join(', ');
+ 
+  const prompt=`Eres El Viajero del Tiempo, un ser ancestral de más de 90 años que tiene el don de viajar al pasado y al futuro. Eres psicólogo, antropólogo y mercadólogo. Vives en Atenas, Grecia. Tu misión es ayudar a las personas con sabiduría, respeto y amor profundo.
+ 
+La persona que consulta se llama ${tiradaData.nombre}.
+Área de consulta: ${tipoTexto[tiradaData.tipo]}.
+Tipo de tirada: ${tiradaTexto[tiradaData.tirada]}.
+${tiradaData.pregunta?`Pregunta específica: "${tiradaData.pregunta}".`:'Lectura abierta sin pregunta específica.'}
+Símbolos que salieron: ${simbolosTexto}.
+ 
+Instrucciones importantes:
+- Dirijite a la persona por su nombre "${tiradaData.nombre}" al menos una vez.
+- NO menciones nunca que eres una IA, programa o sistema automático.
+- Interpretá cada símbolo en relación al área consultada.
+- Sé profundo, sabio y esperanzador. NUNCA cierres con negatividad.
+- Al final, de forma sutil y natural, mencioná que si desea que los cambios se manifiesten más rápido, puede hacer una donación mayor para una consulta personalizada contigo.
+- Usa la palabra "donación" en lugar de "pago".
+- El tono es cálido, íntimo, poético pero concreto. Máximo 250 palabras.
+- Escribí en español neutro latinoamericano.`;
+ 
+  try {
+    const response=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await response.json();
+    const texto=data.content?.[0]?.text||'El tiempo guarda silencio por ahora. Intenta de nuevo.';
+ 
+    document.getElementById('tirada-loading').style.display='none';
+    document.getElementById('tirada-content').style.display='block';
+    document.getElementById('tirada-reading').textContent=texto;
+ 
+    // Upsell según el área
+    const upsells={
+      amor:`✦ ${tiradaData.nombre}, si deseás que el amor se manifieste más rápido en tu vida, puedo acompañarte personalmente con una consulta de Regreso de Pareja o Encontrar el Amor. Solo requiere una donación mayor. El tiempo puede acortarse.`,
+      dinero:`✦ ${tiradaData.nombre}, si querés que la abundancia llegue en 21 a 70 días, puedo guiarte personalmente con una consulta de Mejorar Economía Personal. Una donación mayor abre puertas que hoy parecen cerradas.`,
+      salud:`✦ ${tiradaData.nombre}, si deseás una guía más profunda para tu bienestar, puedo acompañarte con una consulta de Limpieza Astral y de Aura. El tiempo revela el camino — y una donación mayor acelera la sanación.`,
+      general:`✦ ${tiradaData.nombre}, si sentís que esta lectura tocó algo importante, puedo ir más profundo contigo en una Consulta Extendida. Una donación mayor me permite dedicarte toda mi atención.`
+    };
+    document.getElementById('tirada-upsell').textContent=upsells[tiradaData.tipo]||upsells.general;
+ 
+  } catch(e){
+    document.getElementById('tirada-loading').style.display='none';
+    document.getElementById('tirada-content').style.display='block';
+    document.getElementById('tirada-reading').textContent='El tiempo atraviesa interferencias en este momento. Por favor intentá nuevamente en unos instantes.';
+  }
+}
+ 
+function resetTirada(){
+  tiradaData={nombre:'',tipo:'',tirada:'',pregunta:''};
+  currentStep=1;
+  document.getElementById('tirada-result').classList.remove('show');
+  document.querySelectorAll('.tirada-step').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tirada-option').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('t-nombre').value='';
+  document.getElementById('t-pregunta').value='';
+  document.getElementById('step-1').classList.add('active');
+  updateProgress();
+}
+ 
+updateProgress();
 </script>
 </body>
 </html>
