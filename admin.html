@@ -7,6 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>emailjs.init('vheByficzrg5tvPG5');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDD6aDKcBWuABNCyjamSt8-Uj2wgeNC4P8",authDomain:"elviajerodeltiempo-a3d4c.firebaseapp.com",databaseURL:"https://elviajerodeltiempo-a3d4c-default-rtdb.firebaseio.com",projectId:"elviajerodeltiempo-a3d4c",storageBucket:"elviajerodeltiempo-a3d4c.firebasestorage.app",messagingSenderId:"242221363221",appId:"1:242221363221:web:0b06570abc8994378b9e1c"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+</script>
 <style>
 :root{--gold:#C9A84C;--gold-light:#E8C97A;--deep:#0A0612;--surface:#130D2A;--surface2:#1C1438;--text:#F0EAD6;--text-muted:#A89CC0;--border:rgba(201,168,76,0.25);--red:#c0392b;--green:#1a7a4a;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -225,27 +232,19 @@ function generateCode(){
 
 // ============ RENDER ============
 function loadRequests(){
-  const all = getRequests();
-  const pending = all.filter(r=>r.status==='pending');
-  const history = all.filter(r=>r.status!=='pending');
-
-  document.getElementById('badge-pend').textContent = pending.length;
-
-  // Pendientes
-  const pEl = document.getElementById('list-pendientes');
-  if(pending.length===0){
-    pEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No hay solicitudes pendientes</div></div>`;
-  } else {
-    pEl.innerHTML = pending.map(r=>renderCard(r)).join('');
-  }
-
-  // Historial
-  const hEl = document.getElementById('list-historial');
-  if(history.length===0){
-    hEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin historial aún</div></div>`;
-  } else {
-    hEl.innerHTML = history.sort((a,b)=>b.ts-a.ts).map(r=>renderCard(r)).join('');
-  }
+  db.ref('requests').once('value').then(snap=>{
+    const all=[];
+    snap.forEach(child=>all.push({id:child.key,...child.val()}));
+    const pending=all.filter(r=>r.status==='pending');
+    const history=all.filter(r=>r.status!=='pending');
+    document.getElementById('badge-pend').textContent=pending.length;
+    const pEl=document.getElementById('list-pendientes');
+    if(pending.length===0){pEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No hay solicitudes pendientes</div></div>`;}
+    else{pEl.innerHTML=pending.map(r=>renderCard(r)).join('');}
+    const hEl=document.getElementById('list-historial');
+    if(history.length===0){hEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin historial aún</div></div>`;}
+    else{hEl.innerHTML=history.sort((a,b)=>b.ts-a.ts).map(r=>renderCard(r)).join('');}
+  });
 }
 
 function renderCard(r){
@@ -285,93 +284,62 @@ function renderCard(r){
 
 // ============ ACCIONES ============
 async function approveRequest(id){
-  const all = getRequests();
-  const req = all.find(r=>r.id===id);
+  const code=generateCode();
+  const expiry=Date.now()+24*60*60*1000;
+  const snap=await db.ref('requests/'+id).once('value');
+  const req=snap.val();
   if(!req) return;
-
-  const code = generateCode();
-  const expiry = Date.now() + 24*60*60*1000;
-
-  req.status = 'approved';
-  req.codigo = code;
-  req.approved_at = Date.now();
-  saveRequests(all);
-
-  // Guardar código
-  const codes = getCodes();
-  codes.push({ code, email: req.email, nombre: req.nombre, servicio: req.servicio, ts: Date.now(), expiry, used: false });
-  saveCodes(codes);
-
-  // Enviar email
-  const sendMsg = document.getElementById('sending-msg');
+  await db.ref('requests/'+id).update({status:'approved',codigo:code,approved_at:Date.now()});
+  await db.ref('codes/'+code).set({code,email:req.email,nombre:req.nombre,servicio:req.servicio,ts:Date.now(),expiry,used:false});
+  const sendMsg=document.getElementById('sending-msg');
   sendMsg.style.display='block';
-
-  try {
-    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-      to_email: req.email,
-      to_name: req.nombre,
-      codigo: code,
-      servicio: req.servicio,
-    }, EMAILJS_PUBLIC);
+  try{
+    await emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{to_email:req.email,to_name:req.nombre,codigo:code,servicio:req.servicio},EMAILJS_PUBLIC);
     sendMsg.style.display='none';
     alert(`✓ Aprobado. Código ${code} enviado a ${req.email}`);
-  } catch(e) {
+  }catch(e){
     sendMsg.style.display='none';
-    alert(`✓ Aprobado. Código generado: ${code}\n\nNo se pudo enviar el email automáticamente. Envialo manualmente a: ${req.email}`);
+    alert(`✓ Aprobado. Código: ${code}\n\nEnvialo manualmente a: ${req.email}`);
   }
-
-  loadRequests();
-  renderStats();
+  loadRequests();renderStats();
 }
 
 function rejectRequest(id){
   if(!confirm('¿Rechazar esta solicitud?')) return;
-  const all = getRequests();
-  const req = all.find(r=>r.id===id);
-  if(!req) return;
-  req.status = 'rejected';
-  req.rejected_at = Date.now();
-  saveRequests(all);
-  loadRequests();
-  renderStats();
+  db.ref('requests/'+id).update({status:'rejected',rejected_at:Date.now()});
+  setTimeout(()=>{loadRequests();renderStats();},500);
   alert('Solicitud rechazada.');
 }
 
-// ============ CÓDIGOS ============
 function renderCodigos(){
-  const codes = getCodes();
-  const el = document.getElementById('list-codigos');
-  if(codes.length===0){
-    el.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin códigos generados aún</div></div>`;
-    return;
-  }
-  el.innerHTML = codes.sort((a,b)=>b.ts-a.ts).map(c=>{
-    const exp = new Date(c.expiry).toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-    const expired = Date.now() > c.expiry;
-    return `
-      <div class="code-card ${c.used||expired?'code-used':''}">
+  db.ref('codes').once('value').then(snap=>{
+    const codes=[];
+    snap.forEach(child=>codes.push(child.val()));
+    const el=document.getElementById('list-codigos');
+    if(codes.length===0){el.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin códigos generados aún</div></div>`;return;}
+    el.innerHTML=codes.sort((a,b)=>b.ts-a.ts).map(c=>{
+      const exp=new Date(c.expiry).toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+      const expired=Date.now()>c.expiry;
+      return `<div class="code-card ${c.used||expired?'code-used':''}">
         <div class="code-meta">${c.nombre} · ${c.email}</div>
         <div class="code-val">${c.code}</div>
         <div class="code-meta">${c.servicio} · Vence: ${exp} ${c.used?'· USADO':''} ${expired&&!c.used?'· EXPIRADO':''}</div>
       </div>`;
-  }).join('');
+    }).join('');
+  });
 }
 
-// ============ STATS ============
 function renderStats(){
-  const all = getRequests();
-  const codes = getCodes();
-  const approved = all.filter(r=>r.status==='approved').length;
-  const pending = all.filter(r=>r.status==='pending').length;
-  const rejected = all.filter(r=>r.status==='rejected').length;
-  const usedCodes = codes.filter(c=>c.used).length;
-
-  document.getElementById('stats-grid').innerHTML=`
-    <div class="stat-box"><div class="stat-num" style="color:var(--gold)">${pending}</div><div class="stat-label">Pendientes</div></div>
-    <div class="stat-box"><div class="stat-num" style="color:#4caf84">${approved}</div><div class="stat-label">Aprobados</div></div>
-    <div class="stat-box"><div class="stat-num" style="color:#e57373">${rejected}</div><div class="stat-label">Rechazados</div></div>
-    <div class="stat-box"><div class="stat-num" style="color:var(--gold-light)">${usedCodes}</div><div class="stat-label">Tiradas usadas</div></div>
-  `;
+  Promise.all([db.ref('requests').once('value'),db.ref('codes').once('value')]).then(([reqSnap,codeSnap])=>{
+    let approved=0,pending=0,rejected=0,usedCodes=0;
+    reqSnap.forEach(c=>{const r=c.val();if(r.status==='approved')approved++;else if(r.status==='pending')pending++;else if(r.status==='rejected')rejected++;});
+    codeSnap.forEach(c=>{if(c.val().used)usedCodes++;});
+    document.getElementById('stats-grid').innerHTML=`
+      <div class="stat-box"><div class="stat-num" style="color:var(--gold)">${pending}</div><div class="stat-label">Pendientes</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:#4caf84">${approved}</div><div class="stat-label">Aprobados</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:#e57373">${rejected}</div><div class="stat-label">Rechazados</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--gold-light)">${usedCodes}</div><div class="stat-label">Tiradas usadas</div></div>`;
+  });
 }
 
 // ============ IMG MODAL ============
