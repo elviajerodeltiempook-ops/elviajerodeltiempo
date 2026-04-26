@@ -217,10 +217,10 @@ const db=firebase.database();
       <div class="modal-title" id="modal-service-name">Servicio</div>
       <div class="modal-amount" id="modal-amount">U$S 0</div>
       <div class="modal-methods">
-        <a class="modal-method" id="modal-paypal" href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank">
+        <div class="modal-method" onclick="copyPaypal()">
           <div class="modal-method-icon">💳</div>
-          <div><div class="modal-method-name">PayPal</div><div class="modal-method-detail">el.viajero.del.tiempook@gmail.com</div></div>
-        </a>
+          <div><div class="modal-method-name">PayPal</div><div class="modal-method-detail">el.viajero.del.tiempook@gmail.com — tocar para copiar</div></div>
+        </div>
         <div class="modal-method" onclick="copyAlias()">
           <div class="modal-method-icon">🇦🇷</div>
           <div><div class="modal-method-name">Pesos AR</div><div class="modal-method-detail">Alias: ELVIAJERODELTIEMPO — tocar para copiar</div></div>
@@ -714,6 +714,7 @@ function showModalStep(step){
 
 function closeModal(){document.getElementById('payModal').classList.remove('open');}
 function showQR(){document.getElementById('qr-section').style.display='block';}
+function copyPaypal(){navigator.clipboard.writeText('el.viajero.del.tiempook@gmail.com');alert('✓ Email de PayPal copiado: el.viajero.del.tiempook@gmail.com');}
 function copyAlias(){navigator.clipboard.writeText('ELVIAJERODELTIEMPO');alert('✓ Alias copiado: ELVIAJERODELTIEMPO');}
 function copyAddress(){navigator.clipboard.writeText('TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG');alert('✓ Dirección copiada');}
 function irATirada(){closeModal();document.getElementById('tirada').scrollIntoView({behavior:'smooth'});}
