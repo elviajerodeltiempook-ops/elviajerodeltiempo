@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>El Viajero — Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<style>
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--deep:#0A0612;--surface:#130D2A;--surface2:#1C1438;--text:#F0EAD6;--text-muted:#A89CC0;--border:rgba(201,168,76,0.25);--red:#c0392b;--green:#1a7a4a;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:300;min-height:100vh;}
+
+/* LOGIN */
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.2em;margin-bottom:0.5rem;}
+.login-sub{font-size:0.65rem;color:var(--text-muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:3rem;}
+.login-box{width:100%;max-width:320px;background:var(--surface);border:0.5px solid var(--border);padding:2rem;}
+.login-label{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;display:block;}
+.login-input{width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.9rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;margin-bottom:1rem;-webkit-text-security:disc;}
+.login-btn{width:100%;padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;}
+.login-btn:active{background:var(--gold);color:var(--deep);}
+.login-error{font-size:0.7rem;color:#e74c3c;margin-top:0.5rem;display:none;text-align:center;}
+
+/* PANEL */
+#panel-screen{display:none;min-height:100vh;}
+.panel-header{background:var(--surface);border-bottom:0.5px solid var(--border);padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
+.panel-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold);letter-spacing:0.1em;}
+.panel-logout{font-size:0.6rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;background:none;border:0.5px solid var(--border);padding:0.35rem 0.7rem;cursor:pointer;font-family:'Montserrat',sans-serif;}
+.panel-logout:active{color:var(--gold);border-color:var(--gold);}
+
+.panel-tabs{display:flex;border-bottom:0.5px solid var(--border);background:var(--surface);}
+.tab-btn{flex:1;padding:0.8rem;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;background:none;border:none;color:var(--text-muted);cursor:pointer;font-family:'Montserrat',sans-serif;border-bottom:2px solid transparent;transition:all 0.2s;}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-badge{display:inline-block;background:var(--gold);color:var(--deep);font-size:0.55rem;padding:0.1rem 0.4rem;border-radius:10px;margin-left:0.3rem;font-weight:500;}
+
+.panel-body{padding:1rem;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* CARDS DE SOLICITUD */
+.request-card{background:var(--surface);border:0.5px solid var(--border);padding:1.2rem;margin-bottom:1rem;position:relative;}
+.request-card.approved{border-color:var(--green);opacity:0.6;}
+.request-card.rejected{border-color:var(--red);opacity:0.6;}
+.req-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.8rem;}
+.req-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);}
+.req-time{font-size:0.6rem;color:var(--text-muted);}
+.req-row{display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:flex-start;}
+.req-label{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);min-width:70px;padding-top:1px;}
+.req-val{font-size:0.75rem;color:var(--text);flex:1;word-break:break-all;}
+.req-service{color:var(--gold-light);}
+.req-comprobante{margin-top:0.8rem;}
+.comp-img{width:100%;max-height:200px;object-fit:contain;border:0.5px solid var(--border);background:var(--surface2);cursor:pointer;}
+.comp-text{font-size:0.72rem;color:var(--text-muted);background:var(--surface2);padding:0.6rem;border:0.5px solid var(--border);line-height:1.6;}
+.req-actions{display:flex;gap:0.8rem;margin-top:1rem;}
+.btn-approve{flex:1;padding:0.8rem;background:var(--green);border:none;color:#fff;font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;}
+.btn-approve:active{opacity:0.8;}
+.btn-reject{flex:1;padding:0.8rem;background:none;border:1px solid var(--red);color:var(--red);font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;}
+.btn-reject:active{background:var(--red);color:#fff;}
+.status-badge{position:absolute;top:0.8rem;right:0.8rem;font-size:0.58rem;letter-spacing:0.1em;padding:0.2rem 0.6rem;border-radius:2px;}
+.badge-approved{background:rgba(26,122,74,0.2);color:#4caf84;border:0.5px solid var(--green);}
+.badge-rejected{background:rgba(192,57,43,0.2);color:#e57373;border:0.5px solid var(--red);}
+.badge-pending{background:rgba(201,168,76,0.1);color:var(--gold);border:0.5px solid var(--border);}
+
+/* ESTADO VACIO */
+.empty-state{text-align:center;padding:3rem 1rem;}
+.empty-icon{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:rgba(201,168,76,0.2);margin-bottom:1rem;}
+.empty-text{font-size:0.75rem;color:var(--text-muted);}
+
+/* CÓDIGOS GENERADOS */
+.code-card{background:var(--surface);border:0.5px solid var(--border);padding:1rem;margin-bottom:0.8rem;}
+.code-val{font-family:monospace;font-size:1rem;color:var(--gold);letter-spacing:0.15em;margin:0.5rem 0;}
+.code-meta{font-size:0.65rem;color:var(--text-muted);}
+.code-used{opacity:0.4;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.5rem;}
+.stat-box{background:var(--surface);border:0.5px solid var(--border);padding:1rem;text-align:center;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);}
+.stat-label{font-size:0.6rem;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.2rem;}
+
+/* MODAL IMAGEN */
+.img-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:100;align-items:center;justify-content:center;}
+.img-modal.open{display:flex;}
+.img-modal img{max-width:95vw;max-height:90vh;object-fit:contain;}
+.img-modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;}
+
+.refresh-btn{width:100%;padding:0.7rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:1rem;}
+.refresh-btn:active{border-color:var(--gold);color:var(--gold);}
+.sending-msg{font-size:0.7rem;color:var(--gold);text-align:center;margin-top:0.5rem;display:none;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-logo">El Viajero del Tiempo</div>
+  <div class="login-sub">Panel de administración</div>
+  <div class="login-box">
+    <label class="login-label">Contraseña de acceso</label>
+    <input class="login-input" type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="login-error">Contraseña incorrecta</div>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div id="panel-screen">
+  <div class="panel-header">
+    <div class="panel-title">✦ Panel del Viajero</div>
+    <button class="panel-logout" onclick="logout()">Salir</button>
+  </div>
+
+  <div class="panel-tabs">
+    <button class="tab-btn active" onclick="showTab('pendientes')">Pendientes <span class="tab-badge" id="badge-pend">0</span></button>
+    <button class="tab-btn" onclick="showTab('historial')">Historial</button>
+    <button class="tab-btn" onclick="showTab('codigos')">Códigos</button>
+    <button class="tab-btn" onclick="showTab('stats')">Stats</button>
+  </div>
+
+  <div class="panel-body">
+
+    <!-- PENDIENTES -->
+    <div class="tab-content active" id="tab-pendientes">
+      <button class="refresh-btn" onclick="loadRequests()">↻ Actualizar solicitudes</button>
+      <div id="list-pendientes"></div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="tab-content" id="tab-historial">
+      <button class="refresh-btn" onclick="loadRequests()">↻ Actualizar</button>
+      <div id="list-historial"></div>
+    </div>
+
+    <!-- CÓDIGOS -->
+    <div class="tab-content" id="tab-codigos">
+      <button class="refresh-btn" onclick="renderCodigos()">↻ Actualizar</button>
+      <div id="list-codigos"></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="tab-content" id="tab-stats">
+      <div class="stats-grid" id="stats-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL IMAGEN -->
+<div class="img-modal" id="img-modal">
+  <button class="img-modal-close" onclick="closeImgModal()">✕</button>
+  <img id="img-modal-src" src="" alt="Comprobante">
+</div>
+
+<div class="sending-msg" id="sending-msg">Enviando código al cliente...</div>
+
+<script>
+// ============ CONFIG ============
+const ADMIN_PASS = 'ALFONSO1712';
+const EMAILJS_SERVICE = 'service_viajero';
+const EMAILJS_TEMPLATE = 'template_codigo';
+const EMAILJS_PUBLIC = 'TU_PUBLIC_KEY';
+
+// Storage key
+const STORAGE_KEY = 'viajero_requests';
+const CODES_KEY = 'viajero_codes';
+
+// ============ AUTH ============
+function doLogin(){
+  const pwd = document.getElementById('pwd-input').value;
+  if(pwd === ADMIN_PASS){
+    sessionStorage.setItem('vj_auth','1');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('panel-screen').style.display='block';
+    loadRequests();
+    renderStats();
+  } else {
+    document.getElementById('login-error').style.display='block';
+    setTimeout(()=>document.getElementById('login-error').style.display='none',2000);
+  }
+}
+
+function logout(){
+  sessionStorage.removeItem('vj_auth');
+  location.reload();
+}
+
+// Check if already logged
+if(sessionStorage.getItem('vj_auth')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('panel-screen').style.display='block';
+}
+
+// ============ TABS ============
+function showTab(name){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active', b.textContent.trim().toLowerCase().startsWith(name));
+  });
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='codigos') renderCodigos();
+  if(name==='stats') renderStats();
+}
+
+// ============ DATA ============
+function getRequests(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }
+  catch(e){ return []; }
+}
+function saveRequests(r){ localStorage.setItem(STORAGE_KEY, JSON.stringify(r)); }
+
+function getCodes(){
+  try{ return JSON.parse(localStorage.getItem(CODES_KEY)||'[]'); }
+  catch(e){ return []; }
+}
+function saveCodes(c){ localStorage.setItem(CODES_KEY, JSON.stringify(c)); }
+
+function generateCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code='VJT-';
+  for(let i=0;i<6;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+  return code;
+}
+
+// ============ RENDER ============
+function loadRequests(){
+  const all = getRequests();
+  const pending = all.filter(r=>r.status==='pending');
+  const history = all.filter(r=>r.status!=='pending');
+
+  document.getElementById('badge-pend').textContent = pending.length;
+
+  // Pendientes
+  const pEl = document.getElementById('list-pendientes');
+  if(pending.length===0){
+    pEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No hay solicitudes pendientes</div></div>`;
+  } else {
+    pEl.innerHTML = pending.map(r=>renderCard(r)).join('');
+  }
+
+  // Historial
+  const hEl = document.getElementById('list-historial');
+  if(history.length===0){
+    hEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin historial aún</div></div>`;
+  } else {
+    hEl.innerHTML = history.sort((a,b)=>b.ts-a.ts).map(r=>renderCard(r)).join('');
+  }
+}
+
+function renderCard(r){
+  const date = new Date(r.ts).toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  const statusBadge = r.status==='approved'
+    ? '<span class="status-badge badge-approved">Aprobado</span>'
+    : r.status==='rejected'
+    ? '<span class="status-badge badge-rejected">Rechazado</span>'
+    : '<span class="status-badge badge-pending">Pendiente</span>';
+
+  const comprobante = r.comprobante_type==='image'
+    ? `<img class="comp-img" src="${r.comprobante}" onclick="openImgModal('${r.comprobante}')" alt="Comprobante">`
+    : `<div class="comp-text">${r.comprobante||'Sin comprobante adjunto'}</div>`;
+
+  const actions = r.status==='pending' ? `
+    <div class="req-actions">
+      <button class="btn-approve" onclick="approveRequest('${r.id}')">✓ Aprobar</button>
+      <button class="btn-reject" onclick="rejectRequest('${r.id}')">✕ Rechazar</button>
+    </div>` : '';
+
+  return `
+    <div class="request-card ${r.status}" id="card-${r.id}">
+      ${statusBadge}
+      <div class="req-header">
+        <div class="req-name">${r.nombre||'Sin nombre'}</div>
+        <div class="req-time">${date}</div>
+      </div>
+      <div class="req-row"><span class="req-label">Email</span><span class="req-val">${r.email||'—'}</span></div>
+      <div class="req-row"><span class="req-label">Servicio</span><span class="req-val req-service">${r.servicio||'—'}</span></div>
+      <div class="req-row"><span class="req-label">Monto</span><span class="req-val">${r.monto||'—'}</span></div>
+      <div class="req-row"><span class="req-label">Método</span><span class="req-val">${r.metodo||'—'}</span></div>
+      <div class="req-comprobante">${comprobante}</div>
+      ${r.codigo ? `<div class="req-row" style="margin-top:0.5rem;"><span class="req-label">Código</span><span class="req-val" style="font-family:monospace;color:var(--gold);">${r.codigo}</span></div>` : ''}
+      ${actions}
+    </div>`;
+}
+
+// ============ ACCIONES ============
+async function approveRequest(id){
+  const all = getRequests();
+  const req = all.find(r=>r.id===id);
+  if(!req) return;
+
+  const code = generateCode();
+  const expiry = Date.now() + 24*60*60*1000;
+
+  req.status = 'approved';
+  req.codigo = code;
+  req.approved_at = Date.now();
+  saveRequests(all);
+
+  // Guardar código
+  const codes = getCodes();
+  codes.push({ code, email: req.email, nombre: req.nombre, servicio: req.servicio, ts: Date.now(), expiry, used: false });
+  saveCodes(codes);
+
+  // Enviar email
+  const sendMsg = document.getElementById('sending-msg');
+  sendMsg.style.display='block';
+
+  try {
+    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      to_email: req.email,
+      to_name: req.nombre,
+      codigo: code,
+      servicio: req.servicio,
+    }, EMAILJS_PUBLIC);
+    sendMsg.style.display='none';
+    alert(`✓ Aprobado. Código ${code} enviado a ${req.email}`);
+  } catch(e) {
+    sendMsg.style.display='none';
+    alert(`✓ Aprobado. Código generado: ${code}\n\nNo se pudo enviar el email automáticamente. Envialo manualmente a: ${req.email}`);
+  }
+
+  loadRequests();
+  renderStats();
+}
+
+function rejectRequest(id){
+  if(!confirm('¿Rechazar esta solicitud?')) return;
+  const all = getRequests();
+  const req = all.find(r=>r.id===id);
+  if(!req) return;
+  req.status = 'rejected';
+  req.rejected_at = Date.now();
+  saveRequests(all);
+  loadRequests();
+  renderStats();
+  alert('Solicitud rechazada.');
+}
+
+// ============ CÓDIGOS ============
+function renderCodigos(){
+  const codes = getCodes();
+  const el = document.getElementById('list-codigos');
+  if(codes.length===0){
+    el.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin códigos generados aún</div></div>`;
+    return;
+  }
+  el.innerHTML = codes.sort((a,b)=>b.ts-a.ts).map(c=>{
+    const exp = new Date(c.expiry).toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const expired = Date.now() > c.expiry;
+    return `
+      <div class="code-card ${c.used||expired?'code-used':''}">
+        <div class="code-meta">${c.nombre} · ${c.email}</div>
+        <div class="code-val">${c.code}</div>
+        <div class="code-meta">${c.servicio} · Vence: ${exp} ${c.used?'· USADO':''} ${expired&&!c.used?'· EXPIRADO':''}</div>
+      </div>`;
+  }).join('');
+}
+
+// ============ STATS ============
+function renderStats(){
+  const all = getRequests();
+  const codes = getCodes();
+  const approved = all.filter(r=>r.status==='approved').length;
+  const pending = all.filter(r=>r.status==='pending').length;
+  const rejected = all.filter(r=>r.status==='rejected').length;
+  const usedCodes = codes.filter(c=>c.used).length;
+
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat-box"><div class="stat-num" style="color:var(--gold)">${pending}</div><div class="stat-label">Pendientes</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:#4caf84">${approved}</div><div class="stat-label">Aprobados</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:#e57373">${rejected}</div><div class="stat-label">Rechazados</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--gold-light)">${usedCodes}</div><div class="stat-label">Tiradas usadas</div></div>
+  `;
+}
+
+// ============ IMG MODAL ============
+function openImgModal(src){ document.getElementById('img-modal-src').src=src; document.getElementById('img-modal').classList.add('open'); }
+function closeImgModal(){ document.getElementById('img-modal').classList.remove('open'); }
+
+// ============ RECIBIR DATOS DEL INDEX ============
+// El index.html guarda solicitudes en localStorage bajo la misma clave
+// Para que funcione en producción, ambas páginas deben estar en el mismo dominio
+
+// Init
+if(sessionStorage.getItem('vj_auth')==='1'){ loadRequests(); renderStats(); }
+</script>
+</body>
+</html>
