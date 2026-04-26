@@ -231,14 +231,14 @@
 
       <!-- Botón para ir al comprobante (solo lecturas instantáneas) -->
       <div id="modal-next-btn" style="display:none;margin-top:1.5rem;padding-top:1.2rem;border-top:0.5px solid var(--border);">
-        <button onclick="showModalStep('b')" style="width:100%;padding:0.9rem;background:var(--gold);color:var(--deep);border:none;font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;font-weight:500;">✦ Ya realicé mi donación → Continuar</button>
+        <button onclick="showModalStep('b')" style="width:100%;padding:0.9rem;background:var(--gold);color:var(--deep);border:none;font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;font-weight:500;">✦ Enviar comprobante de donación</button>
       </div>
     </div>
 
     <!-- PASO B: Subir comprobante + datos -->
     <div id="modal-step-b" style="display:none;">
       <div class="modal-title" style="margin-bottom:0.3rem;">Confirmá tu donación</div>
-      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;">El Viajero verifica cada donación personalmente. Completá tus datos y adjuntá el comprobante.</p>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;">El Viajero revisa cada donación personalmente antes de abrir el acceso. Adjuntá tu comprobante y él te enviará tu código a la brevedad.</p>
 
       <div style="display:flex;flex-direction:column;gap:0.8rem;">
         <div>
@@ -254,7 +254,7 @@
           <input id="comp-file" type="file" accept="image/*" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text-muted);padding:0.6rem;font-family:'Montserrat',sans-serif;font-size:0.72rem;cursor:pointer;">
           <textarea id="comp-texto" placeholder="O describí brevemente tu pago: método, monto, fecha..." rows="2" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);border-top:none;color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.75rem;outline:none;resize:none;margin-top:0;"></textarea>
         </div>
-        <button onclick="enviarComprobante()" style="padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;">Enviar y aguardar verificación</button>
+        <button onclick="enviarComprobante()" style="padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;">Enviar comprobante de donación</button>
         <div id="comp-msg" style="font-size:0.7rem;text-align:center;display:none;line-height:1.7;"></div>
       </div>
     </div>
