@@ -6,6 +6,13 @@
 <title>El Viajero del Tiempo — Ya estuve en tu futuro</title>
 <meta name="description" content="Ya estuve en tu futuro. Sé lo que viene... y lo que podés manejar.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDD6aDKcBWuABNCyjamSt8-Uj2wgeNC4P8",authDomain:"elviajerodeltiempo-a3d4c.firebaseapp.com",databaseURL:"https://elviajerodeltiempo-a3d4c-default-rtdb.firebaseio.com",projectId:"elviajerodeltiempo-a3d4c",storageBucket:"elviajerodeltiempo-a3d4c.firebasestorage.app",messagingSenderId:"242221363221",appId:"1:242221363221:web:0b06570abc8994378b9e1c"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+</script>
 <style>
   :root{--gold:#C9A84C;--gold-light:#E8C97A;--deep:#0A0612;--surface:#130D2A;--surface2:#1C1438;--text:#F0EAD6;--text-muted:#A89CC0;--border:rgba(201,168,76,0.25);}
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -722,10 +729,8 @@ function enviarComprobante(){
   const id='req_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
   const processRequest=(comprobanteData,comprobanteType)=>{
     const req={id,ts:Date.now(),nombre,email,servicio:currentModalService,monto:document.getElementById('modal-amount').textContent,metodo:'—',comprobante:comprobanteData||texto||'Sin comprobante',comprobante_type:comprobanteType||'text',status:'pending'};
-    let requests=[];
-    try{requests=JSON.parse(localStorage.getItem('viajero_requests')||'[]');}catch(e){}
-    requests.push(req);
-    localStorage.setItem('viajero_requests',JSON.stringify(requests));
+    db.ref('requests/'+id).set(req);
+    localStorage.setItem('viajero_requests', JSON.stringify(requests));
     msg.style.display='block';msg.style.color='var(--gold-light)';
     msg.innerHTML='✦ Tu solicitud fue enviada.<br>El Viajero la revisará personalmente y recibirás tu código por email.<br><br><em style="font-size:0.65rem;color:var(--text-muted)">Tiempo estimado: menos de 1 hora</em>';
     setTimeout(()=>{showModalStep('c');},2500);
@@ -745,20 +750,20 @@ function checkKeyword(){
     setTimeout(()=>{closeModal();document.getElementById('tirada').scrollIntoView({behavior:'smooth'});},800);
     return;
   }
-  let codes=[];
-  try{codes=JSON.parse(localStorage.getItem('viajero_codes')||'[]');}catch(e){}
-  const codeObj=codes.find(c=>c.code===val);
-  if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';msg.style.display='block';return;}
-  if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';msg.style.display='block';return;}
-  if(Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';msg.style.display='block';return;}
-  codeObj.used=true;
-  localStorage.setItem('viajero_codes',JSON.stringify(codes));
-  msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';msg.style.display='block';
-  setTimeout(()=>{
-    closeModal();
-    if(codeObj.nombre){const inp=document.getElementById('t-nombre');if(inp)inp.value=codeObj.nombre;}
-    document.getElementById('tirada').scrollIntoView({behavior:'smooth'});
-  },900);
+  msg.textContent='Verificando código...';msg.style.color='var(--text-muted)';msg.style.display='block';
+  db.ref('codes/'+val).once('value').then(snap=>{
+    const codeObj=snap.val();
+    if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
+    if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
+    if(Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
+    db.ref('codes/'+val).update({used:true});
+    msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
+    setTimeout(()=>{
+      closeModal();
+      if(codeObj.nombre){const inp=document.getElementById('t-nombre');if(inp)inp.value=codeObj.nombre;}
+      document.getElementById('tirada').scrollIntoView({behavior:'smooth'});
+    },900);
+  }).catch(()=>{msg.textContent='Error de conexión. Intentá nuevamente.';msg.style.color='#e74c3c';});
 }
 
 function setCurrency(c){
