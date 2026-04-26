@@ -6,7 +6,6 @@
 <title>El Viajero — Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>emailjs.init('vheByficzrg5tvPG5');</script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
@@ -294,7 +293,8 @@ async function approveRequest(id){
   const sendMsg=document.getElementById('sending-msg');
   sendMsg.style.display='block';
   try{
-    await emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{to_email:req.email,to_name:req.nombre,codigo:code,servicio:req.servicio},EMAILJS_PUBLIC);
+    emailjs.init(EMAILJS_PUBLIC);
+    await emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{to_email:req.email,to_name:req.nombre,codigo:code,servicio:req.servicio});
     sendMsg.style.display='none';
     alert(`✓ Aprobado. Código ${code} enviado a ${req.email}`);
   }catch(e){
