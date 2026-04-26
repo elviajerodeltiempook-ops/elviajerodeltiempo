@@ -730,7 +730,6 @@ function enviarComprobante(){
   const processRequest=(comprobanteData,comprobanteType)=>{
     const req={id,ts:Date.now(),nombre,email,servicio:currentModalService,monto:document.getElementById('modal-amount').textContent,metodo:'—',comprobante:comprobanteData||texto||'Sin comprobante',comprobante_type:comprobanteType||'text',status:'pending'};
     db.ref('requests/'+id).set(req);
-    localStorage.setItem('viajero_requests', JSON.stringify(requests));
     msg.style.display='block';msg.style.color='var(--gold-light)';
     msg.innerHTML='✦ Tu solicitud fue enviada.<br>El Viajero la revisará personalmente y recibirás tu código por email.<br><br><em style="font-size:0.65rem;color:var(--text-muted)">Tiempo estimado: menos de 1 hora</em>';
     setTimeout(()=>{showModalStep('c');},2500);
