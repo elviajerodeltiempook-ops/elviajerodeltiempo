@@ -217,9 +217,9 @@ const db=firebase.database();
       <div class="modal-title" id="modal-service-name">Servicio</div>
       <div class="modal-amount" id="modal-amount">U$S 0</div>
       <div class="modal-methods">
-        <a class="modal-method" id="modal-paypal" href="#" target="_blank">
+        <a class="modal-method" id="modal-paypal" href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank">
           <div class="modal-method-icon">💳</div>
-          <div><div class="modal-method-name">PayPal</div><div class="modal-method-detail">paypal.me/elviajerodeltempook</div></div>
+          <div><div class="modal-method-name">PayPal</div><div class="modal-method-detail">el.viajero.del.tiempook@gmail.com</div></div>
         </a>
         <div class="modal-method" onclick="copyAlias()">
           <div class="modal-method-icon">🇦🇷</div>
@@ -458,7 +458,7 @@ const db=firebase.database();
         <div class="payment-icon">💳</div>
         <div class="payment-name">PayPal</div>
         <div class="payment-detail">Dólares (USD)<br>Donación segura e inmediata</div>
-        <a class="payment-action" href="https://paypal.me/elviajerodeltempook" target="_blank">Donar con PayPal</a>
+        <a class="payment-action" href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank">Donar con PayPal</a>
       </div>
       <div class="payment-card">
         <div class="payment-icon">🇦🇷</div>
@@ -697,7 +697,7 @@ function openModal(name,usdPrice,isInstant=false){
   document.getElementById('modal-service-name').textContent=name;
   const finalPrice=discountApplied?usdPrice*(1-DISCOUNT_PCT):usdPrice;
   document.getElementById('modal-amount').textContent='U$S '+Math.round(finalPrice)+(discountApplied?' (−10%)':'');
-  document.getElementById('modal-paypal').href='https://paypal.me/elviajerodeltempook/'+Math.round(finalPrice);
+  document.getElementById('modal-paypal').href='https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com&amount='+Math.round(finalPrice);
   document.getElementById('qr-section').style.display='none';
   document.getElementById('modal-next-btn').style.display=isInstant?'block':'none';
   document.getElementById('modal-step-links').style.display=isInstant?'block':'none';
