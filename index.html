@@ -236,10 +236,19 @@ const db=firebase.database();
         <button onclick="copyAddress()" style="background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.4rem 1rem;font-size:0.62rem;letter-spacing:0.1em;cursor:pointer;font-family:'Montserrat',sans-serif;">Copiar dirección</button>
       </div>
 
-      <!-- Botón para ir al comprobante (solo lecturas instantáneas) -->
-      <div id="modal-next-btn" style="display:none;margin-top:1.5rem;padding-top:1.2rem;border-top:0.5px solid var(--border);">
+      <!-- Botón para ir al comprobante — siempre visible -->
+      <div style="margin-top:1.5rem;padding-top:1.2rem;border-top:0.5px solid var(--border);display:flex;flex-direction:column;gap:0.8rem;">
         <button onclick="showModalStep('b')" style="width:100%;padding:0.9rem;background:var(--gold);color:var(--deep);border:none;font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;font-weight:500;">✦ Enviar comprobante de donación</button>
+        <div style="text-align:center;">
+          <p style="font-size:0.62rem;color:var(--text-muted);margin-bottom:0.5rem;letter-spacing:0.05em;">¿Ya tenés un código de acceso?</p>
+          <div style="display:flex;gap:0.5rem;">
+            <input id="keyword-input-a" type="text" placeholder="Ingresá tu código..." style="flex:1;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.65rem 0.8rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;letter-spacing:0.08em;text-transform:uppercase;">
+            <button onclick="checkKeywordA()" style="padding:0.65rem 1rem;background:none;border:0.5px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;cursor:pointer;">Entrar</button>
+          </div>
+          <div id="keyword-msg-a" style="display:none;font-size:0.7rem;margin-top:0.4rem;"></div>
+        </div>
       </div>
+      <div id="modal-next-btn" style="display:none;"></div>
     </div>
 
     <!-- PASO B: Subir comprobante + datos -->
@@ -757,7 +766,31 @@ function enviarComprobante(){
   } else { processRequest(null,'text'); }
 }
 
-function checkKeyword(){
+function checkKeywordA(){
+  const val=document.getElementById('keyword-input-a').value.trim().toUpperCase();
+  const msg=document.getElementById('keyword-msg-a');
+  msg.style.display='block';
+  if(val==='ALFONSOPORTAL'){
+    msg.textContent='✦ Acceso concedido por el Viajero';msg.style.color='var(--gold)';
+    setTimeout(()=>{closeModal();document.getElementById('tirada').scrollIntoView({behavior:'smooth'});},800);
+    return;
+  }
+  msg.textContent='Verificando...';msg.style.color='var(--text-muted)';
+  db.ref('codes/'+val).once('value').then(snap=>{
+    const codeObj=snap.val();
+    if(!codeObj){msg.textContent='Código no válido.';msg.style.color='#e74c3c';return;}
+    if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
+    if(Date.now()>codeObj.expiry){msg.textContent='Este código expiró.';msg.style.color='#e74c3c';return;}
+    db.ref('codes/'+val).update({used:true});
+    msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
+    setTimeout(()=>{
+      closeModal();
+      if(codeObj.nombre){const inp=document.getElementById('t-nombre');if(inp)inp.value=codeObj.nombre;}
+      document.getElementById('tirada').scrollIntoView({behavior:'smooth'});
+    },900);
+  }).catch(()=>{msg.textContent='Error de conexión.';msg.style.color='#e74c3c';});
+}
+function checkKeyword(){checkKeywordA();}
   const val=document.getElementById('keyword-input').value.trim().toUpperCase();
   const msg=document.getElementById('keyword-msg');
   if(val==='ALFONSOPORTAL'){
