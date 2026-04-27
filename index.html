@@ -552,6 +552,22 @@ const rates={USD:1,ARS:1420,COP:3600,MXN:17.35,EUR:0.92};
 const symbols={USD:'U$S',ARS:'$',COP:'$',MXN:'$',EUR:'€'};
 let cur='USD',lang='es',discountApplied=false;
 
+// Detección automática de país → moneda
+const countryCurrency={
+  AR:'ARS',CO:'COP',MX:'MXN',
+  ES:'EUR',FR:'EUR',DE:'EUR',IT:'EUR',PT:'EUR',NL:'EUR',BE:'EUR',AT:'EUR',
+  US:'USD',CA:'USD',AU:'USD',GB:'USD',CH:'USD',
+};
+async function detectCountry(){
+  try{
+    const r=await fetch('https://ipapi.co/json/');
+    const d=await r.json();
+    const c=countryCurrency[d.country_code];
+    if(c && c!==cur){ setCurrency(c); }
+  }catch(e){}
+}
+setTimeout(detectCountry,500);
+
 // Código de descuento — cupo diario 5 personas
 const DISCOUNT_CODE='AYUDA10';
 const DISCOUNT_PCT=0.10;
@@ -587,7 +603,7 @@ function applyDiscount(){
   }
 }
 
-const iP=[15,25,35];
+const iP=[7,12,17];
 const sP=[5,15,55,35,40,40,45,50,12,12,7,12];
 const planesPrices=[25,45,75];
 
@@ -611,7 +627,7 @@ const content={
     instant:[
       {icon:"✦",name:"Tirada de Cartas",desc:"El Viajero consulta el tiempo y te entrega tu lectura de forma inmediata. Sin esperas.",badge:"INSTANTÁNEO"},
       {icon:"ᚱ",name:"Tirada de Runas",desc:"El antiguo oráculo nórdico responde tus preguntas más urgentes.",badge:"INSTANTÁNEO"},
-      {icon:"✦ᚱ",name:"Combo Cartas + Runas",desc:"La lectura completa. Cartas y Runas juntas para máxima claridad.",badge:"AHORRÁS U$S 5"},
+      {icon:"✦ᚱ",name:"Combo Cartas + Runas",desc:"La lectura completa. Cartas y Runas juntas para máxima claridad.",badge:"AHORRÁS U$S 2"},
     ],
     services:[
       {num:"01",name:"3 Preguntas Concretas",desc:"Tres respuestas directas de sí o no. Claridad inmediata sobre lo que más necesitás saber.",extra:null},
