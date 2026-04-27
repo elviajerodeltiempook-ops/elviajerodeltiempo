@@ -713,7 +713,6 @@ function openModal(name,usdPrice,isInstant=false){
   document.getElementById('modal-service-name').textContent=name;
   const finalPrice=discountApplied?usdPrice*(1-DISCOUNT_PCT):usdPrice;
   document.getElementById('modal-amount').textContent='U$S '+Math.round(finalPrice)+(discountApplied?' (−10%)':'');
-  document.getElementById('modal-paypal').href='https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com&amount='+Math.round(finalPrice);
   document.getElementById('qr-section').style.display='none';
   document.getElementById('modal-next-btn').style.display=isInstant?'block':'none';
   document.getElementById('modal-step-links').style.display=isInstant?'block':'none';
