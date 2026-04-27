@@ -356,6 +356,9 @@ const db=firebase.database();
       <button class="currency-btn" onclick="setCurrency('COP')">COP $</button>
       <button class="currency-btn" onclick="setCurrency('MXN')">MXN $</button>
       <button class="currency-btn" onclick="setCurrency('EUR')">EUR €</button>
+      <button class="currency-btn" onclick="setCurrency('VES')">VES Bs.</button>
+      <button class="currency-btn" onclick="setCurrency('CLP')">CLP $</button>
+      <button class="currency-btn" onclick="setCurrency('PEN')">PEN S/</button>
     </div>
     <div class="instant-grid" id="instant-grid"></div>
   </div>
@@ -561,25 +564,31 @@ const db=firebase.database();
 </footer>
 
 <script>
-const rates={USD:1,ARS:1420,COP:3600,MXN:17.35,EUR:0.92};
-const symbols={USD:'U$S',ARS:'$',COP:'$',MXN:'$',EUR:'€'};
+const rates={USD:1,ARS:1420,COP:4200,MXN:17.35,EUR:0.92,VES:36,PEN:3.7,CLP:940,BOB:6.9,PYG:7400,UYU:39,GTQ:7.8,HNL:24.7,NIO:36.6,CRC:515,DOP:58,CUP:24};
+const symbols={USD:'U$S',ARS:'$',COP:'$',MXN:'$',EUR:'€',VES:'Bs.',PEN:'S/',CLP:'$',BOB:'Bs.',PYG:'₲',UYU:'$',GTQ:'Q',HNL:'L',NIO:'C$',CRC:'₡',DOP:'RD$',CUP:'$'};
 let cur='USD',lang='es',discountApplied=false;
 
 // Detección automática de país → moneda
 const countryCurrency={
-  AR:'ARS',CO:'COP',MX:'MXN',
+  // Latinoamérica
+  AR:'ARS',CO:'COP',MX:'MXN',VE:'VES',PE:'PEN',CL:'CLP',BO:'BOB',
+  PY:'PYG',UY:'UYU',GT:'GTQ',HN:'HNL',NI:'NIO',CR:'CRC',DO:'DOP',CU:'CUP',
+  // Europa
   ES:'EUR',FR:'EUR',DE:'EUR',IT:'EUR',PT:'EUR',NL:'EUR',BE:'EUR',AT:'EUR',
-  US:'USD',CA:'USD',AU:'USD',GB:'USD',CH:'USD',
+  GR:'EUR',FI:'EUR',IE:'EUR',LU:'EUR',SK:'EUR',SI:'EUR',EE:'EUR',LV:'EUR',LT:'EUR',
+  // Anglosajón / resto
+  US:'USD',CA:'USD',AU:'USD',GB:'USD',CH:'USD',NZ:'USD',
+  // Resto del mundo → USD por defecto
 };
 async function detectCountry(){
   try{
     const r=await fetch('https://ipapi.co/json/');
     const d=await r.json();
-    const c=countryCurrency[d.country_code];
-    if(c && c!==cur){ setCurrency(c); }
+    const c=countryCurrency[d.country_code]||'USD';
+    if(c!==cur){ setCurrency(c); }
   }catch(e){}
 }
-setTimeout(detectCountry,500);
+setTimeout(detectCountry,300);
 
 // Código de descuento — cupo diario 5 personas
 const DISCOUNT_CODE='AYUDA10';
@@ -643,12 +652,12 @@ const content={
       {icon:"✦ᚱ",name:"Combo Cartas + Runas",desc:"La lectura completa. Cartas y Runas juntas para máxima claridad.",badge:"AHORRÁS U$S 2"},
     ],
     services:[
-      {num:"01",name:"3 Preguntas Concretas",desc:"Tres respuestas directas de sí o no. Claridad inmediata sobre lo que más necesitás saber.",extra:null,img:"tirada%20de%20cartas.png"},
-      {num:"02",name:"Consulta Extendida (escrita)",desc:"Lectura profunda por mensaje. Sin horario fijo, recibís tu respuesta completa.",extra:null,img:"TIRADA%20DE%20RUNAS.png"},
-      {num:"03",name:"Consulta Extendida (llamada)",desc:"Sesión en vivo por llamada telefónica. Previa cita coordinada por email.",extra:null,img:"Combo%20Cartas%20%2B%20Runas.png"},
+      {num:"01",name:"3 Preguntas Concretas",desc:"Tres respuestas directas de sí o no. Claridad inmediata sobre lo que más necesitás saber.",extra:null,img:"3-preguntas.jpg"},
+      {num:"02",name:"Consulta Extendida (escrita)",desc:"Lectura profunda por mensaje. Sin horario fijo, recibís tu respuesta completa.",extra:null,img:"consulta-escrita.jpg"},
+      {num:"03",name:"Consulta Extendida (llamada)",desc:"Sesión en vivo por llamada telefónica. Previa cita coordinada por email.",extra:null,img:"consulta-llamada.jpg"},
       {num:"04",name:"Mejorar Economía Personal",desc:"Apartá tu consulta y recibirás las indicaciones precisas que las cartas revelan. En 21 a 70 días comenzarás a ver los cambios que tanto necesitás.",extra:null,img:"ECONOMIA.png"},
-      {num:"05",name:"Regreso de Pareja",desc:"Una vez tomada la consulta, recibirás una guía exacta según lo que el tiempo revela. En 21 a 70 días comenzarás a ver los cambios que tanto esperabas.",extra:"pareja",img:"AMOR.png"},
-      {num:"06",name:"Encontrar el Amor",desc:"Las cartas revelan el camino hacia el amor que buscás. En 21 a 70 días comenzarás a ver los cambios.",extra:null,img:"AMOR.png"},
+      {num:"05",name:"Regreso de Pareja",desc:"Una vez tomada la consulta, recibirás una guía exacta según lo que el tiempo revela. En 21 a 70 días comenzarás a ver los cambios que tanto esperabas.",extra:"pareja",img:"regreso-pareja.jpg"},
+      {num:"06",name:"Encontrar el Amor",desc:"Las cartas revelan el camino hacia el amor que buscás. En 21 a 70 días comenzarás a ver los cambios.",extra:null,img:"encontrar-amor.jpg"},
       {num:"07",name:"Temas Judiciales",desc:"Completá tus datos y aboná. En menos de 2 horas recibís tu lectura completa. Resultados esperados en 40 a 120 días.",extra:null,img:"JUDICIAL.jpg"},
       {num:"08",name:"Fertilidad & Nuevo Comienzo",desc:"Las cartas revelan los bloqueos que impiden la llegada de una nueva vida. Guía personalizada de rituales, hábitos y alineación astral.",extra:"pareja",img:"FERTILIDAD.jpg"},
       {num:"09",name:"Bendición y Protección para el Camino",desc:"Para quienes emprenden un nuevo camino. Lectura de protección y bendición para que el tiempo ilumine tu travesía.",extra:null,img:"Bendici%C3%B3n%20y%20Protecci%C3%B3n.jpg"},
@@ -690,12 +699,12 @@ const content={
       {icon:"✦ᚱ",name:"Cards + Runes Combo",desc:"The complete reading. Cards and Runes together for maximum clarity.",badge:"SAVE U$S 5"},
     ],
     services:[
-      {num:"01",name:"3 Concrete Questions",desc:"Three direct yes or no answers. Immediate clarity on what you need to know most.",extra:null,img:"tirada%20de%20cartas.png"},
-      {num:"02",name:"Extended Consultation (written)",desc:"Deep reading by message. No fixed schedule — you receive your full response.",extra:null,img:"TIRADA%20DE%20RUNAS.png"},
-      {num:"03",name:"Extended Consultation (call)",desc:"Live session by phone call. Appointment coordinated by email.",extra:null,img:"Combo%20Cartas%20%2B%20Runas.png"},
+      {num:"01",name:"3 Concrete Questions",desc:"Three direct yes or no answers. Immediate clarity on what you need to know most.",extra:null,img:"3-preguntas.jpg"},
+      {num:"02",name:"Extended Consultation (written)",desc:"Deep reading by message. No fixed schedule — you receive your full response.",extra:null,img:"consulta-escrita.jpg"},
+      {num:"03",name:"Extended Consultation (call)",desc:"Live session by phone call. Appointment coordinated by email.",extra:null,img:"consulta-llamada.jpg"},
       {num:"04",name:"Improve Personal Economy",desc:"Donate your consultation and receive precise guidance from what the cards reveal. In 21 to 70 days you will begin to see the changes you need.",extra:null,img:"ECONOMIA.png"},
-      {num:"05",name:"Return of a Partner",desc:"Once the consultation is taken, you will receive exact guidance from what time reveals. In 21 to 70 days you will begin to see the changes you were waiting for.",extra:"pareja",img:"AMOR.png"},
-      {num:"06",name:"Find Love",desc:"The cards reveal the path to the love you seek. In 21 to 70 days you will begin to see the changes.",extra:null,img:"AMOR.png"},
+      {num:"05",name:"Return of a Partner",desc:"Once the consultation is taken, you will receive exact guidance from what time reveals. In 21 to 70 days you will begin to see the changes you were waiting for.",extra:"pareja",img:"regreso-pareja.jpg"},
+      {num:"06",name:"Find Love",desc:"The cards reveal the path to the love you seek. In 21 to 70 days you will begin to see the changes.",extra:null,img:"encontrar-amor.jpg"},
       {num:"07",name:"Legal Matters",desc:"Complete your details and pay. In less than 2 hours you receive your full reading. Expected results in 40 to 120 days.",extra:null,img:"JUDICIAL.jpg"},
       {num:"08",name:"Fertility & New Beginning",desc:"The cards reveal the blockages preventing the arrival of new life. Personalized guidance on rituals, habits and astral alignment.",extra:"pareja",img:"FERTILIDAD.jpg"},
       {num:"09",name:"Blessing & Protection for the Journey",desc:"For those embarking on a new path. Receive a protection and blessing reading so time illuminates your journey.",extra:null,img:"Bendici%C3%B3n%20y%20Protecci%C3%B3n.jpg"},
@@ -742,9 +751,23 @@ function showModalStep(step){
 
 function closeModal(){document.getElementById('payModal').classList.remove('open');}
 function showQR(){document.getElementById('qr-section').style.display='block';}
-function copyPaypal(){navigator.clipboard.writeText('el.viajero.del.tiempook@gmail.com');alert('✓ Email de PayPal copiado: el.viajero.del.tiempook@gmail.com');}
-function copyAlias(){navigator.clipboard.writeText('ELVIAJERODELTIEMPO');alert('✓ Alias copiado: ELVIAJERODELTIEMPO');}
-function copyAddress(){navigator.clipboard.writeText('TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG');alert('✓ Dirección copiada');}
+function copyPaypal(){
+  navigator.clipboard.writeText('el.viajero.del.tiempook@gmail.com');
+  // Mostrar confirmación inline y pasar al comprobante
+  const detail=document.querySelector('#modal-step-a .modal-method:nth-child(1) .modal-method-detail');
+  if(detail){const orig=detail.textContent;detail.textContent='✓ Copiado!';detail.style.color='var(--gold)';setTimeout(()=>{detail.textContent=orig;detail.style.color='';},1500);}
+  setTimeout(()=>showModalStep('b'),600);
+}
+function copyAlias(){
+  navigator.clipboard.writeText('ELVIAJERODELTIEMPO');
+  const detail=document.querySelector('#modal-step-a .modal-method:nth-child(2) .modal-method-detail');
+  if(detail){const orig=detail.textContent;detail.textContent='✓ Alias copiado!';detail.style.color='var(--gold)';setTimeout(()=>{detail.textContent=orig;detail.style.color='';},1500);}
+  setTimeout(()=>showModalStep('b'),600);
+}
+function copyAddress(){
+  navigator.clipboard.writeText('TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG');
+  const btn=event.target;btn.textContent='✓ Copiado';setTimeout(()=>{btn.textContent='Copiar dirección';},1500);
+}
 function irATirada(){closeModal();document.getElementById('tirada').scrollIntoView({behavior:'smooth'});}
 
 function enviarComprobante(){
@@ -798,7 +821,7 @@ function checkKeyword(){checkKeywordA();}
 
 function setCurrency(c){
   cur=c;
-  document.querySelectorAll('.currency-btn').forEach(b=>b.classList.toggle('active',b.textContent.startsWith(c)));
+  document.querySelectorAll('.currency-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+c+"'")));
   renderInstant(content[lang]);renderServices(content[lang]);renderPlanes(content[lang]);renderServiceSelect(content[lang]);
 }
 
@@ -815,9 +838,11 @@ function renderInstant(c){
 }
 
 function renderServices(c){
-  document.getElementById('services-grid').innerHTML=c.services.map((s,i)=>`
-    <div class="service-card">
-      ${s.img?`<img class="service-img" src="${s.img}" alt="${s.name}" loading="lazy">`:`<div class="service-img-placeholder">✦</div>`}
+  document.getElementById('services-grid').innerHTML=c.services.map((s,i)=>{
+    const imgSrc=s.img||'';
+    const imgTag=imgSrc?`<img class="service-img" src="${imgSrc}" alt="${s.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="service-img-placeholder" style="display:none">✦</div>`:`<div class="service-img-placeholder">✦</div>`;
+    return`<div class="service-card">
+      ${imgTag}
       <div class="service-body">
         <div class="service-num">${s.num}</div>
         <div class="service-name">${s.name}</div>
@@ -825,7 +850,8 @@ function renderServices(c){
         <div class="service-price"><strong>${fmt(sP[i],cur)}</strong></div>
         <button class="pay-btn" onclick="openModal('${s.name}',${sP[i]})"><span>${lang==='es'?'Donar':'Donate'}</span></button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function renderPlanes(c){
