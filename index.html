@@ -795,28 +795,6 @@ function checkKeywordA(){
   }).catch(()=>{msg.textContent='Error de conexión.';msg.style.color='#e74c3c';});
 }
 function checkKeyword(){checkKeywordA();}
-  const val=document.getElementById('keyword-input').value.trim().toUpperCase();
-  const msg=document.getElementById('keyword-msg');
-  if(val==='ALFONSOPORTAL'){
-    msg.textContent='✦ Acceso concedido por el Viajero';msg.style.color='var(--gold)';msg.style.display='block';
-    setTimeout(()=>{closeModal();document.getElementById('tirada').scrollIntoView({behavior:'smooth'});},800);
-    return;
-  }
-  msg.textContent='Verificando código...';msg.style.color='var(--text-muted)';msg.style.display='block';
-  db.ref('codes/'+val).once('value').then(snap=>{
-    const codeObj=snap.val();
-    if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
-    if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
-    if(Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
-    db.ref('codes/'+val).update({used:true});
-    msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
-    setTimeout(()=>{
-      closeModal();
-      if(codeObj.nombre){const inp=document.getElementById('t-nombre');if(inp)inp.value=codeObj.nombre;}
-      document.getElementById('tirada').scrollIntoView({behavior:'smooth'});
-    },900);
-  }).catch(()=>{msg.textContent='Error de conexión. Intentá nuevamente.';msg.style.color='#e74c3c';});
-}
 
 function setCurrency(c){
   cur=c;
