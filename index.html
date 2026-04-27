@@ -796,7 +796,22 @@ function enviarComprobante(){
   const id='req_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
   const processRequest=(comprobanteData,comprobanteType)=>{
     const req={id,ts:Date.now(),nombre,email,servicio:currentModalService,monto:document.getElementById('modal-amount').textContent,metodo:'—',comprobante:comprobanteData||texto||'Sin comprobante',comprobante_type:comprobanteType||'text',status:'pending'};
+    // Guardar en Firebase
     db.ref('requests/'+id).set(req);
+    // Enviar email via Formspree
+    const formData=new FormData();
+    formData.append('nombre', nombre);
+    formData.append('email', email);
+    formData.append('servicio', currentModalService);
+    formData.append('monto', document.getElementById('modal-amount').textContent);
+    formData.append('comprobante_texto', texto||'Sin descripción');
+    formData.append('id_solicitud', id);
+    formData.append('_subject', '✦ Nueva donación — '+currentModalService+' — '+nombre);
+    if(fileInput.files&&fileInput.files[0]){
+      formData.append('comprobante_imagen', fileInput.files[0]);
+    }
+    fetch('https://formspree.io/f/meevdqdy',{method:'POST',body:formData,headers:{Accept:'application/json'}})
+      .catch(()=>{}); // silencioso — Firebase ya guardó
     msg.style.display='block';msg.style.color='var(--gold-light)';
     msg.innerHTML='✦ Tu solicitud fue enviada.<br>El Viajero la revisará personalmente y recibirás tu código por email.<br><br><em style="font-size:0.65rem;color:var(--text-muted)">Tiempo estimado: menos de 1 hora</em>';
     setTimeout(()=>{showModalStep('c');},2500);
