@@ -6,7 +6,8 @@
 <title>El Viajero del Tiempo — Ya estuve en tu futuro</title>
 <meta name="description" content="Ya estuve en tu futuro. Sé lo que viene... y lo que podés manejar.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('vheByficzrg5tvPG5');</script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
 const firebaseConfig={apiKey:"AIzaSyDD6aDKcBWuABNCyjamSt8-Uj2wgeNC4P8",authDomain:"elviajerodeltiempo-a3d4c.firebaseapp.com",databaseURL:"https://elviajerodeltiempo-a3d4c-default-rtdb.firebaseio.com",projectId:"elviajerodeltiempo-a3d4c",storageBucket:"elviajerodeltiempo-a3d4c.firebasestorage.app",messagingSenderId:"242221363221",appId:"1:242221363221:web:0b06570abc8994378b9e1c"};
@@ -798,20 +799,15 @@ function enviarComprobante(){
     const req={id,ts:Date.now(),nombre,email,servicio:currentModalService,monto:document.getElementById('modal-amount').textContent,metodo:'—',comprobante:comprobanteData||texto||'Sin comprobante',comprobante_type:comprobanteType||'text',status:'pending'};
     // Guardar en Firebase
     db.ref('requests/'+id).set(req);
-    // Enviar email via Formspree
-    const formData=new FormData();
-    formData.append('nombre', nombre);
-    formData.append('email', email);
-    formData.append('servicio', currentModalService);
-    formData.append('monto', document.getElementById('modal-amount').textContent);
-    formData.append('comprobante_texto', texto||'Sin descripción');
-    formData.append('id_solicitud', id);
-    formData.append('_subject', '✦ Nueva donación — '+currentModalService+' — '+nombre);
-    if(fileInput.files&&fileInput.files[0]){
-      formData.append('comprobante_imagen', fileInput.files[0]);
-    }
-    fetch('https://formspree.io/f/meevdqdy',{method:'POST',body:formData,headers:{Accept:'application/json'}})
-      .catch(()=>{}); // silencioso — Firebase ya guardó
+    // Enviar email via EmailJS
+    emailjs.send('service_wxw598b','s8f44i5',{
+      nombre: nombre,
+      email: email,
+      servicio: currentModalService,
+      monto: document.getElementById('modal-amount').textContent,
+      comprobante: texto||'Ver imagen adjunta',
+      id_solicitud: id
+    }).catch(()=>{});
     msg.style.display='block';msg.style.color='var(--gold-light)';
     msg.innerHTML='✦ Tu solicitud fue enviada.<br>El Viajero la revisará personalmente y recibirás tu código por email.<br><br><em style="font-size:0.65rem;color:var(--text-muted)">Tiempo estimado: menos de 1 hora</em>';
     setTimeout(()=>{showModalStep('c');},2500);
