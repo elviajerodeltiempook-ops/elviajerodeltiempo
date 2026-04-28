@@ -245,9 +245,14 @@ function generateCode(){
 
 // ============ RENDER ============
 function loadRequests(){
-  db.ref('requests').once('value').then(snap=>{
+  db.ref('requests').orderByKey().once('value').then(snap=>{
     const all=[];
-    snap.forEach(child=>all.push({id:child.key,...child.val()}));
+    snap.forEach(child=>{
+      const val=child.val();
+      if(val && typeof val === 'object'){
+        all.push({id:child.key, nombre:val.nombre||'', email:val.email||'', servicio:val.servicio||'', monto:val.monto||'', comprobante:val.comprobante||'', comprobante_type:val.comprobante_type||'text', status:val.status||'pending', ts:val.ts||0, metodo:val.metodo||'—'});
+      }
+    });
     console.log('Firebase requests total:', all.length, all.map(r=>({id:r.id,status:r.status})));
     const pending=all.filter(r=>!r.status||r.status==='pending');
     console.log('Pending:', pending.length);
@@ -259,7 +264,7 @@ function loadRequests(){
     const hEl=document.getElementById('list-historial');
     if(history.length===0){hEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin historial aún</div></div>`;}
     else{hEl.innerHTML=history.sort((a,b)=>b.ts-a.ts).map(r=>renderCard(r)).join('');}
-  });
+  }).catch(e=>console.log('Error:', e));
 }
 
 function renderCard(r){
