@@ -165,7 +165,7 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
 // ============ CONFIG ============
 const ADMIN_PASS = 'ALFONSO1712';
 const EMAILJS_SERVICE = 'service_wxw598b';
-const EMAILJS_TEMPLATE = 'template_uaih0ae';
+const EMAILJS_TEMPLATE = 'template_kuo9m7a';
 const EMAILJS_PUBLIC = 'vheByficzrg5tvPG5';
 
 // Storage key
@@ -294,9 +294,15 @@ async function approveRequest(id){
   sendMsg.style.display='block';
   try{
     emailjs.init(EMAILJS_PUBLIC);
-    await emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{to_email:req.email,to_name:req.nombre,codigo:code,servicio:req.servicio});
+    await emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{
+      to_email: req.email,
+      to_name: req.nombre||'Consultante',
+      codigo: code,
+      servicio: req.servicio||'Consulta',
+      codigo: code
+    });
     sendMsg.style.display='none';
-    alert(`✓ Aprobado. Código ${code} enviado a ${req.email}`);
+    alert(`✓ Código ${code} enviado automáticamente a ${req.email}`);
   }catch(e){
     sendMsg.style.display='none';
     alert(`✓ Aprobado. Código: ${code}\n\nEnvialo manualmente a: ${req.email}`);
