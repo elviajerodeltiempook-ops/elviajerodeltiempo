@@ -247,7 +247,7 @@ function loadRequests(){
   db.ref('requests').once('value').then(snap=>{
     const all=[];
     snap.forEach(child=>all.push({id:child.key,...child.val()}));
-    const pending=all.filter(r=>!r.status||r.status==='pending');
+    const  pending=all.filter(r=>!r.status||r.status==='pending');
     const history=all.filter(r=>r.status==='approved'||r.status==='rejected');
     document.getElementById('badge-pend').textContent=pending.length;
     const pEl=document.getElementById('list-pendientes');
