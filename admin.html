@@ -104,9 +104,12 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
   <div class="login-logo">El Viajero del Tiempo</div>
   <div class="login-sub">Panel de administración</div>
   <div class="login-box">
-    <label class="login-label">Contraseña de acceso</label>
-    <input class="login-input" type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <form onsubmit="doLogin();return false;" autocomplete="on">
+      <input type="text" name="username" value="viajero" autocomplete="username" style="display:none">
+      <label class="login-label">Contraseña de acceso</label>
+      <input class="login-input" type="password" id="pwd-input" name="password" placeholder="••••••••" autocomplete="current-password">
+      <button type="submit" class="login-btn">Entrar</button>
+    </form>
     <div class="login-error" id="login-error">Contraseña incorrecta</div>
   </div>
 </div>
@@ -176,7 +179,8 @@ const CODES_KEY = 'viajero_codes';
 function doLogin(){
   const pwd = document.getElementById('pwd-input').value;
   if(pwd === ADMIN_PASS){
-    sessionStorage.setItem('vj_auth','1');
+    const expiry=Date.now()+(30*24*60*60*1000);
+    localStorage.setItem('vj_auth', JSON.stringify({auth:'1',expiry}));
     document.getElementById('login-screen').style.display='none';
     document.getElementById('panel-screen').style.display='block';
     loadRequests();
@@ -188,12 +192,21 @@ function doLogin(){
 }
 
 function logout(){
-  sessionStorage.removeItem('vj_auth');
+  localStorage.removeItem('vj_auth');
   location.reload();
 }
 
+// Check if already logged (30 días)
+function checkAuth(){
+  try{
+    const stored=JSON.parse(localStorage.getItem('vj_auth')||'null');
+    if(stored&&stored.auth==='1'&&Date.now()<stored.expiry) return true;
+  }catch(e){}
+  return false;
+}
+
 // Check if already logged
-if(sessionStorage.getItem('vj_auth')==='1'){
+if(checkAuth()){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('panel-screen').style.display='block';
 }
@@ -357,7 +370,7 @@ function closeImgModal(){ document.getElementById('img-modal').classList.remove(
 // Para que funcione en producción, ambas páginas deben estar en el mismo dominio
 
 // Init
-if(sessionStorage.getItem('vj_auth')==='1'){ loadRequests(); renderStats(); }
+if(checkAuth()){ loadRequests(); renderStats(); }
 </script>
 </body>
 </html>
