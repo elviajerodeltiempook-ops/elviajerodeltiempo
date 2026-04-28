@@ -234,8 +234,8 @@ function loadRequests(){
   db.ref('requests').once('value').then(snap=>{
     const all=[];
     snap.forEach(child=>all.push({id:child.key,...child.val()}));
-    const pending=all.filter(r=>r.status==='pending');
-    const history=all.filter(r=>r.status!=='pending');
+    const pending=all.filter(r=>!r.status||r.status==='pending');
+    const history=all.filter(r=>r.status==='approved'||r.status==='rejected');
     document.getElementById('badge-pend').textContent=pending.length;
     const pEl=document.getElementById('list-pendientes');
     if(pending.length===0){pEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No hay solicitudes pendientes</div></div>`;}
@@ -258,7 +258,7 @@ function renderCard(r){
     ? `<img class="comp-img" src="${r.comprobante}" onclick="openImgModal('${r.comprobante}')" alt="Comprobante">`
     : `<div class="comp-text">${r.comprobante||'Sin comprobante adjunto'}</div>`;
 
-  const actions = r.status==='pending' ? `
+  const actions = (!r.status||r.status==='pending') ? `
     <div class="req-actions">
       <button class="btn-approve" onclick="approveRequest('${r.id}')">✓ Aprobar</button>
       <button class="btn-reject" onclick="rejectRequest('${r.id}')">✕ Rechazar</button>
