@@ -435,6 +435,33 @@ const db=firebase.database();
         <button class="tirada-next" onclick="nextStep(3)"><span>Continuar</span></button>
       </div>
 
+      <!-- PASO 3B: TIPO DE TIRADA -->
+      <div class="tirada-step" id="step-3b">
+        <p class="tirada-question" id="tq-3b">"¿Qué forma de lectura resuena con lo que estás viviendo?"</p>
+        <div class="tirada-options" style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;">
+          <button class="tirada-option" onclick="selectTipoLectura(this,'runa_unica')" title="Para reconocer la energía del día o la raíz de un problema">🎯 Runa Única</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'tres')" title="Pasado, Presente y Futuro">🔮 Tres Runas</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'cruz')" title="Para consultas generales o específicas">✝ Cruz</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'estrella')" title="Los cuatro elementos y cómo se relacionan">⭐ Estrella</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'diamante')" title="Profundiza en un tema actual">💎 Diamante</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'guerrero')" title="Tu corazón, voluntad y habilidades frente al desafío">⚔️ Guerrero</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'parejas')" title="Para evaluar la energía de una relación">💞 Parejas</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'freyja')" title="Especializada en emociones y amor">🌸 Freyja</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'proyectos')" title="Viabilidad de una idea o proyecto">📋 Proyectos</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'yggdrasil')" title="Los 9 mundos del árbol sagrado">🌳 Yggdrasil</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'caminante')" title="Los tres planos de existencia">🚶 Caminante</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'lanza_odin')" title="Para alcanzar objetivos y deseos">🏹 Lanza de Odín</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'martillo')" title="Para desafíos y decisiones rápidas">🔨 Martillo</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'salud')" title="Bienestar físico, mental y emocional">💚 Salud</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'siete')" title="Lectura profunda de 7 runas">✦ Siete Runas</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'pentaculo')" title="Situación, oposición, influencias y conclusión">⛤ Pentáculo</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'triskel')" title="Cuerpo, Mente y Espíritu">☘ Triskel</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'rasgos')" title="Patrones heredados del árbol genealógico">🌿 Rasgos Heredados</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'varas')" title="Método intuitivo original en madera">🪵 Varas</button>
+        </div>
+        <button class="tirada-next" onclick="nextStep('3b')"><span>Continuar</span></button>
+      </div>
+
       <!-- PASO 4: PREGUNTA -->
       <div class="tirada-step" id="step-4">
         <p class="tirada-question" id="tq-4">"¿Hay algo específico que querés preguntarle al tiempo, o preferís una lectura abierta?"</p>
@@ -978,7 +1005,7 @@ document.getElementById('payModal').addEventListener('click',function(e){if(e.ta
 setLang('es');
 
 // ============ SISTEMA DE TIRADAS ============
-let tiradaData={nombre:'',tipo:'',tirada:'',pregunta:''};
+let tiradaData={nombre:'',tipo:'',tirada:'',tipoLectura:'',pregunta:''};
 let currentStep=1;
 const totalSteps=4;
 
@@ -994,22 +1021,38 @@ function selectOption(btn,val){
   if(currentStep===3) tiradaData.tirada=val;
 }
 
+function selectTipoLectura(el,val){
+  document.querySelectorAll('#step-3b .tirada-option').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  tiradaData.tipoLectura=val;
+}
+
 function nextStep(step){
   if(step===1){
     const nombre=document.getElementById('t-nombre').value.trim();
     if(!nombre){alert('Por favor ingresá tu nombre o seudónimo');return;}
     tiradaData.nombre=nombre;
-    // Personalizar preguntas siguientes con el nombre
     document.getElementById('tq-2').textContent=`"${nombre}, ¿sobre qué área de tu vida querés que el tiempo hable hoy?"`;
     document.getElementById('tq-3').textContent=`"${nombre}, ¿qué tipo de lectura sentís que necesitás hoy?"`;
+    document.getElementById('tq-3b').textContent=`"${nombre}, ¿qué forma de lectura resuena con lo que estás viviendo?"`;
     document.getElementById('tq-4').textContent=`"${nombre}, ¿hay algo específico que querés preguntarle al tiempo, o preferís una lectura abierta?"`;
   }
   if(step===2&&!tiradaData.tipo){alert('Por favor elegí un área');return;}
   if(step===3&&!tiradaData.tirada){alert('Por favor elegí un tipo de tirada');return;}
+  if(step==='3b'&&!tiradaData.tipoLectura){alert('Por favor elegí un tipo de lectura');return;}
 
   document.getElementById(`step-${step}`).classList.remove('active');
-  currentStep=step+1;
-  document.getElementById(`step-${currentStep}`).classList.add('active');
+
+  // Después del paso 3 (cartas/runas/combo) va al paso 3b (tipo de lectura)
+  if(step===3){
+    document.getElementById('step-3b').classList.add('active');
+  } else if(step==='3b'){
+    currentStep=4;
+    document.getElementById('step-4').classList.add('active');
+  } else {
+    currentStep=step+1;
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+  }
   updateProgress();
 }
 
@@ -1039,18 +1082,30 @@ const cartasTarot=[
 ];
 
 const runasNordicas=[
-  {nombre:'Fehu',emoji:'ᚠ',pos:'Prosperidad'},
-  {nombre:'Uruz',emoji:'ᚢ',pos:'Fuerza'},
-  {nombre:'Thurisaz',emoji:'ᚦ',pos:'Protección'},
-  {nombre:'Ansuz',emoji:'ᚨ',pos:'Mensaje'},
-  {nombre:'Raidho',emoji:'ᚱ',pos:'Camino'},
-  {nombre:'Kenaz',emoji:'ᚲ',pos:'Conocimiento'},
-  {nombre:'Gebo',emoji:'ᚷ',pos:'Intercambio'},
-  {nombre:'Wunjo',emoji:'ᚹ',pos:'Alegría'},
-  {nombre:'Hagalaz',emoji:'ᚺ',pos:'Transformación'},
-  {nombre:'Sowilo',emoji:'ᛊ',pos:'Éxito'},
-  {nombre:'Tiwaz',emoji:'ᛏ',pos:'Justicia'},
-  {nombre:'Berkano',emoji:'ᛒ',pos:'Crecimiento'},
+  {nombre:'Fehu',emoji:'ᚠ',pos:'Prosperidad',significado_corto:'Tu cuenta bancaria está llena, pero tu espíritu está en quiebra.',mensaje:'Regalá algo valioso hoy. Sin que nadie sepa que fuiste vos.'},
+  {nombre:'Uruz',emoji:'ᚢ',pos:'Fuerza',significado_corto:'Esa fuerza salvaje que reprimís te va a terminar enfermando.',mensaje:'Hacé un esfuerzo físico extremo hoy. Sentí el dolor de estar vivo.'},
+  {nombre:'Thurisaz',emoji:'ᚦ',pos:'Protección',significado_corto:'Estás a un paso de atacar a quien solo intenta ayudarte.',mensaje:'No reacciones. Ante la primera provocación de hoy, hacé silencio absoluto.'},
+  {nombre:'Ansuz',emoji:'ᚨ',pos:'Mensaje',significado_corto:'Tus palabras son mentiras elegantes para convencerte a vos mismo.',mensaje:'Pasá una hora escuchando el ruido de la calle sin decir una sola palabra.'},
+  {nombre:'Raidho',emoji:'ᚱ',pos:'Camino',significado_corto:'Estás viajando rápido, pero no tenés idea de a dónde vas.',mensaje:'Cambiá tu ruta habitual hoy. Perdete a propósito en tu propia ciudad.'},
+  {nombre:'Kenaz',emoji:'ᚲ',pos:'Conocimiento',significado_corto:'Tu luz está quemando a los que tenés cerca.',mensaje:'Apagá las luces de tu casa esta noche y quedate a oscuras hasta que sientas incomodidad.'},
+  {nombre:'Gebo',emoji:'ᚷ',pos:'Intercambio',significado_corto:'Ese regalo tiene un hilo invisible que te tiene atado del cuello.',mensaje:'Pagá el café de un extraño y retirate antes de que te puedan dar las gracias.'},
+  {nombre:'Wunjo',emoji:'ᚹ',pos:'Alegría',significado_corto:'Tu alegría es una máscara de plástico que se está derritiendo.',mensaje:'Admití algo que te hace profundamente infeliz hoy, frente a un espejo.'},
+  {nombre:'Hagalaz',emoji:'ᚺ',pos:'Transformación',significado_corto:'El granizo viene a destruir tu castillo de arena.',mensaje:'Tirá a la basura algo que esté roto y que guardes "por las dudas".'},
+  {nombre:'Naudhiz',emoji:'ᚾ',pos:'Necesidad',significado_corto:'Tu necesidad es un pozo sin fondo que devora a quien se acerca.',mensaje:'Pasá un día entero sin pedirle absolutamente nada a nadie.'},
+  {nombre:'Isa',emoji:'ᛁ',pos:'Pausa',significado_corto:'Estás congelado por miedo a cometer un error.',mensaje:'Hacé algo impulsivo hoy. Algo que no hayas planeado en absoluto.'},
+  {nombre:'Jera',emoji:'ᛃ',pos:'Ciclo',significado_corto:'Estás cosechando exactamente el veneno que sembraste.',mensaje:'Plantá una semilla real en tierra hoy y cuidala como si fuera tu redención.'},
+  {nombre:'Eihwaz',emoji:'ᛇ',pos:'Muerte/Renacimiento',significado_corto:'La muerte es el único puente que te queda por cruzar.',mensaje:'Cambiá radicalmente tu apariencia hoy. Que alguien no te reconozca.'},
+  {nombre:'Perthro',emoji:'ᛈ',pos:'Destino',significado_corto:'Tu secreto mejor guardado está a punto de ser revelado.',mensaje:'Contale una verdad incómoda a alguien que no esperes que te perdone.'},
+  {nombre:'Algiz',emoji:'ᛉ',pos:'Protección',significado_corto:'Tu protección es una mentira si no tenés el valor de pelear.',mensaje:'Establecé un límite verbal claro hoy con alguien que te invade.'},
+  {nombre:'Sowilo',emoji:'ᛊ',pos:'Éxito',significado_corto:'Tu éxito te está cegando y vas a chocar de frente.',mensaje:'Tomate un descanso total de pantallas y redes sociales por 12 horas.'},
+  {nombre:'Tiwaz',emoji:'ᛏ',pos:'Justicia',significado_corto:'Tu sacrificio es solo una excusa para sentirte un mártir.',mensaje:'Cedé en una discusión hoy, incluso si tenés la razón absoluta.'},
+  {nombre:'Berkano',emoji:'ᛒ',pos:'Crecimiento',significado_corto:'Algo está creciendo en vos y te aterra la responsabilidad.',mensaje:'Cuidá de algo o alguien hoy sin quejarte ni una sola vez.'},
+  {nombre:'Ehwaz',emoji:'ᛖ',pos:'Movimiento',significado_corto:'Tu socio es tu espejo, y no te gusta lo que ves.',mensaje:'Hacé una actividad en equipo donde no tengas el mando absoluto.'},
+  {nombre:'Mannaz',emoji:'ᛗ',pos:'Humanidad',significado_corto:'Te sentís solo en la multitud porque sos un extraño para vos.',mensaje:'Pasá una hora mirándote fijamente a los ojos en un espejo.'},
+  {nombre:'Laguz',emoji:'ᛚ',pos:'Flujo',significado_corto:'Te estás ahogando en tus emociones y decís que es "fluir".',mensaje:'Sumergí tu cabeza en agua fría hoy hasta que el pensamiento se detenga.'},
+  {nombre:'Ingwaz',emoji:'ᛜ',pos:'Potencial',significado_corto:'Estás encerrado en tu propio capullo y te estás asfixiando.',mensaje:'Mostrá un resultado final de algo que hayas estado ocultando.'},
+  {nombre:'Dagaz',emoji:'ᛞ',pos:'Amanecer',significado_corto:'La claridad te va a cegar porque preferís vivir en las sombras.',mensaje:'Abrí todas las cortinas de tu casa apenas salga el sol mañana.'},
+  {nombre:'Othala',emoji:'ᛟ',pos:'Herencia',significado_corto:'Tu herencia es una cadena de deudas emocionales.',mensaje:'Deshazte de un objeto familiar que te genere culpa o peso emocional.'},
 ];
 
 function getRandom(arr,n){
@@ -1095,6 +1150,7 @@ async function generarTirada(){
   // Construir prompt para la IA
   const tipoTexto={amor:'amor y relaciones',dinero:'dinero y economía',salud:'salud y bienestar',general:'consulta general'};
   const tiradaTexto={cartas:'tirada de tarot',runas:'tirada de runas nórdicas',combo:'tirada combinada de tarot y runas'};
+  const lecturaTexto={runa_unica:'Runa Única',tres:'Tres Runas (Pasado/Presente/Futuro)',cruz:'Cruz',estrella:'Estrella (4 elementos)',diamante:'Diamante',guerrero:'Guerrero',parejas:'Parejas',freyja:'Freyja (amor y emociones)',proyectos:'Proyectos',yggdrasil:'Yggdrasil',caminante:'Caminante (3 planos)',lanza_odin:'Lanza de Odín',martillo:'Martillo de Thor',salud:'Salud',siete:'Siete Runas',pentaculo:'Pentáculo',triskel:'Triskel (Cuerpo/Mente/Espíritu)',rasgos:'Rasgos Heredados',varas:'Varas'};
   const simbolosTexto=simbolos.map(s=>`${s.nombre} (${s.pos}) — "${s.significado_corto||''}"`).join('\n');
 
   const prompt=`Eres El Viajero del Tiempo, un ser ancestral de más de 90 años que tiene el don de viajar al pasado y al futuro. Eres psicólogo, antropólogo y mercadólogo. Vives en Atenas, Grecia. Tu misión es ayudar a las personas con sabiduría, respeto y amor profundo.
@@ -1102,6 +1158,7 @@ async function generarTirada(){
 La persona que consulta se llama ${tiradaData.nombre}.
 Área de consulta: ${tipoTexto[tiradaData.tipo]}.
 Tipo de tirada: ${tiradaTexto[tiradaData.tirada]}.
+Forma de lectura elegida: ${lecturaTexto[tiradaData.tipoLectura]||tiradaData.tipoLectura}.
 ${tiradaData.pregunta?`Pregunta específica: "${tiradaData.pregunta}".`:'Lectura abierta sin pregunta específica.'}
 Símbolos que salieron: ${simbolosTexto}.
 
