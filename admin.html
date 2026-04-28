@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.1 -->
+<!-- v2.2 fix: status filter + code validator -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -18,8 +18,6 @@ const db=firebase.database();
 :root{--gold:#C9A84C;--gold-light:#E8C97A;--deep:#0A0612;--surface:#130D2A;--surface2:#1C1438;--text:#F0EAD6;--text-muted:#A89CC0;--border:rgba(201,168,76,0.25);--red:#c0392b;--green:#1a7a4a;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:300;min-height:100vh;}
-
-/* LOGIN */
 #login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
 .login-logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.2em;margin-bottom:0.5rem;}
 .login-sub{font-size:0.65rem;color:var(--text-muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:3rem;}
@@ -29,24 +27,17 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
 .login-btn{width:100%;padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;}
 .login-btn:active{background:var(--gold);color:var(--deep);}
 .login-error{font-size:0.7rem;color:#e74c3c;margin-top:0.5rem;display:none;text-align:center;}
-
-/* PANEL */
 #panel-screen{display:none;min-height:100vh;}
 .panel-header{background:var(--surface);border-bottom:0.5px solid var(--border);padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
 .panel-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold);letter-spacing:0.1em;}
 .panel-logout{font-size:0.6rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;background:none;border:0.5px solid var(--border);padding:0.35rem 0.7rem;cursor:pointer;font-family:'Montserrat',sans-serif;}
-.panel-logout:active{color:var(--gold);border-color:var(--gold);}
-
 .panel-tabs{display:flex;border-bottom:0.5px solid var(--border);background:var(--surface);}
 .tab-btn{flex:1;padding:0.8rem;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;background:none;border:none;color:var(--text-muted);cursor:pointer;font-family:'Montserrat',sans-serif;border-bottom:2px solid transparent;transition:all 0.2s;}
 .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
 .tab-badge{display:inline-block;background:var(--gold);color:var(--deep);font-size:0.55rem;padding:0.1rem 0.4rem;border-radius:10px;margin-left:0.3rem;font-weight:500;}
-
 .panel-body{padding:1rem;}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
-
-/* CARDS DE SOLICITUD */
 .request-card{background:var(--surface);border:0.5px solid var(--border);padding:1.2rem;margin-bottom:1rem;position:relative;}
 .request-card.approved{border-color:var(--green);opacity:0.6;}
 .request-card.rejected{border-color:var(--red);opacity:0.6;}
@@ -69,38 +60,37 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
 .badge-approved{background:rgba(26,122,74,0.2);color:#4caf84;border:0.5px solid var(--green);}
 .badge-rejected{background:rgba(192,57,43,0.2);color:#e57373;border:0.5px solid var(--red);}
 .badge-pending{background:rgba(201,168,76,0.1);color:var(--gold);border:0.5px solid var(--border);}
-
-/* ESTADO VACIO */
 .empty-state{text-align:center;padding:3rem 1rem;}
 .empty-icon{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:rgba(201,168,76,0.2);margin-bottom:1rem;}
 .empty-text{font-size:0.75rem;color:var(--text-muted);}
-
-/* CÓDIGOS GENERADOS */
 .code-card{background:var(--surface);border:0.5px solid var(--border);padding:1rem;margin-bottom:0.8rem;}
 .code-val{font-family:monospace;font-size:1rem;color:var(--gold);letter-spacing:0.15em;margin:0.5rem 0;}
 .code-meta{font-size:0.65rem;color:var(--text-muted);}
 .code-used{opacity:0.4;}
-
-/* STATS */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.5rem;}
 .stat-box{background:var(--surface);border:0.5px solid var(--border);padding:1rem;text-align:center;}
 .stat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);}
 .stat-label{font-size:0.6rem;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.2rem;}
-
-/* MODAL IMAGEN */
 .img-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:100;align-items:center;justify-content:center;}
 .img-modal.open{display:flex;}
 .img-modal img{max-width:95vw;max-height:90vh;object-fit:contain;}
 .img-modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;}
-
 .refresh-btn{width:100%;padding:0.7rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:1rem;}
 .refresh-btn:active{border-color:var(--gold);color:var(--gold);}
 .sending-msg{font-size:0.7rem;color:var(--gold);text-align:center;margin-top:0.5rem;display:none;}
+.validate-section{background:var(--surface);border:0.5px solid var(--border);padding:1.2rem;margin-bottom:1rem;}
+.validate-title{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.8rem;}
+.validate-row{display:flex;gap:0.5rem;}
+.validate-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.8rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:500;letter-spacing:0.1em;outline:none;text-transform:uppercase;}
+.validate-btn{padding:0.8rem 1.2rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.validate-btn:active{background:var(--gold);color:var(--deep);}
+.validate-result{margin-top:0.8rem;font-size:0.75rem;padding:0.7rem;display:none;}
+.validate-ok{background:rgba(26,122,74,0.15);border:0.5px solid var(--green);color:#4caf84;}
+.validate-fail{background:rgba(192,57,43,0.15);border:0.5px solid var(--red);color:#e57373;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-logo">El Viajero del Tiempo</div>
   <div class="login-sub">Panel de administración</div>
@@ -115,270 +105,28 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
   </div>
 </div>
 
-<!-- PANEL -->
 <div id="panel-screen">
   <div class="panel-header">
     <div class="panel-title">✦ Panel del Viajero</div>
     <button class="panel-logout" onclick="logout()">Salir</button>
   </div>
-
   <div class="panel-tabs">
     <button class="tab-btn active" onclick="showTab('pendientes')">Pendientes <span class="tab-badge" id="badge-pend">0</span></button>
     <button class="tab-btn" onclick="showTab('historial')">Historial</button>
     <button class="tab-btn" onclick="showTab('codigos')">Códigos</button>
     <button class="tab-btn" onclick="showTab('stats')">Stats</button>
   </div>
-
   <div class="panel-body">
-
-    <!-- PENDIENTES -->
     <div class="tab-content active" id="tab-pendientes">
       <button class="refresh-btn" onclick="loadRequests()">↻ Actualizar solicitudes</button>
       <div id="list-pendientes"></div>
     </div>
-
-    <!-- HISTORIAL -->
     <div class="tab-content" id="tab-historial">
       <button class="refresh-btn" onclick="loadRequests()">↻ Actualizar</button>
       <div id="list-historial"></div>
     </div>
-
-    <!-- CÓDIGOS -->
     <div class="tab-content" id="tab-codigos">
-      <button class="refresh-btn" onclick="renderCodigos()">↻ Actualizar</button>
-      <div id="list-codigos"></div>
-    </div>
-
-    <!-- STATS -->
-    <div class="tab-content" id="tab-stats">
-      <div class="stats-grid" id="stats-grid"></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- MODAL IMAGEN -->
-<div class="img-modal" id="img-modal">
-  <button class="img-modal-close" onclick="closeImgModal()">✕</button>
-  <img id="img-modal-src" src="" alt="Comprobante">
-</div>
-
-<div class="sending-msg" id="sending-msg">Enviando código al cliente...</div>
-
-<script>
-// ============ CONFIG ============
-const ADMIN_PASS = 'ALFONSO1712';
-const EMAILJS_SERVICE = 'service_wxw598b';
-const EMAILJS_TEMPLATE = 'template_kuo9m7a';
-const EMAILJS_PUBLIC = 'vheByficzrg5tvPG5';
-
-// Storage key
-const STORAGE_KEY = 'viajero_requests';
-const CODES_KEY = 'viajero_codes';
-
-// ============ AUTH ============
-function doLogin(){
-  const pwd = document.getElementById('pwd-input').value;
-  if(pwd === ADMIN_PASS){
-    const expiry=Date.now()+(30*24*60*60*1000);
-    localStorage.setItem('vj_auth', JSON.stringify({auth:'1',expiry}));
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('panel-screen').style.display='block';
-    loadRequests();
-    renderStats();
-  } else {
-    document.getElementById('login-error').style.display='block';
-    setTimeout(()=>document.getElementById('login-error').style.display='none',2000);
-  }
-}
-
-function logout(){
-  localStorage.removeItem('vj_auth');
-  location.reload();
-}
-
-// Check if already logged (30 días)
-function checkAuth(){
-  try{
-    const stored=JSON.parse(localStorage.getItem('vj_auth')||'null');
-    if(stored&&stored.auth==='1'&&Date.now()<stored.expiry) return true;
-  }catch(e){}
-  return false;
-}
-
-// Check if already logged
-if(checkAuth()){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('panel-screen').style.display='block';
-}
-
-// ============ TABS ============
-function showTab(name){
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
-    b.classList.toggle('active', b.textContent.trim().toLowerCase().startsWith(name));
-  });
-  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  if(name==='codigos') renderCodigos();
-  if(name==='stats') renderStats();
-}
-
-// ============ DATA ============
-function getRequests(){
-  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }
-  catch(e){ return []; }
-}
-function saveRequests(r){ localStorage.setItem(STORAGE_KEY, JSON.stringify(r)); }
-
-function getCodes(){
-  try{ return JSON.parse(localStorage.getItem(CODES_KEY)||'[]'); }
-  catch(e){ return []; }
-}
-function saveCodes(c){ localStorage.setItem(CODES_KEY, JSON.stringify(c)); }
-
-function generateCode(){
-  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code='VJT-';
-  for(let i=0;i<6;i++) code+=chars[Math.floor(Math.random()*chars.length)];
-  return code;
-}
-
-// ============ RENDER ============
-function loadRequests(){
-  db.ref('requests').orderByKey().once('value').then(snap=>{
-    const all=[];
-    snap.forEach(child=>{
-      const val=child.val();
-      if(val && typeof val === 'object'){
-        all.push({id:child.key, nombre:val.nombre||'', email:val.email||'', servicio:val.servicio||'', monto:val.monto||'', comprobante:val.comprobante||'', comprobante_type:val.comprobante_type||'text', status:val.status||'pending', ts:val.ts||0, metodo:val.metodo||'—'});
-      }
-    });
-    console.log('Firebase requests total:', all.length, all.map(r=>({id:r.id,status:r.status})));
-    const pending=all.filter(r=>!r.status||r.status==='pending');
-    console.log('Pending:', pending.length);
-    const history=all.filter(r=>r.status==='approved'||r.status==='rejected');
-    document.getElementById('badge-pend').textContent=pending.length;
-    const pEl=document.getElementById('list-pendientes');
-    if(pending.length===0){pEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">No hay solicitudes pendientes</div></div>`;}
-    else{pEl.innerHTML=pending.map(r=>renderCard(r)).join('');}
-    const hEl=document.getElementById('list-historial');
-    if(history.length===0){hEl.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin historial aún</div></div>`;}
-    else{hEl.innerHTML=history.sort((a,b)=>b.ts-a.ts).map(r=>renderCard(r)).join('');}
-  }).catch(e=>console.log('Error:', e));
-}
-
-function renderCard(r){
-  const date = new Date(r.ts).toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-  const statusBadge = r.status==='approved'
-    ? '<span class="status-badge badge-approved">Aprobado</span>'
-    : r.status==='rejected'
-    ? '<span class="status-badge badge-rejected">Rechazado</span>'
-    : '<span class="status-badge badge-pending">Pendiente</span>';
-
-  const comprobante = r.comprobante_type==='image'
-    ? `<img class="comp-img" src="${r.comprobante}" onclick="openImgModal('${r.comprobante}')" alt="Comprobante">`
-    : `<div class="comp-text">${r.comprobante||'Sin comprobante adjunto'}</div>`;
-
-  const actions = (!r.status||r.status==='pending') ? `
-    <div class="req-actions">
-      <button class="btn-approve" onclick="approveRequest('${r.id}')">✓ Aprobar</button>
-      <button class="btn-reject" onclick="rejectRequest('${r.id}')">✕ Rechazar</button>
-    </div>` : '';
-
-  return `
-    <div class="request-card ${r.status}" id="card-${r.id}">
-      ${statusBadge}
-      <div class="req-header">
-        <div class="req-name">${r.nombre||'Sin nombre'}</div>
-        <div class="req-time">${date}</div>
-      </div>
-      <div class="req-row"><span class="req-label">Email</span><span class="req-val">${r.email||'—'}</span></div>
-      <div class="req-row"><span class="req-label">Servicio</span><span class="req-val req-service">${r.servicio||'—'}</span></div>
-      <div class="req-row"><span class="req-label">Monto</span><span class="req-val">${r.monto||'—'}</span></div>
-      <div class="req-row"><span class="req-label">Método</span><span class="req-val">${r.metodo||'—'}</span></div>
-      <div class="req-comprobante">${comprobante}</div>
-      ${r.codigo ? `<div class="req-row" style="margin-top:0.5rem;"><span class="req-label">Código</span><span class="req-val" style="font-family:monospace;color:var(--gold);">${r.codigo}</span></div>` : ''}
-      ${actions}
-    </div>`;
-}
-
-// ============ ACCIONES ============
-async function approveRequest(id){
-  const code=generateCode();
-  const expiry = Date.now() + (48*60*60*1000); // 48 horas
-  const snap=await db.ref('requests/'+id).once('value');
-  const req=snap.val();
-  if(!req) return;
-  await db.ref('requests/'+id).update({status:'approved',codigo:code,approved_at:Date.now()});
-  await db.ref('codes/'+code).set({code,email:req.email,nombre:req.nombre,servicio:req.servicio,ts:Date.now(),expiry,used:false});
-  const sendMsg=document.getElementById('sending-msg');
-  sendMsg.style.display='block';
-  try{
-    emailjs.init(EMAILJS_PUBLIC);
-    await emailjs.send(EMAILJS_SERVICE,EMAILJS_TEMPLATE,{
-      to_email: req.email,
-      to_name: req.nombre||'Consultante',
-      codigo: code,
-      servicio: req.servicio||'Consulta',
-      codigo: code
-    });
-    sendMsg.style.display='none';
-    alert(`✓ Código ${code} enviado automáticamente a ${req.email}`);
-  }catch(e){
-    sendMsg.style.display='none';
-    alert(`✓ Aprobado. Código: ${code}\n\nEnvialo manualmente a: ${req.email}`);
-  }
-  loadRequests();renderStats();
-}
-
-function rejectRequest(id){
-  if(!confirm('¿Rechazar esta solicitud?')) return;
-  db.ref('requests/'+id).update({status:'rejected',rejected_at:Date.now()});
-  setTimeout(()=>{loadRequests();renderStats();},500);
-  alert('Solicitud rechazada.');
-}
-
-function renderCodigos(){
-  db.ref('codes').once('value').then(snap=>{
-    const codes=[];
-    snap.forEach(child=>codes.push(child.val()));
-    const el=document.getElementById('list-codigos');
-    if(codes.length===0){el.innerHTML=`<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin códigos generados aún</div></div>`;return;}
-    el.innerHTML=codes.sort((a,b)=>b.ts-a.ts).map(c=>{
-      const exp=new Date(c.expiry).toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-      const expired=Date.now()>c.expiry;
-      return `<div class="code-card ${c.used||expired?'code-used':''}">
-        <div class="code-meta">${c.nombre} · ${c.email}</div>
-        <div class="code-val">${c.code}</div>
-        <div class="code-meta">${c.servicio} · Vence: ${exp} ${c.used?'· USADO':''} ${expired&&!c.used?'· EXPIRADO':''}</div>
-      </div>`;
-    }).join('');
-  });
-}
-
-function renderStats(){
-  Promise.all([db.ref('requests').once('value'),db.ref('codes').once('value')]).then(([reqSnap,codeSnap])=>{
-    let approved=0,pending=0,rejected=0,usedCodes=0;
-    reqSnap.forEach(c=>{const r=c.val();if(r.status==='approved')approved++;else if(r.status==='pending')pending++;else if(r.status==='rejected')rejected++;});
-    codeSnap.forEach(c=>{if(c.val().used)usedCodes++;});
-    document.getElementById('stats-grid').innerHTML=`
-      <div class="stat-box"><div class="stat-num" style="color:var(--gold)">${pending}</div><div class="stat-label">Pendientes</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:#4caf84">${approved}</div><div class="stat-label">Aprobados</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:#e57373">${rejected}</div><div class="stat-label">Rechazados</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--gold-light)">${usedCodes}</div><div class="stat-label">Tiradas usadas</div></div>`;
-  });
-}
-
-// ============ IMG MODAL ============
-function openImgModal(src){ document.getElementById('img-modal-src').src=src; document.getElementById('img-modal').classList.add('open'); }
-function closeImgModal(){ document.getElementById('img-modal').classList.remove('open'); }
-
-// ============ RECIBIR DATOS DEL INDEX ============
-// El index.html guarda solicitudes en localStorage bajo la misma clave
-// Para que funcione en producción, ambas páginas deben estar en el mismo dominio
-
-// Init
-if(checkAuth()){ loadRequests(); renderStats(); }
-</script>
-</body>
-</html>
+      <div class="validate-section">
+        <div class="validate-title">Validar código en sesión</div>
+        <div class="validate-row">
+          <input class="validate-input" id="validate-in
