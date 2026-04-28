@@ -824,16 +824,16 @@ function enviarComprobante(){
   if(!email||!email.includes('@')){alert('Por favor ingresá un email válido.');return;}
   const id='req_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
   const processRequest=(comprobanteData,comprobanteType)=>{
-    // Firebase: guardar sin imagen (evita límite de tamaño)
-    const req={id,ts:Date.now(),nombre,email,servicio:currentModalService,monto:document.getElementById('modal-amount').textContent,metodo:'—',comprobante:texto||'Ver imagen adjunta',comprobante_type:'text',status:'pending'};
-    db.ref('requests/'+id).set(req).catch(e=>console.log('Firebase error:',e));
+    const req={id,ts:Date.now(),nombre,email,servicio:currentModalService,monto:document.getElementById('modal-amount').textContent,metodo:'—',comprobante:texto||'Sin descripción',comprobante_type:'text',status:'pending'};
+    // Guardar en Firebase
+    db.ref('requests/'+id).set(req)
+      .then(()=>console.log('Firebase OK'))
+      .catch(e=>console.log('Firebase error:',e));
     // Telegram
     const tgToken='8626615964:AAFq3HGRDbtc5ItvGTV-WlNWjwY_0Qo5Oco';
     const tgChat='8207523849';
-    const tgMsg=`✦ NUEVA DONACIÓN\n\nNombre: ${nombre}\nEmail: ${email}\nServicio: ${currentModalService}\nMonto: ${document.getElementById('modal-amount').textContent}\nDescripción: ${texto||'Solo imagen'}\nID: ${id}\n\n→ Panel: https://elviajerodeltiempook.com/admin.html`;
+    const tgMsg=`✦ NUEVA DONACIÓN\n\nNombre: ${nombre}\nEmail: ${email}\nServicio: ${currentModalService}\nMonto: ${document.getElementById('modal-amount').textContent}\nDescripción: ${texto||'Sin descripción'}\nID: ${id}\n\n→ Panel: https://elviajerodeltiempook.com/admin.html`;
     fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:tgChat,text:tgMsg})}).catch(()=>{});
-    // EmailJS
-    emailjs.send('service_wxw598b','s8f44i5',{nombre,email,servicio:currentModalService,monto:document.getElementById('modal-amount').textContent,comprobante:texto||'Ver imagen adjunta',id_solicitud:id}).catch(()=>{});
     msg.style.display='block';msg.style.color='var(--gold-light)';
     msg.innerHTML='✦ Tu solicitud fue enviada.<br>El Viajero la revisará personalmente y recibirás tu código por email.<br><br><em style="font-size:0.65rem;color:var(--text-muted)">Tiempo estimado: menos de 1 hora</em>';
     setTimeout(()=>{showModalStep('c');},2500);
