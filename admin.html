@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.2 fix: status filter + code validator -->
+<!-- v2.3 doLogin restored -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -23,7 +23,7 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
 .login-sub{font-size:0.65rem;color:var(--text-muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:3rem;}
 .login-box{width:100%;max-width:320px;background:var(--surface);border:0.5px solid var(--border);padding:2rem;}
 .login-label{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;display:block;}
-.login-input{width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.9rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;margin-bottom:1rem;-webkit-text-security:disc;}
+.login-input{width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.9rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;margin-bottom:1rem;}
 .login-btn{width:100%;padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;}
 .login-btn:active{background:var(--gold);color:var(--deep);}
 .login-error{font-size:0.7rem;color:#e74c3c;margin-top:0.5rem;display:none;text-align:center;}
@@ -89,8 +89,7 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
 .validate-fail{background:rgba(192,57,43,0.15);border:0.5px solid var(--red);color:#e57373;}
 </style>
 </head>
-<body>
-
+  <body>
 <div id="login-screen">
   <div class="login-logo">El Viajero del Tiempo</div>
   <div class="login-sub">Panel de administración</div>
@@ -104,17 +103,16 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
     <div class="login-error" id="login-error">Contraseña incorrecta</div>
   </div>
 </div>
-
 <div id="panel-screen">
   <div class="panel-header">
     <div class="panel-title">✦ Panel del Viajero</div>
     <button class="panel-logout" onclick="logout()">Salir</button>
   </div>
   <div class="panel-tabs">
-    <button class="tab-btn active" onclick="showTab('pendientes')">Pendientes <span class="tab-badge" id="badge-pend">0</span></button>
-    <button class="tab-btn" onclick="showTab('historial')">Historial</button>
-    <button class="tab-btn" onclick="showTab('codigos')">Códigos</button>
-    <button class="tab-btn" onclick="showTab('stats')">Stats</button>
+    <button class="tab-btn active" onclick="showTab('pendientes',this)">Pendientes <span class="tab-badge" id="badge-pend">0</span></button>
+    <button class="tab-btn" onclick="showTab('historial',this)">Historial</button>
+    <button class="tab-btn" onclick="showTab('codigos',this)">Códigos</button>
+    <button class="tab-btn" onclick="showTab('stats',this)">Stats</button>
   </div>
   <div class="panel-body">
     <div class="tab-content active" id="tab-pendientes">
@@ -129,4 +127,219 @@ body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-seri
       <div class="validate-section">
         <div class="validate-title">Validar código en sesión</div>
         <div class="validate-row">
-          <input class="validate-input" id="validate-in
+          <input class="validate-input" id="validate-input" type="text" placeholder="VJT-XXXXXX">
+          <button class="validate-btn" onclick="validateCode()">Verificar</button>
+        </div>
+        <div class="validate-result" id="validate-result"></div>
+      </div>
+      <div id="list-codigos"></div>
+    </div>
+    <div class="tab-content" id="tab-stats">
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total solicitudes</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-pend">—</div><div class="stat-label">Pendientes</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-aprov">—</div><div class="stat-label">Aprobadas</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-codes">—</div><div class="stat-label">Códigos activos</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="img-modal" id="img-modal" onclick="closeImgModal()">
+  <button class="img-modal-close">✕</button>
+  <img id="img-modal-src" src="" alt="">
+</div>
+    <script>
+const ADMIN_PASS='ALFONSO1712';
+emailjs.init('vheByficzrg5tvPG5');
+
+function doLogin(){
+  const pwd=document.getElementById('pwd-input').value.trim();
+  const err=document.getElementById('login-error');
+  if(pwd===ADMIN_PASS){
+    err.style.display='none';
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('panel-screen').style.display='block';
+    sessionStorage.setItem('vt_auth','1');
+    loadRequests();
+  } else {
+    err.style.display='block';
+    document.getElementById('pwd-input').value='';
+  }
+}
+
+function logout(){
+  sessionStorage.removeItem('vt_auth');
+  document.getElementById('panel-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('pwd-input').value='';
+}
+
+(function(){
+  const p=new URLSearchParams(window.location.search).get('password');
+  if(p===ADMIN_PASS){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('panel-screen').style.display='block';
+    sessionStorage.setItem('vt_auth','1');
+    loadRequests();
+    return;
+  }
+  if(sessionStorage.getItem('vt_auth')==='1'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('panel-screen').style.display='block';
+    loadRequests();
+  }
+})();
+
+function showTab(name,btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='codigos') loadCodes();
+  if(name==='stats') loadStats();
+}
+
+let allRequests=[];
+
+function loadRequests(){
+  db.ref('requests').once('value').then(snap=>{
+    allRequests=[];
+    snap.forEach(c=>{
+      const r=c.val(); r._key=c.key;
+      if(!r.status) r.status='pending';
+      r.status=r.status.toString().trim().toLowerCase();
+      allRequests.push(r);
+    });
+    allRequests.sort((a,b)=>b.ts-a.ts);
+    renderRequests();
+  });
+}
+
+function renderRequests(){
+  const pending=allRequests.filter(r=>r.status==='pending');
+  const hist=allRequests.filter(r=>r.status!=='pending');
+  document.getElementById('badge-pend').textContent=pending.length;
+  document.getElementById('list-pendientes').innerHTML=pending.length===0
+    ?'<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin solicitudes pendientes</div></div>'
+    :pending.map(r=>cardHTML(r)).join('');
+  document.getElementById('list-historial').innerHTML=hist.length===0
+    ?'<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin historial aún</div></div>'
+    :hist.map(r=>cardHTML(r)).join('');
+}
+
+function cardHTML(r){
+  const fecha=r.ts?new Date(r.ts).toLocaleString('es-AR'):'—';
+  const sLabel=r.status==='approved'?'Aprobado':r.status==='rejected'?'Rechazado':'Pendiente';
+  const sClass=r.status==='approved'?'badge-approved':r.status==='rejected'?'badge-rejected':'badge-pending';
+  const cClass=r.status==='approved'?'approved':r.status==='rejected'?'rejected':'';
+  const comp=r.comprobante_type==='image'&&r.comprobante
+    ?`<img class="comp-img" src="${r.comprobante}" onclick="openImgModal('${r.comprobante}')">`
+    :`<div class="comp-text">${r.comprobante||'Sin descripción'}</div>`;
+  const nom=(r.nombre||'').replace(/'/g,"\\'");
+  const em=(r.email||'').replace(/'/g,"\\'");
+  const sv=(r.servicio||'').replace(/'/g,"\\'");
+  const actions=r.status==='pending'
+    ?`<div class="req-actions">
+        <button class="btn-approve" onclick="approveRequest('${r._key}','${nom}','${em}','${sv}')">✓ Aprobar y enviar código</button>
+        <button class="btn-reject" onclick="rejectRequest('${r._key}')">✕ Rechazar</button>
+       </div>
+       <div class="sending-msg" id="msg-${r._key}"></div>`:'';
+  return `<div class="request-card ${cClass}" id="card-${r._key}">
+    <span class="status-badge ${sClass}">${sLabel}</span>
+    <div class="req-header"><div class="req-name">${r.nombre||'Sin nombre'}</div><div class="req-time">${fecha}</div></div>
+    <div class="req-row"><span class="req-label">Email</span><span class="req-val">${r.email||'—'}</span></div>
+    <div class="req-row"><span class="req-label">Servicio</span><span class="req-val req-service">${r.servicio||'—'}</span></div>
+    <div class="req-row"><span class="req-label">Monto</span><span class="req-val">${r.monto||'—'}</span></div>
+    <div class="req-comprobante">${comp}</div>
+    ${actions}
+  </div>`;
+}
+
+function generateCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let c='VJT-';
+  for(let i=0;i<6;i++) c+=chars[Math.floor(Math.random()*chars.length)];
+  return c;
+}
+
+function approveRequest(key,nombre,email,servicio){
+  const code=generateCode();
+  const expiry=Date.now()+7*24*60*60*1000;
+  const msgEl=document.getElementById('msg-'+key);
+  if(msgEl){msgEl.style.display='block';msgEl.textContent='Enviando código...';}
+  db.ref('codes/'+code).set({code,email,nombre,servicio,ts:Date.now(),expiry,used:false});
+  db.ref('requests/'+key).update({status:'approved',code_sent:code});
+  emailjs.send('service_viajero','template_codigo',{
+    to_email:email,to_name:nombre||'Viajero',codigo:code,servicio:servicio||'tu consulta',expiry_days:'7'
+  }).then(()=>{
+    if(msgEl){msgEl.textContent='✓ Código enviado: '+code;msgEl.style.color='var(--gold)';}
+    setTimeout(()=>loadRequests(),1500);
+  }).catch(()=>{
+    if(msgEl){msgEl.textContent='⚠ Email falló. Código: '+code+' — envialo manualmente a '+email;msgEl.style.color='#e5a000';}
+    setTimeout(()=>loadRequests(),3000);
+  });
+}
+
+function rejectRequest(key){
+  if(!confirm('¿Rechazar esta solicitud?')) return;
+  db.ref('requests/'+key).update({status:'rejected'});
+  loadRequests();
+}
+
+function loadCodes(){
+  db.ref('codes').once('value').then(snap=>{
+    const codes=[];
+    snap.forEach(c=>{const v=c.val();v._key=c.key;codes.push(v);});
+    codes.sort((a,b)=>b.ts-a.ts);
+    const el=document.getElementById('list-codigos');
+    if(!codes.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin códigos generados</div></div>';return;}
+    el.innerHTML=codes.map(c=>{
+      const fecha=c.ts?new Date(c.ts).toLocaleString('es-AR'):'—';
+      const exp=c.expiry?new Date(c.expiry).toLocaleDateString('es-AR'):'—';
+      const expired=c.expiry&&Date.now()>c.expiry;
+      return `<div class="code-card ${c.used||expired?'code-used':''}">
+        <div class="code-val">${c.code||c._key}</div>
+        <div class="code-meta">Para: ${c.nombre||'—'} · ${c.email||'—'}</div>
+        <div class="code-meta">Servicio: ${c.servicio||'—'}</div>
+        <div class="code-meta">Expira: ${exp} · ${c.used?'✓ Usado':expired?'⚠ Expirado':'● Activo'}</div>
+        <div class="code-meta">Generado: ${fecha}</div>
+      </div>`;
+    }).join('');
+  });
+}
+
+function validateCode(){
+  const val=document.getElementById('validate-input').value.trim().toUpperCase();
+  const res=document.getElementById('validate-result');
+  if(!val){res.style.display='none';return;}
+  res.style.display='block';res.className='validate-result';res.textContent='Verificando...';
+  db.ref('codes/'+val).once('value').then(snap=>{
+    const c=snap.val();
+    if(!c){res.className='validate-result validate-fail';res.textContent='✕ Código no encontrado.';return;}
+    if(c.used){res.className='validate-result validate-fail';res.textContent='✕ Ya utilizado por '+(c.nombre||'usuario desconocido')+'.';return;}
+    if(c.expiry&&Date.now()>c.expiry){res.className='validate-result validate-fail';res.textContent='✕ Expirado el '+new Date(c.expiry).toLocaleDateString('es-AR')+'.';return;}
+    res.className='validate-result validate-ok';
+    res.textContent='✓ Válido · Para: '+(c.nombre||'—')+' · Servicio: '+(c.servicio||'—');
+  }).catch(()=>{res.className='validate-result validate-fail';res.textContent='Error de conexión.';});
+}
+
+function loadStats(){
+  db.ref('requests').once('value').then(snap=>{
+    let total=0,pend=0,aprov=0;
+    snap.forEach(c=>{const r=c.val();total++;const s=(r.status||'pending').toLowerCase();if(s==='pending')pend++;if(s==='approved')aprov++;});
+    document.getElementById('stat-total').textContent=total;
+    document.getElementById('stat-pend').textContent=pend;
+    document.getElementById('stat-aprov').textContent=aprov;
+  });
+  db.ref('codes').once('value').then(snap=>{
+    let active=0;
+    snap.forEach(c=>{const v=c.val();if(!v.used&&(!v.expiry||Date.now()<v.expiry))active++;});
+    document.getElementById('stat-codes').textContent=active;
+  });
+}
+
+function openImgModal(src){document.getElementById('img-modal-src').src=src;document.getElementById('img-modal').classList.add('open');}
+function closeImgModal(){document.getElementById('img-modal').classList.remove('open');}
+</script>
+</body>
+</html>
