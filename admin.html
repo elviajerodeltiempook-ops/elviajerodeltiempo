@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>El Viajero — Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
@@ -269,7 +269,7 @@ function approveRequest(key,nombre,email,servicio){
   if(msgEl){msgEl.style.display='block';msgEl.textContent='Enviando código...';}
   db.ref('codes/'+code).set({code,email,nombre,servicio,ts:Date.now(),expiry,used:false});
   db.ref('requests/'+key).update({status:'approved',code_sent:code});
-  emailjs.send('service_viajero','template_codigo',{
+  emailjs.send('service_wxw598b','template_kuo9m7a',{
     to_email:email,to_name:nombre||'Viajero',codigo:code,servicio:servicio||'tu consulta',expiry_days:'7'
   }).then(()=>{
     if(msgEl){msgEl.textContent='✓ Código enviado: '+code;msgEl.style.color='var(--gold)';}
