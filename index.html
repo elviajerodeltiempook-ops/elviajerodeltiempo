@@ -422,6 +422,16 @@ const db=firebase.database();
       <div class="payment-card"><div class="payment-icon">🇦🇷</div><div class="payment-name">Pesos AR</div><div class="payment-detail">Transferencia bancaria Argentina<br>Alias: <strong style="color:var(--gold)">ELVIAJERODELTIEMPO</strong></div><button class="payment-action" onclick="copyAlias()">Donar en Pesos AR</button></div>
       <div class="payment-card"><div class="payment-icon">₮</div><div class="payment-name">USDT TRC20</div><div class="payment-detail">Criptomoneda estable<br>Escaneá el QR o copiá la dirección</div><img src="qr_usdt.jpg" class="qr-img" alt="QR USDT TRC20"><div class="crypto-address">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</div><button class="payment-action" onclick="copyAddress()">Copiar Dirección</button></div>
     </div>
+
+    <div style="margin-top:2.5rem;text-align:center;padding:1.8rem;border:0.5px solid var(--border);background:var(--surface2);">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);margin-bottom:0.4rem;">¿Tenés dudas antes de donar?</p>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.2rem;line-height:1.7;">El Viajero te escucha. Escribile directamente por Telegram antes de dar el paso.</p>
+      <a href="https://t.me/Elviajerodeltiempook" target="_blank" style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.75rem 2rem;border:0.5px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;transition:all 0.3s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>
+        Escribir al Viajero
+      </a>
+    </div>
+
   </div>
 </section>
 <section class="social-section">
@@ -892,6 +902,19 @@ updateProgress();
 </audio>
 
 <!-- BOTÓN FLOTANTE DE MÚSICA -->
+<a href="https://t.me/Elviajerodeltiempook" target="_blank" id="tg-btn" title="Escribir al Viajero" style="
+  position:fixed;bottom:24px;left:24px;z-index:9999;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(20,10,40,0.85);border:1px solid var(--gold);
+  color:var(--gold);font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 12px rgba(212,175,55,0.3);
+  text-decoration:none;
+  transition:all 0.3s ease;
+">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>
+</a>
+
 <button id="audio-btn" onclick="toggleAudio()" title="Música" style="
   position:fixed;bottom:24px;right:24px;z-index:9999;
   width:44px;height:44px;border-radius:50%;
