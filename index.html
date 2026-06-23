@@ -397,7 +397,7 @@ const db=firebase.database();
           <div class="tirada-reading" id="tirada-reading"></div>
           <div class="tirada-upsell" id="tirada-upsell"></div>
           <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;">
-            <button class="tirada-next" onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})"><span>Consultar al Viajero</span></button>
+            <button class="tirada-next" onclick="openAgenda()"><span>📞 Hablar con el Viajero</span></button>
             <button class="tirada-nueva" onclick="resetTirada()">Nueva tirada</button>
           </div>
         </div>
@@ -1082,6 +1082,218 @@ function closeTutorial() {
   document.getElementById('tutorial-overlay').style.display = 'none';
   document.getElementById('tutorial-modal').style.display = 'none';
   document.body.style.overflow = '';
+}
+</script>
+
+
+<!-- MODAL AGENDA -->
+<div id="agenda-overlay" onclick="closeAgenda()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10000;"></div>
+<div id="agenda-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;width:min(540px,95vw);background:var(--surface);border:0.5px solid var(--gold);padding:2.5rem;max-height:90vh;overflow-y:auto;">
+  <button onclick="closeAgenda()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;">✕</button>
+  
+  <div style="text-align:center;margin-bottom:1.8rem;">
+    <div style="font-size:2rem;margin-bottom:0.5rem;">📞</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.5rem;margin-bottom:0.4rem;">Llamada con El Viajero</h3>
+    <p style="font-size:0.72rem;color:var(--text-muted);line-height:1.7;">Una conversación directa. Sin video. Solo su voz y la tuya.<br>Por Meet o Instagram — vos elegís.</p>
+  </div>
+
+  <!-- DISPONIBILIDAD -->
+  <div style="background:rgba(212,175,55,0.06);border:0.5px solid var(--gold);padding:1rem 1.2rem;margin-bottom:1.5rem;text-align:center;">
+    <p style="font-size:0.65rem;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem;">Disponibilidad esta semana</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text);">⚠ Queda <strong style="color:var(--gold)">1 lugar disponible</strong></p>
+    <p style="font-size:0.65rem;color:var(--text-muted);margin-top:0.2rem;">La agenda del Viajero se completa rápido. Reservá ahora.</p>
+  </div>
+
+  <!-- SELECTOR DE HORARIO -->
+  <div style="margin-bottom:1.5rem;">
+    <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.8rem;">Elegí tu horario</label>
+    <div id="slots-container" style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;"></div>
+    <p style="font-size:0.62rem;color:var(--text-muted);margin-top:0.6rem;text-align:center;">Los horarios se muestran en tu zona horaria local 🌍</p>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div style="display:flex;flex-direction:column;gap:0.8rem;margin-bottom:1.5rem;">
+    <div>
+      <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Nombre completo</label>
+      <input id="ag-nombre" type="text" placeholder="Tu nombre" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;">
+    </div>
+    <div>
+      <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Email</label>
+      <input id="ag-email" type="email" placeholder="tu@email.com" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;">
+    </div>
+    <div>
+      <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Tu usuario de TikTok o Instagram</label>
+      <input id="ag-social" type="text" placeholder="@tuusuario" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;">
+    </div>
+    <div>
+      <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Plataforma de llamada</label>
+      <select id="ag-plataforma" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;">
+        <option value="">— Elegí una —</option>
+        <option value="meet">Google Meet</option>
+        <option value="instagram">Instagram</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="ag-msg" style="display:none;font-size:0.72rem;margin-bottom:1rem;text-align:center;"></div>
+
+  <button onclick="confirmarAgenda()" style="width:100%;padding:0.9rem;background:var(--gold);color:var(--deep);border:none;font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;font-weight:500;">✦ Confirmar mi llamada</button>
+</div>
+
+<script>
+// ── AGENDA ──────────────────────────────────────────────
+// Horarios disponibles en hora Argentina (ART, UTC-3)
+const SLOTS_ART = [
+  {day:1, h:9,  m:30},
+  {day:1, h:10, m:30},
+  {day:2, h:9,  m:30},
+  {day:2, h:18, m:0 },
+  {day:3, h:10, m:0 },
+  {day:3, h:19, m:0 },
+  {day:4, h:9,  m:30},
+  {day:4, h:20, m:0 },
+  {day:5, h:10, m:0 },
+  {day:5, h:18, m:30},
+];
+
+const DIAS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const DIAS_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+let selectedSlot = null;
+
+function getNextSlots() {
+  const now = new Date();
+  // Offset ART = UTC-3
+  const artOffset = -3 * 60;
+  const localOffset = -now.getTimezoneOffset();
+  const diffMin = artOffset - localOffset;
+
+  const slots = [];
+  for(let d = 0; d <= 14; d++) {
+    const date = new Date(now);
+    date.setDate(date.getDate() + d);
+    const dayOfWeek = date.getDay(); // 0=Dom
+    if(dayOfWeek === 0 || dayOfWeek === 6) continue; // solo lun-vie
+
+    const matchSlots = SLOTS_ART.filter(s => s.day === dayOfWeek);
+    for(const s of matchSlots) {
+      // Crear fecha en ART
+      const artDate = new Date(date);
+      artDate.setHours(s.h, s.m, 0, 0);
+      // Convertir a local
+      const localDate = new Date(artDate.getTime() + diffMin * 60000);
+      if(localDate > now) {
+        slots.push({artDate, localDate});
+      }
+    }
+    if(slots.length >= 4) break;
+  }
+  return slots.slice(0, 3); // máximo 3 slots visibles (escasez)
+}
+
+function formatSlot(localDate) {
+  const dia = DIAS_ES[localDate.getDay()];
+  const d = localDate.getDate();
+  const mes = localDate.toLocaleString('es', {month:'short'});
+  const hh = String(localDate.getHours()).padStart(2,'0');
+  const mm = String(localDate.getMinutes()).padStart(2,'0');
+  return `${dia} ${d} ${mes} · ${hh}:${mm}hs`;
+}
+
+function renderSlots() {
+  const container = document.getElementById('slots-container');
+  const slots = getNextSlots();
+  container.innerHTML = '';
+  slots.forEach((slot, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = formatSlot(slot.localDate);
+    btn.style.cssText = 'padding:0.7rem 0.5rem;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);font-family:"Montserrat",sans-serif;font-size:0.65rem;cursor:pointer;text-align:center;transition:all 0.2s;';
+    btn.onclick = function() {
+      document.querySelectorAll('#slots-container button').forEach(b => {
+        b.style.borderColor = 'var(--border)';
+        b.style.color = 'var(--text)';
+        b.style.background = 'var(--surface2)';
+      });
+      this.style.borderColor = 'var(--gold)';
+      this.style.color = 'var(--gold)';
+      this.style.background = 'rgba(212,175,55,0.08)';
+      selectedSlot = slot;
+    };
+    container.appendChild(btn);
+  });
+}
+
+function openAgenda() {
+  selectedSlot = null;
+  renderSlots();
+  document.getElementById('agenda-overlay').style.display = 'block';
+  document.getElementById('agenda-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAgenda() {
+  document.getElementById('agenda-overlay').style.display = 'none';
+  document.getElementById('agenda-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function confirmarAgenda() {
+  const nombre = document.getElementById('ag-nombre').value.trim();
+  const email = document.getElementById('ag-email').value.trim();
+  const social = document.getElementById('ag-social').value.trim();
+  const plataforma = document.getElementById('ag-plataforma').value;
+  const msg = document.getElementById('ag-msg');
+
+  if(!nombre || !email || !social || !plataforma) {
+    msg.style.display='block';msg.style.color='#e74c3c';
+    msg.textContent='Por favor completá todos los campos.';return;
+  }
+  if(!selectedSlot) {
+    msg.style.display='block';msg.style.color='#e74c3c';
+    msg.textContent='Elegí un horario para tu llamada.';return;
+  }
+
+  const slotLabel = formatSlot(selectedSlot.localDate);
+  const artLabel = selectedSlot.artDate.toLocaleString('es-AR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}) + ' (hora Argentina)';
+
+  msg.style.display='block';msg.style.color='var(--text-muted)';
+  msg.textContent='Confirmando...';
+
+  try {
+    // Guardar en Firebase
+    await db.ref('citas').push({
+      nombre, email, social, plataforma,
+      slot_local: slotLabel,
+      slot_art: artLabel,
+      ts: Date.now()
+    });
+
+    // Notificar por Telegram
+    const BOT_TOKEN = '7645656241:AAGmmL1GYn5GDEGpVfOo0T7g5O96oMK76as';
+    const CHAT_ID = '6218222481';
+    const texto = `📞 NUEVA CITA AGENDADA\n\n👤 ${nombre}\n📧 ${email}\n📱 ${social}\n🔗 Plataforma: ${plataforma}\n🕐 Horario (local): ${slotLabel}\n🇦🇷 En Argentina: ${artLabel}`;
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:CHAT_ID,text:texto})
+    });
+
+    // Email de confirmación al cliente
+    await emailjs.send('service_wxw598b','template_mytxxce',{
+      to_email: email,
+      to_name: nombre,
+      slot: slotLabel,
+      plataforma: plataforma === 'meet' ? 'Google Meet' : 'Instagram',
+      social: social
+    });
+
+    msg.style.color='var(--gold)';
+    msg.innerHTML='✦ ¡Tu llamada está confirmada!<br><small style="color:var(--text-muted)">Revisá tu email. El Viajero te contactará antes de la llamada.</small>';
+    document.querySelector('#agenda-modal button[onclick="confirmarAgenda()"]').style.display='none';
+
+  } catch(e) {
+    msg.style.color='#e74c3c';
+    msg.textContent='Error al confirmar. Escribinos por Telegram.';
+  }
 }
 </script>
 
