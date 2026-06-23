@@ -663,35 +663,7 @@ function checkKeywordA(){
     },900);
   }).catch(()=>{msg.textContent='Error de conexión. Intentá nuevamente.';msg.style.color='#e74c3c';});
 }
-function checkKeyword(){
-  const inputEl=document.getElementById('keyword-input');
-  const val=inputEl.value.trim().toUpperCase();
-  const msg=document.getElementById('keyword-msg');
-  msg.style.display='block';
-  if(!val||val.length<4){msg.textContent='Ingresá tu código de acceso.';msg.style.color='#e74c3c';return;}
-  msg.textContent='Verificando...';msg.style.color='var(--text-muted)';
-  db.ref('codes/'+val).once('value').then(snap=>{
-    const codeObj=snap.val();
-    if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
-    if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
-    if(!codeObj.expiry||Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
-    db.ref('codes/'+val).update({used:true,used_at:Date.now()});
-    msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
-    setTimeout(()=>{
-      closeModal();
-      resetTirada();
-      if(codeObj.nombre){
-        tiradaData.nombre=codeObj.nombre;
-        document.getElementById('t-nombre').value=codeObj.nombre;
-        document.getElementById('step-1').classList.remove('active');
-        document.getElementById('step-2').classList.add('active');
-        currentStep=2;
-        updateProgress();
-      }
-      setTimeout(()=>document.getElementById('tirada').scrollIntoView({behavior:'smooth'}),100);
-    },900);
-  }).catch(()=>{msg.textContent='Error de conexión. Intentá nuevamente.';msg.style.color='#e74c3c';});
-}
+function checkKeyword(){checkKeywordA();}
 
 function setCurrency(c){
   cur=c;
@@ -913,5 +885,62 @@ function resetTirada(){
 }
 updateProgress();
 </script>
+
+<!-- AUDIO AMBIENTE -->
+<audio id="bg-audio" loop preload="auto" style="display:none;">
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<!-- BOTÓN FLOTANTE DE MÚSICA -->
+<button id="audio-btn" onclick="toggleAudio()" title="Música" style="
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(20,10,40,0.85);border:1px solid var(--gold);
+  color:var(--gold);font-size:1.2rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 12px rgba(212,175,55,0.3);
+  transition:all 0.3s ease;
+">🔊</button>
+
+<script>
+(function(){
+  const audio = document.getElementById('bg-audio');
+  const btn = document.getElementById('audio-btn');
+  let playing = false;
+
+  // Intentar autoplay al primer click/touch en cualquier parte de la página
+  function startAudio(){
+    if(!playing){
+      audio.volume = 0.35;
+      audio.play().then(()=>{
+        playing = true;
+        btn.textContent = '🔊';
+      }).catch(()=>{});
+    }
+    document.removeEventListener('click', startAudio);
+    document.removeEventListener('touchstart', startAudio);
+  }
+
+  document.addEventListener('click', startAudio);
+  document.addEventListener('touchstart', startAudio);
+
+  // Intentar autoplay directo (funciona en algunos navegadores)
+  audio.volume = 0.35;
+  audio.play().then(()=>{ playing = true; }).catch(()=>{});
+
+  window.toggleAudio = function(){
+    if(playing){
+      audio.pause();
+      playing = false;
+      btn.textContent = '🔇';
+    } else {
+      audio.play();
+      playing = true;
+      btn.textContent = '🔊';
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
