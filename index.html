@@ -418,9 +418,35 @@ const db=firebase.database();
     <span class="section-label" id="pay-label">Medios de donación</span>
     <h2 class="section-title" style="font-size:1.8rem;" id="pay-title">Donaciones seguras,<br>a tu medida</h2>
     <div class="payment-grid">
-      <div class="payment-card"><div class="payment-icon">💳</div><div class="payment-name">PayPal</div><div class="payment-detail">Dólares (USD)<br>Donación segura e inmediata</div><a class="payment-action" href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank">Donar con PayPal</a></div>
-      <div class="payment-card"><div class="payment-icon">🇦🇷</div><div class="payment-name">Pesos AR</div><div class="payment-detail">Transferencia bancaria Argentina<br>Alias: <strong style="color:var(--gold)">ELVIAJERODELTIEMPO</strong></div><button class="payment-action" onclick="copyAlias()">Donar en Pesos AR</button></div>
-      <div class="payment-card"><div class="payment-icon">₮</div><div class="payment-name">USDT TRC20</div><div class="payment-detail">Criptomoneda estable<br>Escaneá el QR o copiá la dirección</div><img src="qr_usdt.jpg" class="qr-img" alt="QR USDT TRC20"><div class="crypto-address">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</div><button class="payment-action" onclick="copyAddress()">Copiar Dirección</button></div>
+      <div class="payment-card">
+        <div class="payment-icon">💳</div>
+        <div class="payment-name">PayPal</div>
+        <div class="payment-detail">Dólares (USD) · Internacional<br>Con o sin cuenta PayPal</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:1rem;">
+          <a class="payment-action" href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank">Donar con PayPal</a>
+          <button class="payment-action" onclick="openTutorial('paypal')" style="font-size:0.58rem;opacity:0.75;">¿Cómo pago? Ver tutorial →</button>
+        </div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-icon">🇦🇷</div>
+        <div class="payment-name">Pesos AR</div>
+        <div class="payment-detail">Transferencia bancaria Argentina<br>Alias: <strong style="color:var(--gold)">ELVIAJERODELTIEMPO</strong></div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:1rem;">
+          <button class="payment-action" onclick="copyAlias()">Copiar Alias</button>
+          <button class="payment-action" onclick="openTutorial('ars')" style="font-size:0.58rem;opacity:0.75;">¿Cómo transfiero? Ver tutorial →</button>
+        </div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-icon">₮</div>
+        <div class="payment-name">USDT TRC20</div>
+        <div class="payment-detail">Criptomoneda · Desde cualquier país<br>Lemon · Binance · Ripio · Metamask · cualquier billetera</div>
+        <img src="qr_usdt.jpg" class="qr-img" alt="QR USDT TRC20">
+        <div class="crypto-address">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:1rem;">
+          <button class="payment-action" onclick="copyAddress()">Copiar Dirección</button>
+          <button class="payment-action" onclick="openTutorial('usdt')" style="font-size:0.58rem;opacity:0.75;">¿Cómo envío cripto? Ver tutorial →</button>
+        </div>
+      </div>
     </div>
 
     <div style="margin-top:2.5rem;text-align:center;padding:1.8rem;border:0.5px solid var(--border);background:var(--surface2);">
@@ -894,6 +920,169 @@ function resetTirada(){
   updateProgress();
 }
 updateProgress();
+</script>
+
+
+<!-- MODALES DE TUTORIAL DE PAGO -->
+<div id="tutorial-overlay" onclick="closeTutorial()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:10000;"></div>
+
+<div id="tutorial-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;width:min(520px,95vw);background:var(--surface);border:0.5px solid var(--gold);padding:2.5rem;max-height:85vh;overflow-y:auto;">
+  <button onclick="closeTutorial()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;">✕</button>
+  <div id="tutorial-content"></div>
+</div>
+
+<script>
+const tutorials = {
+  paypal: `
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">💳</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo donar con PayPal</h3>
+      <p style="font-size:0.72rem;color:var(--text-muted);">No necesitás tener cuenta PayPal. Podés pagar con tu tarjeta directamente.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">1</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Hacé clic en <strong style="color:var(--gold)">Donar con PayPal</strong></p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Se abre la página de PayPal con el destinatario ya cargado.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">2</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto en dólares (USD)</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Podés ingresar el monto que desees. PayPal lo convierte a tu moneda local automáticamente.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">3</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">¿Sin cuenta PayPal? Sin problema</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">En la pantalla de PayPal buscá la opción <strong style="color:var(--gold)">"Pagar con tarjeta de débito o crédito"</strong>. Ingresás los datos de tu tarjeta y listo — sin registrarte.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">4</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Tomá captura del comprobante</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Volvé aquí y enviá el comprobante. El Viajero te enviará tu código a la brevedad.</p>
+        </div>
+      </div>
+    </div>
+    <a href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank" style="display:block;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Ir a PayPal ahora →</a>
+  `,
+
+  ars: `
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">🇦🇷</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo transferir en Pesos AR</h3>
+      <p style="font-size:0.72rem;color:var(--text-muted);">Desde cualquier banco o billetera argentina. Mercado Pago, Lemon, BBVA, Santander, Brubank, lo que tengas.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">1</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Abrí tu app bancaria o billetera</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Mercado Pago, Lemon, tu banco, Brubank, MODO o cualquier otra.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">2</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ir a <strong style="color:var(--gold)">Transferir → Por alias</strong></p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Buscá la opción de transferir o enviar dinero y elegí la opción "por alias" o "CVU/alias".</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">3</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el alias exacto</p>
+          <div style="background:var(--deep);border:0.5px solid var(--gold);padding:0.6rem 1rem;margin-top:0.4rem;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:'Montserrat',sans-serif;color:var(--gold);font-size:0.8rem;letter-spacing:0.05em;">ELVIAJERODELTIEMPO</span>
+            <button onclick="copyAlias();this.textContent='✓'" style="background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.6rem;cursor:pointer;font-family:'Montserrat',sans-serif;">Copiar</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">4</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto y confirmá</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">El monto sugerido aparece en la página según tu moneda. Tomá captura del comprobante y envialo aquí.</p>
+        </div>
+      </div>
+    </div>
+    <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
+  `,
+
+  usdt: `
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">₮</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo enviar USDT</h3>
+      <p style="font-size:0.72rem;color:var(--text-muted);">Desde cualquier país del mundo. Si ya tenés una billetera cripto, esto te lleva 2 minutos.</p>
+    </div>
+
+    <div style="background:rgba(212,175,55,0.08);border:0.5px solid var(--gold);padding:1rem;margin-bottom:1.2rem;">
+      <p style="font-size:0.7rem;color:var(--gold);margin-bottom:0.3rem;font-family:'Montserrat',sans-serif;letter-spacing:0.08em;">⚠ IMPORTANTE</p>
+      <p style="font-size:0.7rem;color:var(--text-muted);line-height:1.6;">Enviá únicamente <strong style="color:var(--text)">USDT en red TRC20 (Tron)</strong>. Si enviás por otra red (ERC20, BEP20) el dinero se puede perder.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">1</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Abrí tu billetera cripto</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Funciona con cualquier billetera: <strong style="color:var(--text)">Lemon · Binance · Ripio · Belo · Trust Wallet · Metamask · Bitget · OKX · Coinbase</strong> o cualquier otra que tengas.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">2</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ir a <strong style="color:var(--gold)">Enviar → USDT → Red TRC20</strong></p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Buscá la opción "Enviar" o "Withdraw". Seleccioná USDT y asegurate de elegir la red <strong style="color:var(--gold)">TRC20</strong>.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">3</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Pegá la dirección o escaneá el QR</p>
+          <div style="background:var(--deep);border:0.5px solid var(--gold);padding:0.6rem 1rem;margin-top:0.4rem;">
+            <p style="font-size:0.6rem;color:var(--text-muted);margin-bottom:0.3rem;">Dirección USDT TRC20:</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">
+              <span style="font-family:monospace;color:var(--gold);font-size:0.65rem;word-break:break-all;">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</span>
+              <button onclick="copyAddress();this.textContent='✓'" style="min-width:50px;background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.6rem;cursor:pointer;font-family:'Montserrat',sans-serif;">Copiar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">4</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto y confirmá</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Tomá captura del hash de transacción o del comprobante. Envialo aquí y El Viajero te enviará tu código.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.2rem;padding:0.8rem;border:0.5px solid var(--border);background:var(--surface2);">
+      <p style="font-size:0.68rem;color:var(--text-muted);line-height:1.6;text-align:center;">¿No tenés USDT todavía? Podés comprarlo en <strong style="color:var(--text)">Lemon Cash · Binance · Ripio · Belo</strong> con tu tarjeta o transferencia bancaria local.</p>
+    </div>
+
+    <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
+  `
+};
+
+function openTutorial(type) {
+  document.getElementById('tutorial-content').innerHTML = tutorials[type];
+  document.getElementById('tutorial-overlay').style.display = 'block';
+  document.getElementById('tutorial-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTutorial() {
+  document.getElementById('tutorial-overlay').style.display = 'none';
+  document.getElementById('tutorial-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
 </script>
 
 <!-- AUDIO AMBIENTE -->
