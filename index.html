@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -337,9 +338,18 @@ const db=firebase.database();
     <div class="tirada-widget">
       <div class="tirada-progress" id="tirada-progress"></div>
       <div class="tirada-step active" id="step-1">
-        <p class="tirada-question" id="tq-1">"Antes de comenzar, ¿cómo querés que me dirija a vos?"</p>
-        <input class="tirada-input" id="t-nombre" type="text" placeholder="Tu nombre o seudónimo...">
+        <p class="tirada-question" id="tq-1">"Ya siento tu presencia... ¿cómo te llaman?"</p>
+        <input class="tirada-input" id="t-nombre" type="text" placeholder="¿Cómo te llaman?">
         <button class="tirada-next" onclick="nextStep(1)"><span>Continuar</span></button>
+      </div>
+      <div class="tirada-step" id="step-1b">
+        <p class="tirada-question" id="tq-1b">"El tiempo necesita un punto de anclaje... ¿cuándo entraste a este mundo?"</p>
+        <div style="display:flex;gap:0.75rem;justify-content:center;margin-bottom:1.2rem;">
+          <input class="tirada-input" id="t-dia" type="number" placeholder="Día" min="1" max="31" style="width:80px;text-align:center;">
+          <input class="tirada-input" id="t-mes" type="number" placeholder="Mes" min="1" max="12" style="width:80px;text-align:center;">
+          <input class="tirada-input" id="t-anio" type="number" placeholder="Año" min="1900" max="2010" style="width:100px;text-align:center;">
+        </div>
+        <button class="tirada-next" onclick="nextStep('1b')"><span>Continuar</span></button>
       </div>
       <div class="tirada-step" id="step-2">
         <p class="tirada-question" id="tq-2">"¿Sobre qué área de tu vida querés que el tiempo hable hoy?"</p>
@@ -807,7 +817,7 @@ document.getElementById('payModal').addEventListener('click',function(e){if(e.ta
 setLang('es');
 
 // ============ TIRADAS ============
-let tiradaData={nombre:'',tipo:'',tirada:'',tipoLectura:'',pregunta:''};
+let tiradaData={nombre:'',fechaNacimiento:'',tipo:'',tirada:'',tipoLectura:'',pregunta:''};
 let currentStep=1;
 const totalSteps=4;
 function updateProgress(){
@@ -828,16 +838,26 @@ function nextStep(step){
     const nombre=document.getElementById('t-nombre').value.trim();
     if(!nombre){alert('Por favor ingresá tu nombre o seudónimo');return;}
     tiradaData.nombre=nombre;
+    document.getElementById('tq-1b').textContent=`"El tiempo necesita un punto de anclaje... ¿cuándo entraste a este mundo, ${nombre}?"`;
     document.getElementById('tq-2').textContent=`"${nombre}, ¿sobre qué área de tu vida querés que el tiempo hable hoy?"`;
     document.getElementById('tq-3').textContent=`"${nombre}, ¿qué tipo de lectura sentís que necesitás hoy?"`;
     document.getElementById('tq-3b').textContent=`"${nombre}, ¿qué forma de lectura resuena con lo que estás viviendo?"`;
     document.getElementById('tq-4').textContent=`"${nombre}, ¿hay algo específico que querés preguntarle al tiempo?"`;
   }
+  if(step==='1b'){
+    const dia=document.getElementById('t-dia').value.trim();
+    const mes=document.getElementById('t-mes').value.trim();
+    const anio=document.getElementById('t-anio').value.trim();
+    if(!dia||!mes||!anio){alert('Por favor ingresá tu fecha de nacimiento completa');return;}
+    tiradaData.fechaNacimiento=`${dia}/${mes}/${anio}`;
+  }
   if(step===2&&!tiradaData.tipo){alert('Por favor elegí un área');return;}
   if(step===3&&!tiradaData.tirada){alert('Por favor elegí un tipo de tirada');return;}
   if(step==='3b'&&!tiradaData.tipoLectura){alert('Por favor elegí un tipo de lectura');return;}
   document.getElementById(`step-${step}`).classList.remove('active');
-  if(step===3){document.getElementById('step-3b').classList.add('active');}
+  if(step===1){document.getElementById('step-1b').classList.add('active');}
+  else if(step==='1b'){currentStep=2;document.getElementById('step-2').classList.add('active');}
+  else if(step===3){document.getElementById('step-3b').classList.add('active');}
   else if(step==='3b'){currentStep=4;document.getElementById('step-4').classList.add('active');}
   else{currentStep=step+1;document.getElementById(`step-${currentStep}`).classList.add('active');}
   updateProgress();
