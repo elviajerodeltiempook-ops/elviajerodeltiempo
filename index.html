@@ -664,7 +664,7 @@ function enviarComprobante(){
     db.ref('requests/'+id).set(req).then(()=>console.log('Firebase OK')).catch(e=>console.log('Firebase error:',e));
     const tgToken='8626615964:AAFq3HGRDbtc5ItvGTV-WlNWjwY_0Qo5Oco';
     const tgChat='8207523849';
-    const tgMsg=`✦ NUEVA DONACIÓN\n\nNombre: ${nombre}\nEmail: ${email}\nServicio: ${currentModalService}\nMonto: ${document.getElementById('modal-amount').textContent}\nDescripción: ${texto||'Sin descripción'}\nID: ${id}\n\n→ Panel: https://elviajerodeltiempook.com/admin.html`;
+    const tgMsg=`✦ NUEVA DONACIÓN\n\nNombre: ${nombre}\nEmail: ${email}\nServicio: ${currentModalService}\nMonto: ${document.getElementById('modal-amount').textContent}\nDescripción: ${texto||'Sin descripción'}\nID: ${id}\n\n→ Panel: https://elviajerodeltiempo.net/admin.html`;
     fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:tgChat,text:tgMsg})}).catch(()=>{});
     msg.style.display='block';msg.style.color='var(--gold-light)';
     msg.innerHTML='✦ Tu solicitud fue enviada.<br>El Viajero la revisará personalmente y recibirás tu código por email.<br><br><em style="font-size:0.65rem;color:var(--text-muted)">Tiempo estimado: menos de 1 hora</em>';
