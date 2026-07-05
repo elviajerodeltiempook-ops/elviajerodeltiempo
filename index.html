@@ -245,6 +245,13 @@ const db=firebase.database();
         <div id="comp-msg" style="font-size:0.7rem;text-align:center;display:none;line-height:1.7;"></div>
       </div>
     </div>
+    <div id="modal-step-form" style="display:none;">
+      <div class="modal-title" style="margin-bottom:0.3rem;" id="form-title">Completá tus datos</div>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;" id="form-subtitle">El Viajero necesita estos datos para preparar tu lectura.</p>
+      <div id="form-fields" style="display:flex;flex-direction:column;gap:0.8rem;"></div>
+      <button onclick="enviarFormularioServicio()" style="margin-top:1rem;width:100%;padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;">✦ Enviar al Viajero</button>
+      <div id="form-msg" style="font-size:0.7rem;text-align:center;display:none;margin-top:0.8rem;line-height:1.7;"></div>
+    </div>
     <div id="modal-step-c" style="display:none;">
       <div class="modal-title" style="margin-bottom:0.3rem;">Ingresar código</div>
       <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;">El Viajero te envió un código único a tu email. Ingrésalo aquí para acceder a tu tirada.</p>
@@ -629,6 +636,171 @@ const content={
   }
 };
 let modalIsInstant=false,currentModalService='';
+// Formularios específicos por servicio
+const serviceFormsConfig={
+  '3 Preguntas Concretas':{
+    title:'Tus 3 preguntas para el Viajero',
+    subtitle:'Formulá tus preguntas con claridad. El Viajero las responderá con sí, no o una breve orientación.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre',placeholder:'¿Cómo te llaman?',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-p1',label:'Pregunta 1',placeholder:'¿...?',type:'text'},
+      {id:'sf-p2',label:'Pregunta 2',placeholder:'¿...?',type:'text'},
+      {id:'sf-p3',label:'Pregunta 3',placeholder:'¿...?',type:'text'},
+    ]
+  },
+  'Consulta Extendida (escrita)':{
+    title:'Consulta Extendida por Escrito',
+    subtitle:'El Viajero preparará una lectura profunda y te la enviará por email. Sin horario fijo.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre',placeholder:'¿Cómo te llaman?',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-area',label:'¿Sobre qué área consultás?',placeholder:'Amor, dinero, salud, trabajo...',type:'text'},
+      {id:'sf-detalle',label:'Contame tu situación',placeholder:'Cuanto más detallés, más precisa será la lectura...',type:'textarea'},
+    ]
+  },
+  'Consulta Extendida (llamada)':{
+    title:'Reservá tu llamada con Alfonso',
+    subtitle:'Sesión de 15 minutos en vivo. El Viajero te contactará en el horario elegido.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-plataforma',label:'¿Por dónde preferís la llamada?',type:'select',options:['Telegram','Instagram']},
+      {id:'sf-usuario',label:'Tu usuario en esa plataforma',placeholder:'@usuario',type:'text'},
+    ],
+    agenda:true
+  },
+  'Mejorar Economía Personal':{
+    title:'Consulta de Economía Personal',
+    subtitle:'El Viajero preparará tu guía. Podés elegir recibirla por escrito o coordinar una llamada.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-modalidad',label:'¿Cómo preferís recibirla?',type:'select',options:['Por escrito (email)','Por llamada (10 min)']},
+      {id:'sf-usuario',label:'Tu usuario Telegram o Instagram (si elegís llamada)',placeholder:'@usuario',type:'text'},
+      {id:'sf-detalle',label:'Describí tu situación económica actual',placeholder:'¿Qué está trabando tu economía?',type:'textarea'},
+    ]
+  },
+  'Regreso de Pareja':{
+    title:'Consulta de Regreso de Pareja',
+    subtitle:'El Viajero necesita los datos de ambas personas para leer los hilos del tiempo.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac1',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-pareja',label:'Nombre completo de tu pareja',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-fnac2',label:'Fecha de nacimiento de tu pareja (si la sabés)',placeholder:'DD/MM/AAAA o No sé',type:'text'},
+      {id:'sf-historia',label:'Contá lo que pasó entre ustedes',placeholder:'Cuánto tiempo estuvieron, qué pasó, cuándo se separaron...',type:'textarea'},
+    ]
+  },
+  'Encontrar el Amor':{
+    title:'Encontrar el Amor',
+    subtitle:'Las cartas revelan el camino. Resultados concretos entre 21 y 70 días.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-detalle',label:'¿Qué buscás en una relación? ¿Qué ha pasado hasta ahora?',placeholder:'Contame tu historia...',type:'textarea'},
+    ]
+  },
+  'Temas Judiciales':{
+    title:'Consulta de Temas Judiciales',
+    subtitle:'Completá tus datos y aboná. En menos de 2 horas recibís tu lectura completa.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-detalle',label:'Describí tu situación judicial',placeholder:'Qué tipo de caso, en qué etapa está, qué necesitás saber...',type:'textarea'},
+    ]
+  },
+  'Fertilidad & Nuevo Comienzo':{
+    title:'Fertilidad & Nuevo Comienzo',
+    subtitle:'El Viajero puede orientarte por escrito o coordinar una llamada.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-modalidad',label:'¿Cómo preferís la consulta?',type:'select',options:['Por escrito (email)','Por llamada']},
+      {id:'sf-pareja',label:'Nombre de tu pareja (si aplica)',placeholder:'Nombre completo o "No aplica"',type:'text'},
+      {id:'sf-detalle',label:'Contame tu situación',placeholder:'Cuánto tiempo llevan intentándolo, qué han consultado antes...',type:'textarea'},
+    ]
+  },
+  'Carta Natal Básica':{
+    title:'Carta Natal Básica',
+    subtitle:'Sol, Luna y Ascendente. Tu mapa personal revelado.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-hnac',label:'Hora de nacimiento (si la sabés)',placeholder:'Ej: 14:30 o No sé',type:'text'},
+      {id:'sf-lnac',label:'Lugar de nacimiento',placeholder:'Ciudad, País',type:'text'},
+    ]
+  },
+  'Carta Natal Extendida':{
+    title:'Carta Natal Extendida',
+    subtitle:'Mapa completo: 10 planetas, casas astrológicas y propósito de vida.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-hnac',label:'Hora de nacimiento',placeholder:'Ej: 14:30 (importante para mayor precisión)',type:'text'},
+      {id:'sf-lnac',label:'Lugar de nacimiento',placeholder:'Ciudad, País',type:'text'},
+    ]
+  },
+};
+
+const inputStyle='width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:Montserrat,sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;';
+const labelStyle='font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;';
+
+function buildServiceForm(name){
+  const cfg=serviceFormsConfig[name];
+  if(!cfg)return false;
+  document.getElementById('form-title').textContent=cfg.title;
+  document.getElementById('form-subtitle').textContent=cfg.subtitle;
+  const container=document.getElementById('form-fields');
+  container.innerHTML=cfg.fields.map(f=>{
+    if(f.type==='textarea') return `<div><label style="${labelStyle}">${f.label}</label><textarea id="${f.id}" placeholder="${f.placeholder}" rows="3" style="${inputStyle}resize:none;"></textarea></div>`;
+    if(f.type==='select') return `<div><label style="${labelStyle}">${f.label}</label><select id="${f.id}" style="${inputStyle}"><option value="">— Elegí una opción —</option>${f.options.map(o=>`<option value="${o}">${o}</option>`).join('')}</select></div>`;
+    return `<div><label style="${labelStyle}">${f.label}</label><input id="${f.id}" type="${f.type}" placeholder="${f.placeholder}" style="${inputStyle}"></div>`;
+  }).join('');
+  return true;
+}
+
+async function enviarFormularioServicio(){
+  const cfg=serviceFormsConfig[currentModalService];
+  if(!cfg)return;
+  const datos={};
+  let valido=true;
+  cfg.fields.forEach(f=>{
+    const el=document.getElementById(f.id);
+    if(el){
+      datos[f.label]=el.value.trim();
+      if(!el.value.trim()&&f.id!=='sf-usuario'&&f.id!=='sf-pareja'&&f.id!=='sf-hnac'){valido=false;}
+    }
+  });
+  if(!valido){const msg=document.getElementById('form-msg');msg.style.display='block';msg.style.color='#e5a000';msg.textContent='Por favor completá los campos obligatorios.';return;}
+  const nombre=datos['Tu nombre'||'Tu nombre completo']||Object.values(datos)[0];
+  const email=datos['Tu email']||'';
+  let msgTg=`✦ NUEVA CONSULTA — ${currentModalService}\n\n`;
+  Object.entries(datos).forEach(([k,v])=>{if(v)msgTg+=`${k}: ${v}\n`;});
+  const botToken='7745791437:AAEzJPVXBUgLNRr0G-gsFPtLPpDSREd1-bI';
+  const chatId='-1002840755524';
+  const btn=document.querySelector('#modal-step-form button');
+  btn.textContent='Enviando...';btn.disabled=true;
+  try{
+    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatId,text:msgTg,parse_mode:'HTML'})});
+    const msg=document.getElementById('form-msg');
+    msg.style.display='block';msg.style.color='var(--gold)';
+    msg.textContent='✦ El Viajero recibió tu consulta. Te responderá a la brevedad.';
+    btn.style.display='none';
+  }catch(e){
+    const msg=document.getElementById('form-msg');
+    msg.style.display='block';msg.style.color='#e5a000';
+    msg.textContent='Hubo un inconveniente. Intentá nuevamente.';
+    btn.textContent='✦ Enviar al Viajero';btn.disabled=false;
+  }
+}
+
 function openModal(name,usdPrice,isInstant=false){
   modalIsInstant=isInstant;currentModalService=name;
   document.getElementById('modal-service-name').textContent=name;
@@ -640,7 +812,7 @@ function openModal(name,usdPrice,isInstant=false){
   showModalStep('a');
   document.getElementById('payModal').classList.add('open');
 }
-function showModalStep(step){['a','b','c'].forEach(s=>{const el=document.getElementById('modal-step-'+s);if(el)el.style.display=s===step?'block':'none';});}
+function showModalStep(step){['a','b','c','form'].forEach(s=>{const el=document.getElementById('modal-step-'+s);if(el)el.style.display=s===step?'block':'none';});}
 function closeModal(){document.getElementById('payModal').classList.remove('open');}
 function showQR(){document.getElementById('qr-section').style.display='block';}
 function copyPaypal(){
@@ -677,7 +849,13 @@ function enviarComprobante(){
     fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:tgChat,text:tgMsg})}).catch(()=>{});
     msg.style.display='block';msg.style.color='var(--gold-light)';
     msg.innerHTML='✦ Tu solicitud fue enviada.<br>El Viajero la revisará personalmente y recibirás tu código por email.<br><br><em style="font-size:0.65rem;color:var(--text-muted)">Tiempo estimado: menos de 1 hora</em>';
-    setTimeout(()=>showModalStep('c'),2500);
+    setTimeout(()=>{
+      if(buildServiceForm(currentModalService)){
+        const sf=document.getElementById('sf-nombre');if(sf)sf.value=nombre;
+        const se=document.getElementById('sf-email');if(se)se.value=email;
+        showModalStep('form');
+      }else{showModalStep('c');}
+    },2500);
   };
   if(fileInput.files&&fileInput.files[0]){
     const reader=new FileReader();
