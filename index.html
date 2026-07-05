@@ -177,7 +177,16 @@ const db=firebase.database();
   .tirada-result{display:none;}
   .tirada-result.show{display:block;}
   .tirada-cards{display:flex;gap:1rem;margin:1.5rem 0;flex-wrap:wrap;justify-content:center;}
-  .tirada-card{background:var(--surface2);border:0.5px solid var(--gold);padding:1.2rem 1rem;text-align:center;min-width:120px;flex:1;}
+  .tirada-card{perspective:1000px;min-width:140px;flex:1;cursor:pointer;}
+  .tirada-card-inner{position:relative;width:100%;transition:transform 0.7s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
+  .tirada-card.flipped .tirada-card-inner{transform:rotateY(180deg);}
+  .tirada-card-front,.tirada-card-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;border:0.5px solid var(--gold);padding:1.5rem 1rem;}
+  .tirada-card-front{background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:160px;}
+  .tirada-card-back{background:var(--surface2);position:absolute;top:0;left:0;width:100%;transform:rotateY(180deg);text-align:left;}
+  .card-tap-hint{font-size:0.58rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:0.5rem;animation:pulse2 2s infinite;}
+  @keyframes pulse2{0%,100%{opacity:0.4;}50%{opacity:1;}}
+  .tirada-card-reveal{animation:cardAppear 0.5s ease forwards;opacity:0;}
+  @keyframes cardAppear{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
   .tirada-card-icon{font-size:1.8rem;margin-bottom:0.5rem;}
   .tirada-card-name{font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--gold);margin-bottom:0.3rem;}
   .tirada-card-pos{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);}
@@ -921,15 +930,41 @@ async function generarTirada(){
   let simbolos=[];
   if(tiradaData.tirada==='cartas'||tiradaData.tirada==='combo')simbolos=[...simbolos,...getRandom(cartasTarot,tiradaData.tirada==='combo'?2:3)];
   if(tiradaData.tirada==='runas'||tiradaData.tirada==='combo')simbolos=[...simbolos,...getRandom(runasNordicas,tiradaData.tirada==='combo'?1:3)];
-  document.getElementById('tirada-cards').innerHTML=simbolos.map(s=>`
-    <div class="tirada-card" style="text-align:left;padding:1.5rem;">
-      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;">
-        <span style="font-size:2rem;">${s.emoji}</span>
-        <div><div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);">${s.nombre}</div><div style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">${s.pos}</div></div>
+  // Cartas boca abajo — el usuario las toca para revelar
+  window._totalCards=simbolos.length;
+  window._flippedCount=0;
+  window._doReading=doReading;
+  document.getElementById('tirada-cards').innerHTML=simbolos.map((s,i)=>`
+    <div class="tirada-card tirada-card-reveal" id="card-${i}" style="animation-delay:${i*0.3}s;" onclick="flipCard(${i})">
+      <div class="tirada-card-inner">
+        <div class="tirada-card-front">
+          <div style="font-size:2.8rem;color:var(--gold);opacity:0.2;">✦</div>
+          <div style="font-size:0.6rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:1rem;">Tocá para revelar</div>
+        </div>
+        <div class="tirada-card-back">
+          <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;">
+            <span style="font-size:2rem;">${s.emoji}</span>
+            <div><div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);">${s.nombre}</div><div style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">${s.pos}</div></div>
+          </div>
+          ${s.significado_corto?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-style:italic;color:var(--text);margin-bottom:0.8rem;line-height:1.5;">"${s.significado_corto}"</div>`:''}
+          ${s.mensaje?`<div style="font-size:0.7rem;color:var(--text-muted);line-height:1.7;border-top:0.5px solid var(--border);padding-top:0.8rem;">→ ${s.mensaje}</div>`:''}
+        </div>
       </div>
-      ${s.significado_corto?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-style:italic;color:var(--text);margin-bottom:0.8rem;line-height:1.5;">"${s.significado_corto}"</div>`:''}
-      ${s.mensaje?`<div style="font-size:0.72rem;color:var(--text-muted);line-height:1.7;border-top:0.5px solid var(--border);padding-top:0.8rem;">→ ${s.mensaje}</div>`:''}
     </div>`).join('');
+  window.flipCard=function(i){
+    const card=document.getElementById('card-'+i);
+    if(card.classList.contains('flipped'))return;
+    card.classList.add('flipped');
+    window._flippedCount++;
+    if(window._flippedCount===window._totalCards){
+      setTimeout(()=>{
+        document.getElementById('tirada-loading').style.display='block';
+        document.getElementById('tirada-loading').textContent='El Viajero está interpretando los símbolos...';
+        window._doReading(simbolos);
+      },1000);
+    }
+  };
+  async function doReading(simbolos){
   const tipoTexto={amor:'amor y relaciones',dinero:'dinero y economía',salud:'salud y bienestar',general:'consulta general'};
   const tiradaTexto={cartas:'tirada de tarot',runas:'tirada de runas nórdicas',combo:'tirada combinada de tarot y runas'};
   const lecturaTexto={runa_unica:'Runa Única',tres:'Tres Runas',cruz:'Cruz',estrella:'Estrella',diamante:'Diamante',guerrero:'Guerrero',parejas:'Parejas',freyja:'Freyja',proyectos:'Proyectos',yggdrasil:'Yggdrasil',caminante:'Caminante',lanza_odin:'Lanza de Odín',martillo:'Martillo de Thor',salud:'Salud',siete:'Siete Runas',pentaculo:'Pentáculo',triskel:'Triskel',rasgos:'Rasgos Heredados',varas:'Varas'};
@@ -943,18 +978,24 @@ async function generarTirada(){
     document.getElementById('tirada-content').style.display='block';
     document.getElementById('tirada-reading').textContent=texto;
     const upsells={
-      amor:`✦ ${tiradaData.nombre}, si deseás que el amor se manifieste más rápido, puedo acompañarte con una consulta de Regreso de Pareja o Encontrar el Amor. Solo requiere una donación mayor.`,
-      dinero:`✦ ${tiradaData.nombre}, si querés que la abundancia llegue en 21 a 70 días, puedo guiarte con una consulta de Mejorar Economía Personal. Una donación mayor abre puertas que hoy parecen cerradas.`,
-      salud:`✦ ${tiradaData.nombre}, si deseás una guía más profunda para tu bienestar, puedo acompañarte con una consulta de Limpieza Astral y de Aura. Una donación mayor acelera la sanación.`,
-      general:`✦ ${tiradaData.nombre}, si sentís que esta lectura tocó algo importante, puedo ir más profundo en una Consulta Extendida. Una donación mayor me permite dedicarte toda mi atención.`
+      amor:`${tiradaData.nombre}... hay algo más que vi y que no pude mostrarte aquí. Algo que tiene que ver con lo que más deseás en este momento. Si querés que lo vea con vos, escribime. Solo hace falta que me lo pidas.`,
+      dinero:`${tiradaData.nombre}... lo que está llegando para vos es real, pero tiene una puerta que todavía no encontraste. Yo la vi. Si querés que te la muestre, podemos hablar. Solo hace falta dar el primer paso.`,
+      salud:`${tiradaData.nombre}... el tiempo me mostró algo sobre tu energía que no pude decirte aquí. No es algo negativo — es algo que podés cambiar si lo sabés. Si querés que lo veamos juntos, buscame.`,
+      general:`${tiradaData.nombre}... hay algo que el tiempo quiso mostrarte hoy y no llegó a revelarse del todo. Si sentís que esta lectura tocó algo real en vos, podemos ir más profundo. Solo escribime.`
     };
-    document.getElementById('tirada-upsell').textContent=upsells[tiradaData.tipo]||upsells.general;
+    const upsellEl=document.getElementById('tirada-upsell');
+    upsellEl.innerHTML=`<p style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;line-height:1.8;margin-bottom:1.2rem;">${upsells[tiradaData.tipo]||upsells.general}</p>
+    <div style="display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;margin-top:1rem;">
+      <a href="https://t.me/Elviajerodeltiempook" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">✦ Escribirle al Viajero</a>
+      <a href="https://www.instagram.com/el.viajero.del.tiempook/" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Seguir en Instagram</a>
+      <a href="https://www.tiktok.com/@el.viajero.del.tiempook" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Seguir en TikTok</a>
+    </div>`;
   }catch(e){
     document.getElementById('tirada-loading').style.display='none';
     document.getElementById('tirada-content').style.display='block';
-    document.getElementById('tirada-reading').textContent='El tiempo atraviesa interferencias en este momento. Por favor intentá nuevamente en unos instantes.';
+    document.getElementById('tirada-reading').textContent='El tiempo guarda silencio por un instante... Algo poderoso está por revelarse. Volvé a intentarlo en unos momentos.';
   }
-}
+  }
 function resetTirada(){
   tiradaData={nombre:'',tipo:'',tirada:'',tipoLectura:'',pregunta:''};
   currentStep=1;
