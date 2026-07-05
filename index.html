@@ -670,13 +670,14 @@ const serviceFormsConfig={
   },
   'Consulta Extendida (llamada)':{
     title:'Reservá tu llamada con Alfonso',
-    subtitle:'Sesión de 15 minutos en vivo. El Viajero te contactará en el horario elegido.',
+    subtitle:'El Viajero te llamará en el horario que elijas. No necesitás llamar vos.',
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
       {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
-      {id:'sf-plataforma',label:'¿Por dónde preferís la llamada?',type:'select',options:['Telegram','Instagram']},
-      {id:'sf-usuario',label:'Tu usuario en esa plataforma',placeholder:'@usuario',type:'text'},
+      {id:'sf-plataforma',label:'¿Por dónde preferís recibir la llamada?',type:'select',options:['Telegram','Instagram']},
+      {id:'sf-usuario',label:'Tu usuario en esa plataforma',placeholder:'@usuario — el Viajero te llamará ahí',type:'text'},
+      {id:'sf-horario',label:'Elegí tu horario disponible',type:'agenda'},
       {id:'sf-otra-nombre',label:'Nombre completo de otra persona involucrada (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
       {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-obs',label:'Observación adicional',placeholder:'¿Sobre qué querés que el Viajero se enfoque?',type:'textarea'},
@@ -787,8 +788,136 @@ function buildServiceForm(name){
   container.innerHTML=cfg.fields.map(f=>{
     if(f.type==='textarea') return `<div><label style="${labelStyle}">${f.label}</label><textarea id="${f.id}" placeholder="${f.placeholder}" rows="3" style="${inputStyle}resize:none;"></textarea></div>`;
     if(f.type==='select') return `<div><label style="${labelStyle}">${f.label}</label><select id="${f.id}" style="${inputStyle}"><option value="">— Elegí una opción —</option>${f.options.map(o=>`<option value="${o}">${o}</option>`).join('')}</select></div>`;
+    if(f.type==='agenda') return `<div id="agenda-container"><label style="${labelStyle}">${f.label}</label><div id="agenda-slots" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem;"></div><input id="${f.id}" type="hidden" value=""></div>`;
     return `<div><label style="${labelStyle}">${f.label}</label><input id="${f.id}" type="${f.type}" placeholder="${f.placeholder}" style="${inputStyle}"></div>`;
   }).join('');
+  // Si hay campo agenda, cargar slots
+  if(cfg.fields.find(f=>f.type==='agenda')){
+    setTimeout(()=>loadAgendaSlots(), 100);
+  }
+  return true;
+}
+
+// ===== SISTEMA DE AGENDA =====
+// Horario disponible: 17:00 a 20:30 hora Argentina (GMT-3)
+// Días disponibles: lunes a jueves + domingos (sin viernes ni sábados)
+function getAvailableSlots(){
+  const now = new Date();
+  // Convertir "ahora" a hora Argentina
+  const arOffset = -3 * 60; // GMT-3 en minutos
+  const arNow = new Date(now.getTime() + (now.getTimezoneOffset() + arOffset) * 60000);
+  
+  const slots = [];
+  // Generar slots para los próximos 7 días
+  for(let d = 0; d < 10; d++){
+    const date = new Date(arNow);
+    date.setDate(arNow.getDate() + d);
+    const dow = date.getDay(); // 0=dom,1=lun,2=mar,3=mie,4=jue,5=vie,6=sab
+    
+    // Excluir viernes (5) y sábados (6)
+    if(dow === 5 || dow === 6) continue;
+    
+    // Generar slots de 15 min entre 17:00 y 20:30 AR
+    for(let h = 17; h < 21; h++){
+      for(let m = 0; m < 60; m += 15){
+        if(h === 20 && m > 15) break; // último slot 20:15 (termina 20:30)
+        
+        const slotAR = new Date(date);
+        slotAR.setHours(h, m, 0, 0);
+        
+        // Si es hoy, solo mostrar slots futuros (con 1h de anticipación)
+        if(d === 0 && slotAR <= new Date(arNow.getTime() + 60*60000)) continue;
+        
+        slots.push(slotAR);
+      }
+    }
+    if(slots.length >= 20) break; // máximo 20 slots visibles
+  }
+  return slots;
+}
+
+function formatSlotLocal(slotAR){
+  // slotAR es la hora en Argentina — convertir a hora local del usuario
+  const arOffset = -3 * 60;
+  const utcMs = slotAR.getTime() - arOffset * 60000;
+  const localDate = new Date(utcMs - slotAR.getTimezoneOffset() * 60000);
+  
+  const days = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  
+  const dayName = days[localDate.getDay()];
+  const dayNum = localDate.getDate();
+  const month = months[localDate.getMonth()];
+  const hours = String(localDate.getHours()).padStart(2,'0');
+  const mins = String(localDate.getMinutes()).padStart(2,'0');
+  
+  // Zona horaria del usuario
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const offset = -localDate.getTimezoneOffset()/60;
+  const tzLabel = offset >= 0 ? `GMT+${offset}` : `GMT${offset}`;
+  
+  return {
+    display: `${dayName} ${dayNum} ${month} — ${hours}:${mins}`,
+    tz: tzLabel,
+    ar: `${['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][slotAR.getDay()]} ${slotAR.getDate()} — ${String(slotAR.getHours()).padStart(2,'0')}:${String(slotAR.getMinutes()).padStart(2,'0')} AR`,
+    key: slotAR.getTime()
+  };
+}
+
+async function loadAgendaSlots(){
+  const container = document.getElementById('agenda-slots');
+  if(!container) return;
+  container.innerHTML = '<span style="font-size:0.7rem;color:var(--text-muted);">Cargando horarios...</span>';
+  
+  // Obtener slots bloqueados de Firebase
+  let bookedSlots = {};
+  try{
+    const snap = await db.ref('agenda_slots').once('value');
+    bookedSlots = snap.val() || {};
+  }catch(e){ bookedSlots = {}; }
+  
+  const slots = getAvailableSlots();
+  const btnStyle = 'padding:0.5rem 0.7rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:Montserrat,sans-serif;font-size:0.62rem;cursor:pointer;transition:all 0.2s;text-align:left;';
+  const btnSelectedStyle = 'padding:0.5rem 0.7rem;background:rgba(201,168,76,0.15);border:0.5px solid var(--gold);color:var(--gold);font-family:Montserrat,sans-serif;font-size:0.62rem;cursor:pointer;transition:all 0.2s;text-align:left;';
+  
+  if(!slots.length){
+    container.innerHTML = '<span style="font-size:0.7rem;color:var(--text-muted);">No hay horarios disponibles. Escribile al Viajero por Telegram.</span>';
+    return;
+  }
+  
+  container.innerHTML = slots.map(slot => {
+    const fmt = formatSlotLocal(slot);
+    const isBooked = bookedSlots[fmt.key] && bookedSlots[fmt.key].status === 'booked';
+    if(isBooked) return '';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('data-key', fmt.key);
+    btn.setAttribute('data-display', fmt.display);
+    btn.setAttribute('data-ar', fmt.ar);
+    btn.style.cssText = btnStyle;
+    btn.innerHTML = '<div>' + fmt.display + '</div><div style="font-size:0.55rem;color:var(--text-muted);margin-top:2px;">' + fmt.tz + '</div>';
+    btn.onclick = function(){ selectSlot(this, this.getAttribute('data-key'), this.getAttribute('data-display'), this.getAttribute('data-ar')); };
+    return btn.outerHTML;
+  }).join('');
+}
+
+let selectedSlotKey = null;
+let selectedSlotDisplay = null;
+let selectedSlotAR = null;
+
+function selectSlot(btn, key, display, ar){
+  // Deseleccionar todos
+  document.querySelectorAll('#agenda-slots button').forEach(b=>{
+    b.style.cssText = 'padding:0.5rem 0.7rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:Montserrat,sans-serif;font-size:0.62rem;cursor:pointer;transition:all 0.2s;text-align:left;';
+  });
+  // Seleccionar este
+  btn.style.cssText = 'padding:0.5rem 0.7rem;background:rgba(201,168,76,0.15);border:0.5px solid var(--gold);color:var(--gold);font-family:Montserrat,sans-serif;font-size:0.62rem;cursor:pointer;transition:all 0.2s;text-align:left;';
+  selectedSlotKey = key;
+  selectedSlotDisplay = display;
+  selectedSlotAR = ar;
+  document.getElementById('sf-horario').value = display + ' | ' + ar;
+}
+
   return true;
 }
 
@@ -805,10 +934,22 @@ async function enviarFormularioServicio(){
     }
   });
   if(!valido){const msg=document.getElementById('form-msg');msg.style.display='block';msg.style.color='#e5a000';msg.textContent='Por favor completá los campos obligatorios.';return;}
-  const nombre=datos['Tu nombre'||'Tu nombre completo']||Object.values(datos)[0];
+  const nombre=Object.values(datos)[0]||'';
   const email=datos['Tu email']||'';
+  // Bloquear slot si es consulta por llamada
+  if(selectedSlotKey && currentModalService.includes('llamada')){
+    try{
+      await db.ref('agenda_slots/'+selectedSlotKey).set({
+        status:'booked',
+        nombre,email,
+        slotAR:selectedSlotAR,
+        ts:Date.now()
+      });
+    }catch(e){console.log('Slot block error:',e);}
+  }
   let msgTg=`✦ NUEVA CONSULTA — ${currentModalService}\n\n`;
   Object.entries(datos).forEach(([k,v])=>{if(v)msgTg+=`${k}: ${v}\n`;});
+  if(selectedSlotAR) msgTg+=`\n📞 HORARIO: ${selectedSlotAR} (hora Argentina)\n⚠️ EL VIAJERO LLAMA — no el consultante`;
   const botToken='7745791437:AAEzJPVXBUgLNRr0G-gsFPtLPpDSREd1-bI';
   const chatId='-1002840755524';
   const btn=document.querySelector('#modal-step-form button');
@@ -839,7 +980,7 @@ function openModal(name,usdPrice,isInstant=false){
   document.getElementById('payModal').classList.add('open');
 }
 function showModalStep(step){['a','b','c','form'].forEach(s=>{const el=document.getElementById('modal-step-'+s);if(el)el.style.display=s===step?'block':'none';});}
-function closeModal(){document.getElementById('payModal').classList.remove('open');}
+function closeModal(){document.getElementById('payModal').classList.remove('open');selectedSlotKey=null;selectedSlotDisplay=null;selectedSlotAR=null;}
 function showQR(){document.getElementById('qr-section').style.display='block';}
 function copyPaypal(){
   navigator.clipboard.writeText('el.viajero.del.tiempook@gmail.com');
