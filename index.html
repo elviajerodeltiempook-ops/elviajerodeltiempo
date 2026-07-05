@@ -637,26 +637,35 @@ const content={
 };
 let modalIsInstant=false,currentModalService='';
 // Formularios específicos por servicio
+const precisionNote='Esta información es para ser más preciso en la lectura del Viajero.';
 const serviceFormsConfig={
   '3 Preguntas Concretas':{
     title:'Tus 3 preguntas para el Viajero',
-    subtitle:'Formulá tus preguntas con claridad. El Viajero las responderá con sí, no o una breve orientación.',
+    subtitle:'Escribí tus preguntas con claridad. Si consultás sobre otra persona, completá sus datos para mayor precisión.',
     fields:[
-      {id:'sf-nombre',label:'Tu nombre',placeholder:'¿Cómo te llaman?',type:'text'},
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
-      {id:'sf-p1',label:'Pregunta 1',placeholder:'¿...?',type:'text'},
-      {id:'sf-p2',label:'Pregunta 2',placeholder:'¿...?',type:'text'},
-      {id:'sf-p3',label:'Pregunta 3',placeholder:'¿...?',type:'text'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-p1',label:'Pregunta 1',placeholder:'Escribí tu primera pregunta...',type:'text'},
+      {id:'sf-p2',label:'Pregunta 2',placeholder:'Escribí tu segunda pregunta...',type:'text'},
+      {id:'sf-p3',label:'Pregunta 3',placeholder:'Escribí tu tercera pregunta...',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre completo de la otra persona (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Cualquier detalle que sientas importante...',type:'textarea'},
     ]
   },
   'Consulta Extendida (escrita)':{
     title:'Consulta Extendida por Escrito',
-    subtitle:'El Viajero preparará una lectura profunda y te la enviará por email. Sin horario fijo.',
+    subtitle:'El Viajero preparará una lectura profunda y te la enviará por email. Cuanto más detallés, más precisa será.',
     fields:[
-      {id:'sf-nombre',label:'Tu nombre',placeholder:'¿Cómo te llaman?',type:'text'},
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-area',label:'¿Sobre qué área consultás?',placeholder:'Amor, dinero, salud, trabajo...',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre completo de otra persona involucrada (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-detalle',label:'Contame tu situación',placeholder:'Cuanto más detallés, más precisa será la lectura...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Algo más que quieras que el Viajero sepa...',type:'textarea'},
     ]
   },
   'Consulta Extendida (llamada)':{
@@ -665,86 +674,103 @@ const serviceFormsConfig={
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-plataforma',label:'¿Por dónde preferís la llamada?',type:'select',options:['Telegram','Instagram']},
       {id:'sf-usuario',label:'Tu usuario en esa plataforma',placeholder:'@usuario',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre completo de otra persona involucrada (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'¿Sobre qué querés que el Viajero se enfoque?',type:'textarea'},
     ],
     agenda:true
   },
   'Mejorar Economía Personal':{
     title:'Consulta de Economía Personal',
-    subtitle:'El Viajero preparará tu guía. Podés elegir recibirla por escrito o coordinar una llamada.',
+    subtitle:'El Viajero preparará tu guía. Podés elegir recibirla por escrito o coordinar una llamada de 10 minutos.',
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-modalidad',label:'¿Cómo preferís recibirla?',type:'select',options:['Por escrito (email)','Por llamada (10 min)']},
       {id:'sf-usuario',label:'Tu usuario Telegram o Instagram (si elegís llamada)',placeholder:'@usuario',type:'text'},
       {id:'sf-detalle',label:'Describí tu situación económica actual',placeholder:'¿Qué está trabando tu economía?',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Cualquier detalle que sientas importante...',type:'textarea'},
     ]
   },
   'Regreso de Pareja':{
     title:'Consulta de Regreso de Pareja',
-    subtitle:'El Viajero necesita los datos de ambas personas para leer los hilos del tiempo.',
+    subtitle:'El Viajero necesita los datos de ambas personas para leer los hilos del tiempo con precisión.',
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
-      {id:'sf-fnac1',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-pareja',label:'Nombre completo de tu pareja',placeholder:'Nombre y apellido',type:'text'},
-      {id:'sf-fnac2',label:'Fecha de nacimiento de tu pareja (si la sabés)',placeholder:'DD/MM/AAAA o No sé',type:'text'},
+      {id:'sf-fnac2',label:'Fecha de nacimiento de tu pareja',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-historia',label:'Contá lo que pasó entre ustedes',placeholder:'Cuánto tiempo estuvieron, qué pasó, cuándo se separaron...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Algo más que quieras que el Viajero sepa...',type:'textarea'},
     ]
   },
   'Encontrar el Amor':{
     title:'Encontrar el Amor',
-    subtitle:'Las cartas revelan el camino. Resultados concretos entre 21 y 70 días.',
+    subtitle:'Las cartas revelan el camino. Resultados concretos entre 21 y 70 días. Cuanto más preciso seas, más exacta será la lectura.',
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
-      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre de alguien en particular (si lo hay)',placeholder:'Nombre completo o "No hay nadie en mente"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-detalle',label:'¿Qué buscás en una relación? ¿Qué ha pasado hasta ahora?',placeholder:'Contame tu historia...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Cualquier detalle que sientas importante...',type:'textarea'},
     ]
   },
   'Temas Judiciales':{
     title:'Consulta de Temas Judiciales',
-    subtitle:'Completá tus datos y aboná. En menos de 2 horas recibís tu lectura completa.',
+    subtitle:'Completá tus datos. En menos de 2 horas recibís tu lectura completa. Cuanto más detallés, más precisa será.',
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
-      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre de la otra parte involucrada (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-detalle',label:'Describí tu situación judicial',placeholder:'Qué tipo de caso, en qué etapa está, qué necesitás saber...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Algo más que consideres importante...',type:'textarea'},
     ]
   },
   'Fertilidad & Nuevo Comienzo':{
     title:'Fertilidad & Nuevo Comienzo',
-    subtitle:'El Viajero puede orientarte por escrito o coordinar una llamada.',
+    subtitle:'El Viajero puede orientarte por escrito o por llamada. Esta información es para ser más preciso en la lectura.',
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
-      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-modalidad',label:'¿Cómo preferís la consulta?',type:'select',options:['Por escrito (email)','Por llamada']},
-      {id:'sf-pareja',label:'Nombre de tu pareja (si aplica)',placeholder:'Nombre completo o "No aplica"',type:'text'},
+      {id:'sf-pareja',label:'Nombre completo de tu pareja (si aplica)',placeholder:'Nombre completo o "No aplica"',type:'text'},
+      {id:'sf-fnac2',label:'Fecha de nacimiento de tu pareja (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
       {id:'sf-detalle',label:'Contame tu situación',placeholder:'Cuánto tiempo llevan intentándolo, qué han consultado antes...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Cualquier detalle que sientas importante...',type:'textarea'},
     ]
   },
   'Carta Natal Básica':{
     title:'Carta Natal Básica',
-    subtitle:'Sol, Luna y Ascendente. Tu mapa personal revelado.',
+    subtitle:'Sol, Luna y Ascendente. Tu mapa personal revelado. Esta información es esencial para la precisión de tu carta.',
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
       {id:'sf-fnac',label:'Fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
-      {id:'sf-hnac',label:'Hora de nacimiento (si la sabés)',placeholder:'Ej: 14:30 o No sé',type:'text'},
+      {id:'sf-hnac',label:'Hora de nacimiento',placeholder:'Ej: 14:30 — cuanto más exacta, más precisa la lectura',type:'text'},
       {id:'sf-lnac',label:'Lugar de nacimiento',placeholder:'Ciudad, País',type:'text'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'¿Hay algo en particular que quieras explorar en tu carta?',type:'textarea'},
     ]
   },
   'Carta Natal Extendida':{
     title:'Carta Natal Extendida',
-    subtitle:'Mapa completo: 10 planetas, casas astrológicas y propósito de vida.',
+    subtitle:'Mapa completo: 10 planetas, casas astrológicas y propósito de vida. Esta información es esencial para la precisión.',
     fields:[
       {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
       {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
       {id:'sf-fnac',label:'Fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
-      {id:'sf-hnac',label:'Hora de nacimiento',placeholder:'Ej: 14:30 (importante para mayor precisión)',type:'text'},
+      {id:'sf-hnac',label:'Hora de nacimiento',placeholder:'Ej: 14:30 — cuanto más exacta, más precisa la lectura',type:'text'},
       {id:'sf-lnac',label:'Lugar de nacimiento',placeholder:'Ciudad, País',type:'text'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'¿Hay algo específico que quieras explorar en tu carta natal?',type:'textarea'},
     ]
   },
 };
@@ -1122,9 +1148,9 @@ async function generarTirada(){
         <div class="tirada-card-back">
           <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;">
             <span style="font-size:2rem;">${s.emoji}</span>
-            <div><div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);">${s.nombre}</div><div style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">${s.pos}</div></div>
+            <div><div style="font-family:Cormorant Garamond,serif;font-size:1.1rem;color:var(--gold);">${s.nombre}</div><div style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">${s.pos}</div></div>
           </div>
-          ${s.significado_corto?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-style:italic;color:var(--text);margin-bottom:0.8rem;line-height:1.5;">"${s.significado_corto}"</div>`:''}
+          ${s.significado_corto?`<div style="font-family:Cormorant Garamond,serif;font-size:0.9rem;font-style:italic;color:var(--text);margin-bottom:0.8rem;line-height:1.5;">"${s.significado_corto}"</div>`:''}
           ${s.mensaje?`<div style="font-size:0.7rem;color:var(--text-muted);line-height:1.7;border-top:0.5px solid var(--border);padding-top:0.8rem;">→ ${s.mensaje}</div>`:''}
         </div>
       </div>
@@ -1162,12 +1188,16 @@ async function generarTirada(){
       general:`${tiradaData.nombre}... hay algo que el tiempo quiso mostrarte hoy y no llegó a revelarse del todo. Si sentís que esta lectura tocó algo real en vos, podemos ir más profundo. Solo escribime.`
     };
     const upsellEl=document.getElementById('tirada-upsell');
-    upsellEl.innerHTML=`<p style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;line-height:1.8;margin-bottom:1.2rem;">${upsells[tiradaData.tipo]||upsells.general}</p>
-    <div style="display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;margin-top:1rem;">
-      <a href="https://t.me/Elviajerodeltiempook" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">✦ Escribirle al Viajero</a>
-      <a href="https://www.instagram.com/el.viajero.del.tiempook/" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Seguir en Instagram</a>
-      <a href="https://www.tiktok.com/@el.viajero.del.tiempook" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Seguir en TikTok</a>
-    </div>`;
+    const upsellText=upsells[tiradaData.tipo]||upsells.general;
+    const upsellDiv=document.createElement('div');
+    const upsellP=document.createElement('p');
+    upsellP.style.cssText='font-family:Cormorant Garamond,serif;font-size:1rem;font-style:italic;line-height:1.8;margin-bottom:1.2rem;';
+    upsellP.textContent=upsellText;
+    const upsellBtns=document.createElement('div');
+    upsellBtns.style.cssText='display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;margin-top:1rem;';
+    upsellBtns.innerHTML='<a href="https://t.me/Elviajerodeltiempook" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--gold);color:var(--gold);font-family:Montserrat,sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">✦ Escribirle al Viajero</a><a href="https://www.instagram.com/el.viajero.del.tiempook/" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--border);color:var(--text-muted);font-family:Montserrat,sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Seguir en Instagram</a><a href="https://www.tiktok.com/@el.viajero.del.tiempook" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--border);color:var(--text-muted);font-family:Montserrat,sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Seguir en TikTok</a>';
+    upsellDiv.appendChild(upsellP);upsellDiv.appendChild(upsellBtns);
+    upsellEl.innerHTML='';upsellEl.appendChild(upsellDiv);
   }catch(e){
     document.getElementById('tirada-loading').style.display='none';
     document.getElementById('tirada-content').style.display='block';
@@ -1202,33 +1232,33 @@ const tutorials = {
   paypal: `
     <div style="text-align:center;margin-bottom:1.5rem;">
       <div style="font-size:2rem;margin-bottom:0.5rem;">💳</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo donar con PayPal</h3>
+      <h3 style="font-family:Cormorant Garamond,serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo donar con PayPal</h3>
       <p style="font-size:0.72rem;color:var(--text-muted);">No necesitás tener cuenta PayPal. Podés pagar con tu tarjeta directamente.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:1rem;">
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">1</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">1</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Hacé clic en <strong style="color:var(--gold)">Donar con PayPal</strong></p>
           <p style="font-size:0.7rem;color:var(--text-muted);">Se abre la página de PayPal con el destinatario ya cargado.</p>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">2</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">2</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto en dólares (USD)</p>
           <p style="font-size:0.7rem;color:var(--text-muted);">Podés ingresar el monto que desees. PayPal lo convierte a tu moneda local automáticamente.</p>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">3</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">3</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">¿Sin cuenta PayPal? Sin problema</p>
           <p style="font-size:0.7rem;color:var(--text-muted);">En la pantalla de PayPal buscá la opción <strong style="color:var(--gold)">"Pagar con tarjeta de débito o crédito"</strong>. Ingresás los datos de tu tarjeta y listo — sin registrarte.</p>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">4</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">4</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Tomá captura del comprobante</p>
           <p style="font-size:0.7rem;color:var(--text-muted);">Volvé aquí y enviá el comprobante. El Viajero te enviará tu código a la brevedad.</p>
@@ -1241,42 +1271,42 @@ const tutorials = {
         <iframe src="https://www.youtube.com/embed/GGB6bL8UwkA" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0.5px solid var(--border);" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
-    <a href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank" style="display:block;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Ir a PayPal ahora →</a>
+    <a href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank" style="display:block;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:Montserrat,sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Ir a PayPal ahora →</a>
   `,
 
   ars: `
     <div style="text-align:center;margin-bottom:1.5rem;">
       <div style="font-size:2rem;margin-bottom:0.5rem;">🇦🇷</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo transferir en Pesos AR</h3>
+      <h3 style="font-family:Cormorant Garamond,serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo transferir en Pesos AR</h3>
       <p style="font-size:0.72rem;color:var(--text-muted);">Desde cualquier banco o billetera argentina. Mercado Pago, Lemon, BBVA, Santander, Brubank, lo que tengas.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:1rem;">
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">1</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">1</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Abrí tu app bancaria o billetera</p>
           <p style="font-size:0.7rem;color:var(--text-muted);">Mercado Pago, Lemon, tu banco, Brubank, MODO o cualquier otra.</p>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">2</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">2</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ir a <strong style="color:var(--gold)">Transferir → Por alias</strong></p>
           <p style="font-size:0.7rem;color:var(--text-muted);">Buscá la opción de transferir o enviar dinero y elegí la opción "por alias" o "CVU/alias".</p>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">3</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">3</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el alias exacto</p>
           <div style="background:var(--deep);border:0.5px solid var(--gold);padding:0.6rem 1rem;margin-top:0.4rem;display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-family:'Montserrat',sans-serif;color:var(--gold);font-size:0.8rem;letter-spacing:0.05em;">ELVIAJERODELTIEMPO</span>
-            <button onclick="copyAlias();this.textContent='✓'" style="background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.6rem;cursor:pointer;font-family:'Montserrat',sans-serif;">Copiar</button>
+            <span style="font-family:Montserrat,sans-serif;color:var(--gold);font-size:0.8rem;letter-spacing:0.05em;">ELVIAJERODELTIEMPO</span>
+            <button onclick="copyAlias();this.textContent='✓'" style="background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.6rem;cursor:pointer;font-family:Montserrat,sans-serif;">Copiar</button>
           </div>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">4</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">4</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto y confirmá</p>
           <p style="font-size:0.7rem;color:var(--text-muted);">El monto sugerido aparece en la página según tu moneda. Tomá captura del comprobante y envialo aquí.</p>
@@ -1289,49 +1319,49 @@ const tutorials = {
         <iframe src="https://www.youtube.com/embed/3gVI1mufXSM" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0.5px solid var(--border);" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
-    <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
+    <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:Montserrat,sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
   `, `
     <div style="text-align:center;margin-bottom:1.5rem;">
       <div style="font-size:2rem;margin-bottom:0.5rem;">₮</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo enviar USDT</h3>
+      <h3 style="font-family:Cormorant Garamond,serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo enviar USDT</h3>
       <p style="font-size:0.72rem;color:var(--text-muted);">Desde cualquier país del mundo. Si ya tenés una billetera cripto, esto te lleva 2 minutos.</p>
     </div>
 
     <div style="background:rgba(212,175,55,0.08);border:0.5px solid var(--gold);padding:1rem;margin-bottom:1.2rem;">
-      <p style="font-size:0.7rem;color:var(--gold);margin-bottom:0.3rem;font-family:'Montserrat',sans-serif;letter-spacing:0.08em;">⚠ IMPORTANTE</p>
+      <p style="font-size:0.7rem;color:var(--gold);margin-bottom:0.3rem;font-family:Montserrat,sans-serif;letter-spacing:0.08em;">⚠ IMPORTANTE</p>
       <p style="font-size:0.7rem;color:var(--text-muted);line-height:1.6;">Enviá únicamente <strong style="color:var(--text)">USDT en red TRC20 (Tron)</strong>. Si enviás por otra red (ERC20, BEP20) el dinero se puede perder.</p>
     </div>
 
     <div style="display:flex;flex-direction:column;gap:1rem;">
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">1</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">1</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Abrí tu billetera cripto</p>
           <p style="font-size:0.7rem;color:var(--text-muted);">Funciona con cualquier billetera: <strong style="color:var(--text)">Lemon · Binance · Ripio · Belo · Trust Wallet · Metamask · Bitget · OKX · Coinbase</strong> o cualquier otra que tengas.</p>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">2</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">2</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ir a <strong style="color:var(--gold)">Enviar → USDT → Red TRC20</strong></p>
           <p style="font-size:0.7rem;color:var(--text-muted);">Buscá la opción "Enviar" o "Withdraw". Seleccioná USDT y asegurate de elegir la red <strong style="color:var(--gold)">TRC20</strong>.</p>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">3</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">3</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Pegá la dirección o escaneá el QR</p>
           <div style="background:var(--deep);border:0.5px solid var(--gold);padding:0.6rem 1rem;margin-top:0.4rem;">
             <p style="font-size:0.6rem;color:var(--text-muted);margin-bottom:0.3rem;">Dirección USDT TRC20:</p>
             <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">
               <span style="font-family:monospace;color:var(--gold);font-size:0.65rem;word-break:break-all;">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</span>
-              <button onclick="copyAddress();this.textContent='✓'" style="min-width:50px;background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.6rem;cursor:pointer;font-family:'Montserrat',sans-serif;">Copiar</button>
+              <button onclick="copyAddress();this.textContent='✓'" style="min-width:50px;background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.6rem;cursor:pointer;font-family:Montserrat,sans-serif;">Copiar</button>
             </div>
           </div>
         </div>
       </div>
       <div style="display:flex;gap:1rem;align-items:flex-start;">
-        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:'Montserrat',sans-serif;">4</div>
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">4</div>
         <div>
           <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto y confirmá</p>
           <p style="font-size:0.7rem;color:var(--text-muted);">Tomá captura del hash de transacción o del comprobante. Envialo aquí y El Viajero te enviará tu código.</p>
@@ -1349,7 +1379,7 @@ const tutorials = {
         <iframe src="https://www.youtube.com/embed/MjO0jnHMBOg" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0.5px solid var(--border);" allowfullscreen loading="lazy"></iframe>
       </div>
     </div>
-    <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
+    <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:Montserrat,sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
   `
 
 function openTutorial(type) {
