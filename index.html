@@ -918,9 +918,6 @@ function selectSlot(btn, key, display, ar){
   document.getElementById('sf-horario').value = display + ' | ' + ar;
 }
 
-  return true;
-}
-
 async function enviarFormularioServicio(){
   const cfg=serviceFormsConfig[currentModalService];
   if(!cfg)return;
@@ -1462,7 +1459,8 @@ const tutorials = {
       </div>
     </div>
     <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:Montserrat,sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
-  `, `
+  `,
+  usdt: `
     <div style="text-align:center;margin-bottom:1.5rem;">
       <div style="font-size:2rem;margin-bottom:0.5rem;">₮</div>
       <h3 style="font-family:Cormorant Garamond,serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo enviar USDT</h3>
