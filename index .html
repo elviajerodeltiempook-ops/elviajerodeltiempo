@@ -1044,7 +1044,7 @@ function checkKeywordA(){
     if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
     if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
     if(!codeObj.expiry||Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
-    db.ref('codes/'+val).update({used:true,used_at:Date.now()});tiradaPaga=true;
+    db.ref('codes/'+val).update({used:true,used_at:Date.now()});tiradaPaga=true;resolverTipoPagado(codeObj);
     msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
     setTimeout(()=>{
       closeModal();
@@ -1073,7 +1073,7 @@ function checkKeyword(){
     if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
     if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
     if(!codeObj.expiry||Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
-    db.ref('codes/'+val).update({used:true,used_at:Date.now()});tiradaPaga=true;
+    db.ref('codes/'+val).update({used:true,used_at:Date.now()});tiradaPaga=true;resolverTipoPagado(codeObj);
     msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
     setTimeout(()=>{
       closeModal();
@@ -1266,6 +1266,27 @@ const runasNordicas=[
 ];
 function getRandom(arr,n){return[...arr].sort(()=>Math.random()-0.5).slice(0,n);}
 var tiradaPaga=false;
+var tiradaPermitida=null;
+function tipoDesdeTexto(t){t=(t||'').toLowerCase();if(t.includes('combo'))return 'combo';if(t.includes('runa')||t.includes('rune'))return 'runas';if(t.includes('carta')||t.includes('card')||t.includes('tarot'))return 'cartas';return null;}
+async function resolverTipoPagado(codeObj){
+  let tipo=tipoDesdeTexto(Object.values(codeObj||{}).filter(v=>typeof v==='string').join(' '));
+  if(!tipo&&codeObj&&codeObj.email){
+    try{const snap=await db.ref('requests').orderByChild('email').equalTo(codeObj.email).once('value');
+      const reqs=Object.values(snap.val()||{}).sort((a,b)=>(b.ts||0)-(a.ts||0));
+      for(const r of reqs){const t=tipoDesdeTexto(r.servicio);if(t){tipo=t;break;}}
+    }catch(e){}
+  }
+  tiradaPermitida=tipo||'cartas';
+  aplicarBloqueoTipo();
+}
+function aplicarBloqueoTipo(){
+  document.querySelectorAll('#step-3 .tirada-option').forEach(b=>{
+    const m=(b.getAttribute('onclick')||'').match(/'(cartas|runas|combo)'/);const v=m&&m[1];
+    if(tiradaPermitida){const ok=v===tiradaPermitida;b.style.display=ok?'':'none';b.classList.toggle('selected',ok);}
+    else{b.style.display='';}
+  });
+  if(tiradaPermitida)tiradaData.tirada=tiradaPermitida;
+}
 async function generarTirada(){
   if(!tiradaPaga){
     const idx={cartas:0,runas:1,combo:2}[tiradaData.tirada]??0;
@@ -1274,7 +1295,8 @@ async function generarTirada(){
     openModal(srv.name,iP[idx],true);
     return;
   }
-  tiradaPaga=false;
+  if(tiradaPermitida)tiradaData.tirada=tiradaPermitida;
+  tiradaPaga=false;tiradaPermitida=null;
   tiradaData.pregunta=document.getElementById('t-pregunta').value.trim();
   document.getElementById('step-4').classList.remove('active');
   document.getElementById('tirada-result').classList.add('show');
@@ -1367,6 +1389,7 @@ function resetTirada(){
   document.getElementById('t-pregunta').value='';
   document.getElementById('step-1').classList.add('active');
   updateProgress();
+  aplicarBloqueoTipo();
 }
 updateProgress();
 </script>
