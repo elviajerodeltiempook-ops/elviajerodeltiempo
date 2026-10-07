@@ -179,11 +179,12 @@ const db=firebase.database();
   .tirada-result.show{display:block;}
   .tirada-cards{display:flex;gap:1rem;margin:1.5rem 0;flex-wrap:wrap;justify-content:center;}
   .tirada-card{perspective:1000px;min-width:140px;flex:1;cursor:pointer;}
-  .tirada-card-inner{position:relative;width:100%;transition:transform 0.7s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
+  .tirada-card-inner{position:relative;width:100%;display:grid;transition:transform 0.7s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
   .tirada-card.flipped .tirada-card-inner{transform:rotateY(180deg);}
   .tirada-card-front,.tirada-card-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;border:0.5px solid var(--gold);padding:1.5rem 1rem;}
   .tirada-card-front{background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:160px;}
-  .tirada-card-back{background:var(--surface2);position:absolute;top:0;left:0;width:100%;transform:rotateY(180deg);text-align:left;}
+  .tirada-card-back{background:var(--surface2);grid-area:1/1;transform:rotateY(180deg);text-align:left;}
+  .tirada-card-front{grid-area:1/1;}
   .card-tap-hint{font-size:0.58rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:0.5rem;animation:pulse2 2s infinite;}
   @keyframes pulse2{0%,100%{opacity:0.4;}50%{opacity:1;}}
   .tirada-card-reveal{animation:cardAppear 0.5s ease forwards;opacity:0;}
@@ -1043,7 +1044,7 @@ function checkKeywordA(){
     if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
     if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
     if(!codeObj.expiry||Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
-    db.ref('codes/'+val).update({used:true,used_at:Date.now()});
+    db.ref('codes/'+val).update({used:true,used_at:Date.now()});tiradaPaga=true;
     msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
     setTimeout(()=>{
       closeModal();
@@ -1072,7 +1073,7 @@ function checkKeyword(){
     if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
     if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
     if(!codeObj.expiry||Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
-    db.ref('codes/'+val).update({used:true,used_at:Date.now()});
+    db.ref('codes/'+val).update({used:true,used_at:Date.now()});tiradaPaga=true;
     msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
     setTimeout(()=>{
       closeModal();
@@ -1264,7 +1265,16 @@ const runasNordicas=[
   {nombre:'Othala',emoji:'ᛟ',pos:'Herencia',significado_corto:'Tu herencia es una cadena de deudas emocionales.',mensaje:'Deshazte de un objeto familiar que te genere culpa o peso emocional.'},
 ];
 function getRandom(arr,n){return[...arr].sort(()=>Math.random()-0.5).slice(0,n);}
+var tiradaPaga=false;
 async function generarTirada(){
+  if(!tiradaPaga){
+    const idx={cartas:0,runas:1,combo:2}[tiradaData.tirada]??0;
+    const srv=content[lang].instant[idx];
+    alert(lang==='es'?'✦ Para recibir tu lectura, primero realizá tu donación. El Viajero te enviará tu código de acceso por email.':'✦ To receive your reading, please make your donation first. The Traveler will email you your access code.');
+    openModal(srv.name,iP[idx],true);
+    return;
+  }
+  tiradaPaga=false;
   tiradaData.pregunta=document.getElementById('t-pregunta').value.trim();
   document.getElementById('step-4').classList.remove('active');
   document.getElementById('tirada-result').classList.add('show');
@@ -1345,6 +1355,9 @@ async function generarTirada(){
   }
 }
 function resetTirada(){
+  ['tirada-cards','tirada-reading','tirada-upsell'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
+  const ld=document.getElementById('tirada-loading');if(ld){ld.style.display='block';ld.innerHTML='<div style="font-size:2rem;margin-bottom:1rem;">🔮</div>El Viajero está consultando el tiempo...';}
+  const ct=document.getElementById('tirada-content');if(ct)ct.style.display='none';
   tiradaData={nombre:'',tipo:'',tirada:'',tipoLectura:'',pregunta:''};
   currentStep=1;
   document.getElementById('tirada-result').classList.remove('show');
