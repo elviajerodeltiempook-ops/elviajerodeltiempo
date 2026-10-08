@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔮</text></svg>">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Viajero del Tiempo — Ya estuve en tu futuro</title>
+<meta name="description" content="Ya estuve en tu futuro. Sé lo que viene... y lo que podés manejar.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('vheByficzrg5tvPG5');</script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDD6aDKcBWuABNCyjamSt8-Uj2wgeNC4P8",authDomain:"elviajerodeltiempo-a3d4c.firebaseapp.com",databaseURL:"https://elviajerodeltiempo-a3d4c-default-rtdb.firebaseio.com",projectId:"elviajerodeltiempo-a3d4c",storageBucket:"elviajerodeltiempo-a3d4c.firebasestorage.app",messagingSenderId:"242221363221",appId:"1:242221363221:web:0b06570abc8994378b9e1c"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+</script>
+<style>
+  :root{--gold:#C9A84C;--gold-light:#E8C97A;--deep:#0A0612;--surface:#130D2A;--surface2:#1C1438;--text:#F0EAD6;--text-muted:#A89CC0;--border:rgba(201,168,76,0.25);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(10,6,18,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;}
+  .nav-links{display:flex;gap:2rem;}
+  .nav-links a{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.3s;}
+  .nav-links a:hover{color:var(--gold);}
+  .nav-social{display:flex;gap:0.6rem;align-items:center;}
+  .nav-social a{color:var(--text-muted);text-decoration:none;font-size:1rem;transition:color 0.3s;}
+  .nav-social a:hover{color:var(--gold);}
+  .nav-lang{display:flex;gap:0.5rem;}
+  .lang-btn{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);background:none;border:0.5px solid var(--border);padding:0.3rem 0.6rem;cursor:pointer;transition:all 0.3s;font-family:'Montserrat',sans-serif;}
+  .lang-btn.active,.lang-btn:hover{color:var(--gold);border-color:var(--gold);}
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden;}
+  .hero-img{position:absolute;inset:0;background-image:url('viajerologo.jpg');background-size:cover;background-position:center top;filter:brightness(0.3) saturate(0.7);}
+  .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(74,45,156,0.55) 0%,transparent 70%),linear-gradient(to bottom,rgba(10,6,18,0.1) 0%,rgba(10,6,18,0.75) 100%);}
+  .hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
+  .hero-logo{width:160px;height:160px;border-radius:50%;border:1px solid var(--gold);overflow:hidden;margin-bottom:2rem;box-shadow:0 0 40px rgba(201,168,76,0.3);}
+  .hero-logo img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+  .hero-ornament{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);margin:0 auto 2rem;}
+  .hero-subtitle{font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:300;line-height:1.05;margin-bottom:1rem;}
+  .hero-title em{font-style:italic;color:var(--gold-light);}
+  .hero-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,2.5vw,1.3rem);color:var(--text);margin-bottom:0.8rem;max-width:520px;line-height:1.4;}
+  .hero-tagline-sub{font-size:0.72rem;color:var(--text-muted);margin-bottom:3rem;max-width:480px;letter-spacing:0.05em;}
+  .hero-cta{display:inline-block;padding:1rem 3rem;border:1px solid var(--gold);color:var(--gold);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;background:none;font-family:'Montserrat',sans-serif;font-weight:400;transition:all 0.4s;position:relative;overflow:hidden;}
+  .hero-cta::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;z-index:0;}
+  .hero-cta:hover{color:var(--deep);}
+  .hero-cta:hover::before{transform:scaleX(1);}
+  .hero-cta span{position:relative;z-index:1;}
+  .divider{display:flex;align-items:center;gap:1.5rem;padding:0 4rem;margin:0 auto;max-width:900px;}
+  .divider-line{flex:1;height:0.5px;background:var(--border);}
+  .divider-diamond{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);}
+  section{padding:5rem 2rem;}
+  .section-inner{max-width:900px;margin:0 auto;}
+  .section-label{font-size:0.6rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;line-height:1.1;margin-bottom:1.5rem;}
+  .section-body{font-size:0.85rem;line-height:1.9;color:var(--text-muted);max-width:680px;}
+  .sobre-mi{background:var(--surface);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
+  .sobre-mi .section-body{max-width:700px;font-size:0.9rem;line-height:2;}
+  .sobre-mi .quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--gold-light);margin-top:1.5rem;padding-left:1.5rem;border-left:2px solid var(--gold);line-height:1.7;}
+  .currency-bar{display:flex;align-items:center;gap:0.5rem;margin-top:2.5rem;flex-wrap:wrap;}
+  .currency-label{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-right:0.5rem;}
+  .currency-btn{font-size:0.62rem;letter-spacing:0.08em;padding:0.35rem 0.8rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);cursor:pointer;transition:all 0.25s;font-family:'Montserrat',sans-serif;}
+  .currency-btn{display:inline-flex;align-items:center;gap:0.35rem;padding:0.35rem 0.6rem !important;}
+  .cur-flag{width:18px;height:13px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 0.5px rgba(255,255,255,0.15);opacity:0.85;}
+  .currency-btn.active .cur-flag{opacity:1;}
+  .currency-btn.active{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,0.08);}
+  .instant-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:0.5px solid var(--border);margin-top:2rem;}
+  .instant-card{background:var(--surface2);padding:2rem 1.5rem;transition:background 0.3s;text-align:center;}
+  .instant-card:hover{background:#221844;}
+  .instant-icon{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);margin-bottom:1rem;font-style:italic;}
+  .instant-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:0.5rem;}
+  .instant-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem;}
+  .instant-price{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--gold-light);margin-bottom:1rem;}
+  .instant-badge{display:inline-block;font-size:0.58rem;letter-spacing:0.1em;padding:0.2rem 0.8rem;border:0.5px solid var(--gold);color:var(--gold);margin-bottom:1rem;text-transform:uppercase;}
+  .pay-btn{display:inline-block;padding:0.6rem 1.5rem;border:1px solid var(--gold);color:var(--gold);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;font-family:'Montserrat',sans-serif;transition:all 0.3s;position:relative;overflow:hidden;cursor:pointer;background:none;}
+  .pay-btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;z-index:0;}
+  .pay-btn:hover{color:var(--deep);}
+  .pay-btn:hover::before{transform:scaleX(1);}
+  .pay-btn span{position:relative;z-index:1;}
+  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--border);border:0.5px solid var(--border);margin-top:2rem;}
+  .service-card{background:var(--surface);padding:0;position:relative;transition:background 0.3s;overflow:hidden;}
+  .service-card:hover{background:var(--surface2);}
+  .service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.3s;z-index:2;}
+  .service-card:hover::before{opacity:1;}
+  .service-img{width:100%;height:180px;object-fit:cover;object-position:center;display:block;filter:brightness(0.75) saturate(0.85);transition:filter 0.4s;}
+  .service-card:hover .service-img{filter:brightness(0.9) saturate(1);}
+  .service-img-placeholder{width:100%;height:180px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);opacity:0.3;}
+  .service-body{padding:1.6rem 1.8rem;}
+  .service-num{font-family:'Cormorant Garamond',serif;font-size:0.72rem;color:var(--gold);letter-spacing:0.2em;margin-bottom:0.7rem;}
+  .service-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:400;margin-bottom:0.5rem;line-height:1.2;}
+  .service-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.2rem;}
+  .service-price strong{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;display:block;color:var(--gold-light);margin-bottom:0.8rem;}
+  .planes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:2.5rem;}
+  .plan-card{background:var(--surface);border:0.5px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;transition:border-color 0.3s;}
+  .plan-card:hover{border-color:var(--gold);}
+  .plan-card.destacado{border-color:var(--gold);background:var(--surface2);}
+  .plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--deep);font-size:0.6rem;letter-spacing:0.1em;padding:0.3rem 1rem;text-transform:uppercase;font-family:'Montserrat',sans-serif;white-space:nowrap;}
+  .plan-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem;}
+  .plan-price{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--gold-light);margin-bottom:0.3rem;}
+  .plan-period{font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em;margin-bottom:1.5rem;}
+  .plan-features{list-style:none;margin-bottom:2rem;}
+  .plan-features li{font-size:0.75rem;color:var(--text-muted);padding:0.4rem 0;border-bottom:0.5px solid var(--border);}
+  .plan-features li:last-child{border-bottom:none;}
+  .plan-features li::before{content:'✦ ';color:var(--gold);}
+  .process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2.5rem;margin-top:4rem;}
+  .process-step{text-align:center;}
+  .step-circle{width:52px;height:52px;border-radius:50%;border:0.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);}
+  .step-title{font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:0.4rem;}
+  .step-desc{font-size:0.72rem;color:var(--text-muted);line-height:1.7;}
+  .payment-section{background:var(--surface);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
+  .payment-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:2.5rem;}
+  .payment-card{background:var(--surface2);border:0.5px solid var(--border);padding:2rem;text-align:center;transition:border-color 0.3s;}
+  .payment-card:hover{border-color:var(--gold);}
+  .payment-icon{font-size:2rem;margin-bottom:1rem;}
+  .payment-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);margin-bottom:0.5rem;}
+  .payment-detail{font-size:0.72rem;color:var(--text-muted);line-height:1.7;margin-bottom:1rem;}
+  .payment-action{display:inline-block;padding:0.6rem 1.5rem;border:0.5px solid var(--gold);color:var(--gold);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;font-family:'Montserrat',sans-serif;transition:all 0.3s;cursor:pointer;background:none;}
+  .payment-action:hover{background:var(--gold);color:var(--deep);}
+  .qr-img{width:130px;height:130px;margin:0.5rem auto 1rem;display:block;border:2px solid var(--border);}
+  .crypto-address{font-size:0.58rem;color:var(--text-muted);word-break:break-all;margin-bottom:1rem;font-family:monospace;background:rgba(255,255,255,0.05);padding:0.5rem;}
+  .social-section{text-align:center;padding:4rem 2rem;background:var(--surface2);border-top:0.5px solid var(--border);}
+  .social-links{display:flex;justify-content:center;gap:1rem;margin-top:2rem;flex-wrap:wrap;}
+  .social-link{display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1.3rem;border:0.5px solid var(--border);color:var(--text-muted);text-decoration:none;font-size:0.72rem;letter-spacing:0.08em;transition:all 0.3s;}
+  .social-link:hover{border-color:var(--gold);color:var(--gold);}
+  .cta-section{text-align:center;background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(74,45,156,0.25) 0%,transparent 70%);}
+  .cta-ornament{font-family:'Cormorant Garamond',serif;font-size:3.5rem;color:rgba(201,168,76,0.15);margin-bottom:1rem;display:block;font-style:italic;}
+  .cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:300;margin-bottom:1.5rem;}
+  .cta-body{font-size:0.8rem;color:var(--text-muted);margin-bottom:3rem;}
+  .booking-form{max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:1rem;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .form-field{display:flex;flex-direction:column;gap:0.4rem;}
+  .form-label{font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);}
+  .form-input,.form-select{background:var(--surface);border:0.5px solid var(--border);color:var(--text);padding:0.8rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:300;outline:none;transition:border-color 0.3s;appearance:none;width:100%;}
+  .form-input:focus,.form-select:focus{border-color:var(--gold);}
+  .form-select option{background:var(--surface);}
+  .extra-fields{display:flex;flex-direction:column;gap:1rem;}
+  .discount-row{display:flex;gap:0.5rem;}
+  .discount-row input{flex:1;}
+  .discount-btn{padding:0 1rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.3s;white-space:nowrap;}
+  .discount-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .discount-msg{font-size:0.7rem;color:var(--gold);margin-top:0.3rem;display:none;}
+  .submit-btn{padding:1rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.4s;position:relative;overflow:hidden;margin-top:0.5rem;}
+  .submit-btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;z-index:0;}
+  .submit-btn:hover{color:var(--deep);}
+  .submit-btn:hover::before{transform:scaleX(1);}
+  .submit-btn span{position:relative;z-index:1;}
+  .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;}
+  .modal.open{display:flex;}
+  .modal-box{background:var(--surface);border:0.5px solid var(--border);padding:2.5rem;max-width:480px;width:90%;position:relative;}
+  .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;}
+  .modal-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem;}
+  .modal-amount{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--gold-light);margin-bottom:1.5rem;}
+  .modal-methods{display:flex;flex-direction:column;gap:0.8rem;}
+  .modal-method{display:flex;align-items:center;gap:1rem;padding:1rem;border:0.5px solid var(--border);text-decoration:none;color:var(--text);transition:border-color 0.3s;cursor:pointer;}
+  .modal-method:hover{border-color:var(--gold);}
+  .modal-method-icon{font-size:1.5rem;width:40px;text-align:center;}
+  .modal-method-name{font-size:0.8rem;font-weight:500;color:var(--gold);}
+  .modal-method-detail{font-size:0.7rem;color:var(--text-muted);}
+  footer{padding:2.5rem 3rem;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+  .footer-logo{font-family:'Cormorant Garamond',serif;font-size:0.85rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;}
+  .footer-copy{font-size:0.62rem;color:var(--text-muted);}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.nav-links{display:none;}.nav-social{display:none;}.form-row{grid-template-columns:1fr;}footer{padding:2rem 1.5rem;flex-direction:column;text-align:center;}}
+  .tirada-section{background:var(--surface2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
+  .tirada-widget{max-width:680px;margin:2.5rem auto 0;background:var(--surface);border:0.5px solid var(--border);padding:2.5rem;}
+  .tirada-step{display:none;}
+  .tirada-step.active{display:block;}
+  .tirada-question{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--text);margin-bottom:1.5rem;line-height:1.5;font-style:italic;}
+  .tirada-options{display:flex;flex-wrap:wrap;gap:0.8rem;margin-bottom:1.5rem;}
+  .tirada-option{padding:0.7rem 1.4rem;border:0.5px solid var(--border);background:none;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.3s;}
+  .tirada-option:hover,.tirada-option.selected{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
+  .tirada-input{width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.9rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.82rem;font-weight:300;outline:none;margin-bottom:1.5rem;transition:border-color 0.3s;}
+  .tirada-input:focus{border-color:var(--gold);}
+  .tirada-next{padding:0.8rem 2.5rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.4s;position:relative;overflow:hidden;}
+  .tirada-next::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;z-index:0;}
+  .tirada-next:hover{color:var(--deep);}
+  .tirada-next:hover::before{transform:scaleX(1);}
+  .tirada-next span{position:relative;z-index:1;}
+  .tirada-result{display:none;}
+  .tirada-result.show{display:block;}
+  .tirada-cards{display:flex;gap:1rem;margin:1.5rem 0;flex-wrap:wrap;justify-content:center;}
+  .tirada-card{perspective:1000px;min-width:140px;flex:1;cursor:pointer;}
+  .tirada-card-inner{position:relative;width:100%;display:grid;transition:transform 0.7s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
+  .tirada-card.flipped .tirada-card-inner{transform:rotateY(180deg);}
+  .tirada-card-front,.tirada-card-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;border:0.5px solid var(--gold);padding:1.5rem 1rem;}
+  .tirada-card-front{background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:160px;}
+  .tirada-card-back{background:var(--surface2);grid-area:1/1;transform:rotateY(180deg);text-align:left;}
+  .tirada-card-front{grid-area:1/1;}
+  .card-tap-hint{font-size:0.58rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:0.5rem;animation:pulse2 2s infinite;}
+  @keyframes pulse2{0%,100%{opacity:0.4;}50%{opacity:1;}}
+  .tirada-card-reveal{animation:cardAppear 0.5s ease forwards;opacity:0;}
+  @keyframes cardAppear{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  .tirada-card-icon{font-size:1.8rem;margin-bottom:0.5rem;}
+  .tirada-card-name{font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--gold);margin-bottom:0.3rem;}
+  .tirada-card-pos{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);}
+  .tirada-reading{font-size:0.82rem;line-height:1.9;color:var(--text-muted);margin:1.5rem 0;white-space:pre-wrap;}
+  .tirada-upsell{background:rgba(201,168,76,0.06);border:0.5px solid var(--gold);padding:1.2rem 1.5rem;margin-top:1.5rem;font-size:0.78rem;color:var(--text);line-height:1.7;font-style:italic;}
+  .tirada-loading{text-align:center;padding:2rem;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);font-style:italic;}
+  .tirada-progress{display:flex;gap:0.4rem;margin-bottom:2rem;}
+  .tirada-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;}
+  .tirada-dot.active{background:var(--gold);}
+  .tirada-nueva{margin-top:1.5rem;padding:0.7rem 2rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
+  .tirada-nueva:hover{border-color:var(--gold);color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="modal" id="payModal">
+  <div class="modal-box" style="max-width:520px;overflow-y:auto;max-height:90vh;">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-step-a">
+      <div class="modal-title" id="modal-service-name">Servicio</div>
+      <div class="modal-amount" id="modal-amount">U$S 0</div>
+      <div class="modal-methods">
+        <div class="modal-method" onclick="copyPaypal()"><div class="modal-method-icon">💳</div><div><div class="modal-method-name">PayPal</div><div class="modal-method-detail">el.viajero.del.tiempook@gmail.com — tocar para copiar</div></div><button onclick="event.stopPropagation();openTutorial('paypal')" style="margin-left:auto;background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.58rem;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;">Ver tutorial →</button></div>
+        <div class="modal-method" onclick="copyAlias()"><div class="modal-method-icon">🇦🇷</div><div><div class="modal-method-name">Pesos AR</div><div class="modal-method-detail">Alias: ELVIAJERODELTIEMPO — tocar para copiar</div></div><button onclick="event.stopPropagation();openTutorial('ars')" style="margin-left:auto;background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.58rem;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;">Ver tutorial →</button></div>
+        <div class="modal-method" onclick="showQR()"><div class="modal-method-icon">₮</div><div><div class="modal-method-name">USDT TRC20</div><div class="modal-method-detail">Tocar para ver QR y dirección</div></div><button onclick="event.stopPropagation();openTutorial('usdt')" style="margin-left:auto;background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.58rem;cursor:pointer;font-family:'Montserrat',sans-serif;white-space:nowrap;">Ver tutorial →</button></div>
+      </div>
+      <div id="qr-section" style="display:none;margin-top:1.5rem;text-align:center;">
+        <img src="qr_usdt.jpg" class="qr-img" alt="QR USDT TRC20">
+        <div class="crypto-address">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</div>
+        <button onclick="copyAddress()" style="background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.4rem 1rem;font-size:0.62rem;letter-spacing:0.1em;cursor:pointer;font-family:'Montserrat',sans-serif;">Copiar dirección</button>
+      </div>
+      <div style="margin-top:1.5rem;padding-top:1.2rem;border-top:0.5px solid var(--border);display:flex;flex-direction:column;gap:0.8rem;">
+        <button onclick="showModalStep('b')" style="width:100%;padding:0.9rem;background:var(--gold);color:var(--deep);border:none;font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;font-weight:500;">✦ Enviar comprobante de donación</button>
+        <div style="text-align:center;">
+          <p style="font-size:0.62rem;color:var(--text-muted);margin-bottom:0.5rem;">¿Ya tenés un código de acceso?</p>
+          <div style="display:flex;gap:0.5rem;">
+            <input id="keyword-input-a" type="text" placeholder="Ingresá tu código..." style="flex:1;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.65rem 0.8rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;letter-spacing:0.08em;text-transform:uppercase;">
+            <button onclick="checkKeywordA()" style="padding:0.65rem 1rem;background:none;border:0.5px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;cursor:pointer;">Entrar</button>
+          </div>
+          <div id="keyword-msg-a" style="display:none;font-size:0.7rem;margin-top:0.4rem;"></div>
+        </div>
+      </div>
+      <div id="modal-next-btn" style="display:none;"></div>
+    </div>
+    <div id="modal-step-b" style="display:none;">
+      <div class="modal-title" style="margin-bottom:0.3rem;">Confirmá tu donación</div>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;">El Viajero revisa cada donación personalmente. Adjuntá tu comprobante y él te enviará tu código a la brevedad.</p>
+      <div style="display:flex;flex-direction:column;gap:0.8rem;">
+        <div><label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Tu nombre o seudónimo</label><input id="comp-nombre" type="text" placeholder="¿Cómo te llaman?" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;"></div>
+        <div><label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Tu email — aquí recibirás tu código</label><input id="comp-email" type="email" placeholder="tu@email.com" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;"></div>
+        <div>
+          <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Comprobante de pago</label>
+          <input id="comp-file" type="file" accept="image/*" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text-muted);padding:0.6rem;font-family:'Montserrat',sans-serif;font-size:0.72rem;cursor:pointer;">
+          <textarea id="comp-texto" placeholder="O describí brevemente tu pago: método, monto, fecha..." rows="2" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);border-top:none;color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.75rem;outline:none;resize:none;"></textarea>
+        </div>
+        <button onclick="enviarComprobante()" style="padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;">Enviar comprobante</button>
+        <div id="comp-msg" style="font-size:0.7rem;text-align:center;display:none;line-height:1.7;"></div>
+      </div>
+    </div>
+    <div id="modal-step-form" style="display:none;">
+      <div class="modal-title" style="margin-bottom:0.3rem;" id="form-title">Completá tus datos</div>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;" id="form-subtitle">El Viajero necesita estos datos para preparar tu lectura.</p>
+      <div id="form-fields" style="display:flex;flex-direction:column;gap:0.8rem;"></div>
+      <button onclick="enviarFormularioServicio()" style="margin-top:1rem;width:100%;padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;">✦ Enviar al Viajero</button>
+      <div id="form-msg" style="font-size:0.7rem;text-align:center;display:none;margin-top:0.8rem;line-height:1.7;"></div>
+    </div>
+    <div id="modal-step-c" style="display:none;">
+      <div class="modal-title" style="margin-bottom:0.3rem;">Ingresar código</div>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;">El Viajero te envió un código único a tu email. Ingrésalo aquí para acceder a tu tirada.</p>
+      <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+        <input id="keyword-input" type="text" placeholder="Ej: VJT-AB3X9K" style="flex:1;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.8rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;letter-spacing:0.1em;text-transform:uppercase;">
+        <button onclick="checkKeyword()" style="padding:0.8rem 1rem;background:none;border:0.5px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;cursor:pointer;">Entrar</button>
+      </div>
+      <div id="keyword-msg" style="display:none;font-size:0.7rem;margin-top:0.3rem;"></div>
+      <button onclick="showModalStep('b')" style="background:none;border:none;color:var(--text-muted);font-size:0.65rem;cursor:pointer;margin-top:1rem;padding:0;">← Volver a enviar comprobante</button>
+    </div>
+    <div id="modal-step-links" style="display:none;margin-top:1.2rem;padding-top:1rem;border-top:0.5px solid var(--border);text-align:center;">
+      <button onclick="showModalStep('c')" style="background:none;border:none;color:var(--text-muted);font-size:0.65rem;cursor:pointer;">Ya tengo mi código de acceso →</button>
+    </div>
+  </div>
+</div>
+<nav>
+  <div class="nav-logo">El Viajero del Tiempo</div>
+  <div class="nav-links">
+    <a href="#instantaneas" id="nav-instant">Lecturas</a>
+    <a href="#servicios" id="nav-services">Servicios</a>
+    <a href="#planes" id="nav-planes">Planes</a>
+    <a href="#donaciones" id="nav-pay">Donaciones</a>
+    <a href="#consulta" id="nav-booking">Donar</a>
+  </div>
+  <div class="nav-social">
+    <a href="https://www.instagram.com/el.viajero.del.tiempook/" target="_blank" title="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+    <a href="https://www.tiktok.com/@el.viajero.del.tiempook" target="_blank" title="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg></a>
+    <a href="https://t.me/elviajerodeltiempook_canal" target="_blank" title="Telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+  </div>
+  <div class="nav-lang">
+    <button class="lang-btn active" onclick="setLang('es')">ES</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-img"></div><div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-logo"><img src="viajerologo.jpg" alt="El Viajero del Tiempo"></div>
+    <div class="hero-ornament"></div>
+    <p class="hero-subtitle" id="hero-sub">Lecturas del Destino</p>
+    <h1 class="hero-title">El Viajero<br><em>del Tiempo</em></h1>
+    <p class="hero-tagline" id="hero-tag">"Ya estuve en tu futuro. Sé lo que viene... y lo que podés manejar."</p>
+    <p class="hero-tagline-sub" id="hero-tag-sub">Psicólogo · Antropólogo · Mercadólogo</p>
+    <button class="hero-cta" onclick="document.getElementById('consulta').scrollIntoView({behavior:'smooth'})"><span id="hero-btn">Comenzar mi consulta</span></button>
+  </div>
+</section>
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+<section class="sobre-mi">
+  <div class="section-inner">
+    <span class="section-label" id="sm-label">Sobre el Viajero</span>
+    <p class="section-body" id="sm-body">Desde pequeño tengo el don de viajar en el tiempo — hacia el pasado y hacia el futuro. Mis especialidades son la psicología, la antropología y la mercadología: tres caminos que convergen en uno solo: entender al ser humano en su totalidad. No siempre digo todo lo que veo. Hay verdades para las que aún no estás preparado. Mi trabajo no es revelarte el futuro — es darte la claridad exacta que necesitás hoy para llegar a donde tenés que llegar.</p>
+    <p class="quote" id="sm-quote">"Creo en la meritocracia. Lo que no se valora, no transforma. Cada consulta es una donación consciente destinada íntegramente a familias refugiadas de guerra."</p>
+  </div>
+</section>
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+<section id="instantaneas">
+  <div class="section-inner">
+    <span class="section-label" id="i-label">Lecturas Instantáneas</span>
+    <h2 class="section-title" id="i-title">Respuestas al instante</h2>
+    <p class="section-body" id="i-body">Pagás y recibís tu lectura de forma inmediata. Sin esperas.</p>
+    <div class="currency-bar">
+      <span class="currency-label" id="curr-label">Ver donación sugerida en:</span>
+      <button class="currency-btn active" onclick="setCurrency('USD')"><img class="cur-flag" src="https://flagcdn.com/w40/us.png" alt="" width="18" height="13" loading="lazy">USD $</button>
+      <button class="currency-btn" onclick="setCurrency('ARS')"><img class="cur-flag" src="https://flagcdn.com/w40/ar.png" alt="" width="18" height="13" loading="lazy">ARS $</button>
+      <button class="currency-btn" onclick="setCurrency('COP')"><img class="cur-flag" src="https://flagcdn.com/w40/co.png" alt="" width="18" height="13" loading="lazy">COP $</button>
+      <button class="currency-btn" onclick="setCurrency('MXN')"><img class="cur-flag" src="https://flagcdn.com/w40/mx.png" alt="" width="18" height="13" loading="lazy">MXN $</button>
+      <button class="currency-btn" onclick="setCurrency('EUR')"><img class="cur-flag" src="https://flagcdn.com/w40/eu.png" alt="" width="18" height="13" loading="lazy">EUR €</button>
+      <button class="currency-btn" onclick="setCurrency('VES')"><img class="cur-flag" src="https://flagcdn.com/w40/ve.png" alt="" width="18" height="13" loading="lazy">VES Bs.</button>
+      <button class="currency-btn" onclick="setCurrency('CLP')"><img class="cur-flag" src="https://flagcdn.com/w40/cl.png" alt="" width="18" height="13" loading="lazy">CLP $</button>
+      <button class="currency-btn" onclick="setCurrency('PEN')"><img class="cur-flag" src="https://flagcdn.com/w40/pe.png" alt="" width="18" height="13" loading="lazy">PEN S/</button>
+    </div>
+    <div class="instant-grid" id="instant-grid"></div>
+  </div>
+</section>
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+<section id="servicios">
+  <div class="section-inner">
+    <span class="section-label" id="s-label">Servicios</span>
+    <h2 class="section-title" id="s-title">Lo que el tiempo<br>puede revelarte</h2>
+    <p class="section-body" id="s-body">Cada lectura es un viaje único.</p>
+    <div class="services-grid" id="services-grid"></div>
+  </div>
+</section>
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+<section id="planes">
+  <div class="section-inner">
+    <span class="section-label" id="pl-label">Planes Mensuales</span>
+    <h2 class="section-title" id="pl-title">Tiradas diarias,<br>resultados continuos</h2>
+    <p class="section-body" id="pl-body">Suscribite y recibí tu lectura diaria todos los días del mes.</p>
+    <div class="planes-grid" id="planes-grid"></div>
+  </div>
+</section>
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+<section class="tirada-section" id="tirada">
+  <div class="section-inner">
+    <span class="section-label">Tirada Instantánea</span>
+    <h2 class="section-title" style="font-size:2rem;">Recibí tu lectura<br><em style="color:var(--gold-light)">ahora mismo</em></h2>
+    <p class="section-body">El Viajero te acompaña en este momento.</p>
+    <div class="tirada-widget">
+      <div class="tirada-progress" id="tirada-progress"></div>
+      <div class="tirada-step active" id="step-1">
+        <p class="tirada-question" id="tq-1">"Ya siento tu presencia... ¿cómo te llaman?"</p>
+        <input class="tirada-input" id="t-nombre" type="text" placeholder="¿Cómo te llaman?">
+        <button class="tirada-next" onclick="nextStep(1)"><span>Continuar</span></button>
+      </div>
+      <div class="tirada-step" id="step-1b">
+        <p class="tirada-question" id="tq-1b">"El tiempo necesita un punto de anclaje... ¿cuándo entraste a este mundo?"</p>
+        <div style="display:flex;gap:0.75rem;justify-content:center;margin-bottom:1.2rem;">
+          <input class="tirada-input" id="t-dia" type="number" placeholder="Día" min="1" max="31" style="width:80px;text-align:center;">
+          <input class="tirada-input" id="t-mes" type="number" placeholder="Mes" min="1" max="12" style="width:80px;text-align:center;">
+          <input class="tirada-input" id="t-anio" type="number" placeholder="Año" min="1900" max="2010" style="width:100px;text-align:center;">
+        </div>
+        <button class="tirada-next" onclick="nextStep('1b')"><span>Continuar</span></button>
+      </div>
+      <div class="tirada-step" id="step-2">
+        <p class="tirada-question" id="tq-2">"¿Sobre qué área de tu vida querés que el tiempo hable hoy?"</p>
+        <div class="tirada-options">
+          <button class="tirada-option" onclick="selectOption(this,'amor')">❤️ Amor y relaciones</button>
+          <button class="tirada-option" onclick="selectOption(this,'dinero')">💰 Dinero y economía</button>
+          <button class="tirada-option" onclick="selectOption(this,'salud')">🌿 Salud y bienestar</button>
+          <button class="tirada-option" onclick="selectOption(this,'general')">✨ Consulta general</button>
+        </div>
+        <button class="tirada-next" onclick="nextStep(2)"><span>Continuar</span></button>
+      </div>
+      <div class="tirada-step" id="step-3">
+        <p class="tirada-question" id="tq-3">"¿Qué tipo de lectura sentís que necesitás hoy?"</p>
+        <div class="tirada-options">
+          <button class="tirada-option" onclick="selectOption(this,'cartas')">✦ Tirada de Cartas</button>
+          <button class="tirada-option" onclick="selectOption(this,'runas')">ᚱ Tirada de Runas</button>
+          <button class="tirada-option" onclick="selectOption(this,'combo')">✦ᚱ Combo Cartas + Runas</button>
+        </div>
+        <button class="tirada-next" onclick="nextStep(3)"><span>Continuar</span></button>
+      </div>
+      <div class="tirada-step" id="step-3b">
+        <p class="tirada-question" id="tq-3b">"¿Qué forma de lectura resuena con lo que estás viviendo?"</p>
+        <div class="tirada-options" style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;">
+          <button class="tirada-option" onclick="selectTipoLectura(this,'runa_unica')">🎯 Runa Única</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'tres')">🔮 Tres Runas</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'cruz')">✝ Cruz</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'estrella')">⭐ Estrella</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'diamante')">💎 Diamante</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'guerrero')">⚔️ Guerrero</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'parejas')">💞 Parejas</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'freyja')">🌸 Freyja</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'proyectos')">📋 Proyectos</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'yggdrasil')">🌳 Yggdrasil</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'caminante')">🚶 Caminante</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'lanza_odin')">🏹 Lanza de Odín</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'martillo')">🔨 Martillo</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'salud')">💚 Salud</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'siete')">✦ Siete Runas</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'pentaculo')">⛤ Pentáculo</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'triskel')">☘ Triskel</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'rasgos')">🌿 Rasgos Heredados</button>
+          <button class="tirada-option" onclick="selectTipoLectura(this,'varas')">🪵 Varas</button>
+        </div>
+        <button class="tirada-next" onclick="nextStep('3b')"><span>Continuar</span></button>
+      </div>
+      <div class="tirada-step" id="step-4">
+        <p class="tirada-question" id="tq-4">"¿Hay algo específico que querés preguntarle al tiempo?"</p>
+        <input class="tirada-input" id="t-pregunta" type="text" placeholder="Tu pregunta (opcional)...">
+        <button class="tirada-next" onclick="generarTirada()"><span>Realizar mi tirada</span></button>
+      </div>
+      <div class="tirada-result" id="tirada-result">
+        <div class="tirada-loading" id="tirada-loading"><div style="font-size:2rem;margin-bottom:1rem;">🔮</div>El Viajero está consultando el tiempo...</div>
+        <div id="tirada-content" style="display:none;">
+          <div class="tirada-cards" id="tirada-cards"></div>
+          <div class="tirada-reading" id="tirada-reading"></div>
+          <div class="tirada-upsell" id="tirada-upsell"></div>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;">
+            <button class="tirada-next" onclick="openAgenda()"><span>📞 Hablar con el Viajero</span></button>
+            <button class="tirada-nueva" onclick="nuevaTirada()">Nueva tirada</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+<section id="proceso">
+  <div class="section-inner">
+    <span class="section-label" id="p-label">El proceso</span>
+    <h2 class="section-title" id="p-title">Cómo funciona</h2>
+    <div class="process-steps" id="process-steps"></div>
+  </div>
+</section>
+<section class="payment-section" id="donaciones">
+  <div class="section-inner">
+    <span class="section-label" id="pay-label">Medios de donación</span>
+    <h2 class="section-title" style="font-size:1.8rem;" id="pay-title">Donaciones seguras,<br>a tu medida</h2>
+    <div class="payment-grid">
+      <div class="payment-card">
+        <div class="payment-icon">💳</div>
+        <div class="payment-name">PayPal</div>
+        <div class="payment-detail">Dólares (USD) · Internacional<br>Con o sin cuenta PayPal</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:1rem;">
+          <a class="payment-action" href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank">Donar con PayPal</a>
+          <button class="payment-action" onclick="openTutorial('paypal')" style="font-size:0.58rem;opacity:0.75;">¿Cómo pago? Ver tutorial →</button>
+        </div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-icon">🇦🇷</div>
+        <div class="payment-name">Pesos AR</div>
+        <div class="payment-detail">Transferencia bancaria Argentina<br>Alias: <strong style="color:var(--gold)">ELVIAJERODELTIEMPO</strong></div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:1rem;">
+          <button class="payment-action" onclick="copyAlias()">Copiar Alias</button>
+          <button class="payment-action" onclick="openTutorial('ars')" style="font-size:0.58rem;opacity:0.75;">¿Cómo transfiero? Ver tutorial →</button>
+        </div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-icon">₮</div>
+        <div class="payment-name">USDT TRC20</div>
+        <div class="payment-detail">Criptomoneda · Desde cualquier país<br>Lemon · Binance · Ripio · Metamask · cualquier billetera</div>
+        <img src="qr_usdt.jpg" class="qr-img" alt="QR USDT TRC20">
+        <div class="crypto-address">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:1rem;">
+          <button class="payment-action" onclick="copyAddress()">Copiar Dirección</button>
+          <button class="payment-action" onclick="openTutorial('usdt')" style="font-size:0.58rem;opacity:0.75;">¿Cómo envío cripto? Ver tutorial →</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem;text-align:center;padding:1.8rem;border:0.5px solid var(--border);background:var(--surface2);">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);margin-bottom:0.4rem;">¿Tenés dudas antes de donar?</p>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:1.2rem;line-height:1.7;">El Viajero te escucha. Escribile directamente por Telegram antes de dar el paso.</p>
+      <a href="https://t.me/Elviajerodeltiempook" target="_blank" style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.75rem 2rem;border:0.5px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;transition:all 0.3s;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>
+        Escribir al Viajero
+      </a>
+    </div>
+
+  </div>
+</section>
+<section class="social-section">
+  <div class="section-inner">
+    <span class="section-label">Seguinos</span>
+    <h2 class="section-title" style="font-size:1.8rem;">Encontranos en</h2>
+    <div class="social-links">
+      <a class="social-link" href="https://www.instagram.com/el.viajero.del.tiempook/" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg> Instagram</a>
+      <a class="social-link" href="https://www.tiktok.com/@el.viajero.del.tiempook" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg> TikTok</a>
+      <a class="social-link" href="https://t.me/elviajerodeltiempook_canal" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg> Telegram</a>
+      <a class="social-link" href="https://www.facebook.com/profile.php?id=61563032677294" target="_blank" id="fb-link">📘 Facebook</a>
+    </div>
+  </div>
+</section>
+<section class="cta-section" id="consulta">
+  <div class="section-inner">
+    <span class="cta-ornament">✦</span>
+    <h2 class="cta-title" id="cta-title">Comenzá tu viaje</h2>
+    <p class="cta-body" id="cta-body">Completá el formulario y me pondré en contacto para coordinar tu consulta.</p>
+    <form class="booking-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field"><label class="form-label" id="fl-name">Nombre completo</label><input class="form-input" type="text" placeholder="Tu nombre completo" required></div>
+        <div class="form-field"><label class="form-label" id="fl-dob">Fecha de nacimiento</label><input class="form-input" type="date" required></div>
+      </div>
+      <div class="form-field"><label class="form-label" id="fl-email">Email</label><input class="form-input" type="email" placeholder="tu@email.com" required></div>
+      <div class="form-field"><label class="form-label" id="fl-service">Servicio</label><select class="form-select" id="f-service" onchange="showExtraFields()" required><option value="">— Seleccioná —</option></select></div>
+      <div class="extra-fields" id="extra-fields"></div>
+      <div class="form-field"><label class="form-label" id="fl-payment">Medio de donación</label><select class="form-select" required><option value="">— Seleccioná —</option><option value="paypal">💳 PayPal (USD)</option><option value="ars">🇦🇷 Pesos AR</option><option value="usdt">₮ USDT TRC20</option></select></div>
+      <div class="form-field">
+        <label class="form-label" id="fl-discount">Código de descuento (opcional)</label>
+        <div class="discount-row"><input class="form-input" type="text" id="discount-input" placeholder="AYUDA10"><button type="button" class="discount-btn" onclick="applyDiscount()">Aplicar</button></div>
+        <div class="discount-msg" id="discount-msg">✓ 10% de descuento aplicado</div>
+      </div>
+      <div class="form-field"><label class="form-label" id="fl-msg">Consulta (opcional)</label><input class="form-input" type="text" placeholder="¿Qué querés explorar?"></div>
+      <button type="submit" class="submit-btn"><span id="btn-submit">Enviar mi consulta</span></button>
+    </form>
+  </div>
+</section>
+<footer>
+  <div class="footer-logo">El Viajero del Tiempo</div>
+  <div class="footer-copy">© 2026 El Viajero del Tiempo · el.viajero.del.tiempook@gmail.com</div>
+</footer>
+<script>
+const rates={USD:1,ARS:1420,COP:3554,MXN:17.40,EUR:0.92,VES:36,PEN:3.70,CLP:940,BOB:6.91,PYG:7400,UYU:39,GTQ:7.8,HNL:24.7,NIO:36.6,CRC:515,DOP:58,CUP:24};
+const symbols={USD:'U$S',ARS:'$',COP:'$',MXN:'$',EUR:'€',VES:'Bs.',PEN:'S/',CLP:'$',BOB:'Bs.',PYG:'₲',UYU:'$',GTQ:'Q',HNL:'L',NIO:'C$',CRC:'₡',DOP:'RD$',CUP:'$'};
+let cur='USD',lang='es',discountApplied=false;
+const countryCurrency={AR:'ARS',CO:'COP',MX:'MXN',VE:'VES',PE:'PEN',CL:'CLP',BO:'BOB',PY:'PYG',UY:'UYU',GT:'GTQ',HN:'HNL',NI:'NIO',CR:'CRC',DO:'DOP',CU:'CUP',ES:'EUR',FR:'EUR',DE:'EUR',IT:'EUR',PT:'EUR',NL:'EUR',BE:'EUR',AT:'EUR',GR:'EUR',FI:'EUR',IE:'EUR',LU:'EUR',SK:'EUR',SI:'EUR',EE:'EUR',LV:'EUR',LT:'EUR',US:'USD',CA:'USD',AU:'USD',GB:'USD',CH:'USD',NZ:'USD'};
+async function detectCountry(){try{const r=await fetch('https://ipapi.co/json/');const d=await r.json();const c=countryCurrency[d.country_code]||'USD';if(c!==cur)setCurrency(c);}catch(e){}}
+setTimeout(detectCountry,300);
+const DISCOUNT_CODE='AYUDA10',DISCOUNT_PCT=0.10;
+let discountUsedToday=parseInt(localStorage.getItem('discountDate')===new Date().toDateString()?localStorage.getItem('discountCount')||0:0);
+function fmt(usd,c){let v=usd*(discountApplied?1-DISCOUNT_PCT:1)*rates[c];if(c==='USD'||c==='EUR')return symbols[c]+' '+Math.round(v);return symbols[c]+' '+Math.round(v).toLocaleString('es-AR');}
+function applyDiscount(){
+  const code=document.getElementById('discount-input').value.trim().toUpperCase();
+  const msg=document.getElementById('discount-msg');
+  if(code===DISCOUNT_CODE){
+    if(discountUsedToday>=5){msg.textContent='El cupo de hoy está agotado. Intentá mañana.';msg.style.color='var(--text-muted)';msg.style.display='block';return;}
+    discountApplied=true;discountUsedToday++;
+    localStorage.setItem('discountDate',new Date().toDateString());
+    localStorage.setItem('discountCount',discountUsedToday);
+    msg.textContent='✓ 10% de descuento aplicado';msg.style.color='var(--gold)';msg.style.display='block';
+  }else{msg.textContent='Código inválido';msg.style.color='#e74c3c';msg.style.display='block';}
+}
+const iP=[7,12,17];
+const sP=[5,15,55,35,40,40,45,50,12,12,7,12];
+const planesPrices=[25,45,75];
+const content={
+  es:{
+    heroSub:"Lecturas del Destino",heroTag:'"Ya estuve en tu futuro. Sé lo que viene... y lo que podés manejar."',heroTagSub:"Psicólogo · Antropólogo · Mercadólogo",heroBtn:"Comenzar mi consulta",
+    navInstant:"Lecturas",navServices:"Servicios",navPlanes:"Planes",navPay:"Pagos",navDonateing:"Donar",
+    smLabel:"Sobre el Viajero",smBody:"Desde pequeño tengo el don de viajar en el tiempo — hacia el pasado y hacia el futuro. Mis especialidades son la psicología, la antropología y la mercadología: tres caminos que convergen en uno solo: entender al ser humano en su totalidad. No siempre digo todo lo que veo. Hay verdades para las que aún no estás preparado. Mi trabajo no es revelarte el futuro — es darte la claridad exacta que necesitás hoy para llegar a donde tenés que llegar.",
+    smQuote:'"Creo en la meritocracia. Lo que no se valora, no transforma. Cada consulta es una donación consciente destinada íntegramente a familias refugiadas de guerra."',
+    iLabel:"Lecturas Instantáneas",iTitle:"Respuestas al instante",iBody:"Pagás y recibís tu lectura de forma inmediata. Sin esperas.",
+    sLabel:"Servicios",sTitle:"Lo que el tiempo<br>puede revelarte",sBody:"Cada lectura es un viaje único. Seleccioná la consulta que resuene con lo que necesitás saber.",
+    plLabel:"Planes Mensuales",plTitle:"Tiradas diarias,<br>resultados continuos",plBody:"Suscribite y recibí tu lectura diaria todos los días del mes.",
+    pLabel:"El proceso",pTitle:"Cómo funciona",payLabel:"Medios de donación",payTitle:"Donaciones seguras,<br>a tu medida",
+    ctaTitle:"Comenzá tu viaje",ctaBody:"Completá el formulario y me pondré en contacto para coordinar tu consulta.",
+    flName:"Nombre completo",flDob:"Fecha de nacimiento",flEmail:"Email",flService:"Servicio",flPayment:"Medio de donación",flDiscount:"Código de descuento (opcional)",flMsg:"Consulta (opcional)",btnSubmit:"Enviar mi consulta",currLabel:"Ver donación sugerida en:",
+    instant:[
+      {icon:"✦",name:"Tirada de Cartas",desc:"El Viajero consulta el tiempo y te entrega tu lectura de forma inmediata.",badge:"INSTANTÁNEO",img:"tirada de cartas.png"},
+      {icon:"ᚱ",name:"Tirada de Runas",desc:"El antiguo oráculo nórdico responde tus preguntas más urgentes.",badge:"INSTANTÁNEO",img:"TIRADA DE RUNAS.png"},
+      {icon:"✦ᚱ",name:"Combo Cartas + Runas",desc:"La lectura completa. Cartas y Runas juntas para máxima claridad.",badge:"AHORRÁS U$S 2",img:"combo-cartas-runas.png"},
+    ],
+    services:[
+      {num:"01",name:"3 Preguntas Concretas",desc:"Tres respuestas directas de sí o no. Claridad inmediata.",extra:null,img:"3 Preguntas Concretas.jpg"},
+      {num:"02",name:"Consulta Extendida (escrita)",desc:"Lectura profunda por mensaje. Sin horario fijo.",extra:null,img:"Consulta Extendida (escrita).jpg"},
+      {num:"03",name:"Consulta Extendida (llamada)",desc:"Sesión en vivo por llamada telefónica. Previa cita por email.",extra:null,img:"Consulta Extendida (llamada).jpg"},
+      {num:"04",name:"Mejorar Economía Personal",desc:"Apartá tu consulta y recibirás las indicaciones precisas que las cartas revelan. En 21 a 70 días comenzarás a ver los cambios.",extra:null,img:"ECONOMIA.png"},
+      {num:"05",name:"Regreso de Pareja",desc:"Una vez tomada la consulta, recibirás una guía exacta según lo que el tiempo revela. En 21 a 70 días comenzarás a ver los cambios.",extra:"pareja",img:"Regreso de Pareja.jpg"},
+      {num:"06",name:"Encontrar el Amor",desc:"Las cartas revelan el camino hacia el amor que buscás. En 21 a 70 días comenzarás a ver los cambios.",extra:null,img:"Encontrar el Amor.jpg"},
+      {num:"07",name:"Temas Judiciales",desc:"Completá tus datos y aboná. En menos de 2 horas recibís tu lectura completa.",extra:null,img:"JUDICIAL.jpg"},
+      {num:"08",name:"Fertilidad & Nuevo Comienzo",desc:"Las cartas revelan los bloqueos que impiden la llegada de una nueva vida.",extra:"pareja",img:"FERTILIDAD.jpg"},
+      {num:"09",name:"Bendición y Protección para el Camino",desc:"Para quienes emprenden un nuevo camino.",extra:null,img:"Bendición y Protección.jpg"},
+      {num:"10",name:"Limpieza Astral y de Aura",desc:"Liberá las energías que te frenan. Lectura entregada en menos de 2 horas.",extra:null,img:"Limpieza Astral.jpg"},
+      {num:"11",name:"Carta Natal Básica",desc:"Sol, Luna y Ascendente. Tu personalidad, emociones y cómo te ven los demás.",extra:"natal",img:"Carta Natal Básica.jpg"},
+      {num:"12",name:"Carta Natal Extendida",desc:"Mapa completo: 10 planetas, casas astrológicas, aspectos y análisis de propósito de vida.",extra:"natal",img:"Carta Natal Extendida.jpg"},
+    ],
+    planes:[
+      {name:"Básico",price:25,period:"donación mensual",badge:null,features:["1 tirada de cartas diaria","Entrega automática por email","Acceso al canal de Telegram"]},
+      {name:"Premium",price:45,period:"donación mensual",badge:"Más elegido",features:["1 tirada de cartas diaria","1 tirada de runas diaria","Entrega automática por email","Acceso al canal de Telegram","1 consulta escrita al mes"]},
+      {name:"VIP",price:75,period:"donación mensual",badge:null,features:["Tiradas diarias ilimitadas","Acceso al canal VIP privado","2 consultas escritas al mes","Prioridad en respuestas","Seguimiento personalizado"]},
+    ],
+    steps:[
+      {n:"I",title:"Elegís tu consulta",desc:"Seleccionás el tipo de lectura y el método de pago."},
+      {n:"II",title:"Completás tus datos",desc:"Llenás el formulario con tu información personal."},
+      {n:"III",title:"Confirmamos el turno",desc:"Me comunico por email para coordinar fecha y hora."},
+      {n:"IV",title:"La lectura",desc:"Realizamos la consulta. Recibís tu lectura completa."},
+    ],
+  },
+  en:{
+    heroSub:"Readings of Destiny",heroTag:'"I have already been to your future. I know what is coming... and what you can handle."',heroTagSub:"Psychologist · Anthropologist · Marketologist",heroBtn:"Begin my consultation",
+    navInstant:"Readings",navServices:"Services",navPlanes:"Plans",navPay:"Payments",navDonateing:"Donate",
+    smLabel:"About the Traveler",smBody:"Since childhood I have had the gift of traveling through time — to the past and to the future. My specialties are psychology, anthropology and marketing: three paths that converge into one: understanding the human being in its entirety.",
+    smQuote:'"I believe in meritocracy. What is not valued, does not transform. Each consultation is a conscious donation — every donation goes entirely to war refugee families."',
+    iLabel:"Instant Readings",iTitle:"Answers instantly",iBody:"Pay and receive your reading immediately. No waiting.",
+    sLabel:"Services",sTitle:"What time<br>can reveal to you",sBody:"Each reading is a unique journey.",
+    plLabel:"Monthly Plans",plTitle:"Daily readings,<br>continuous results",plBody:"Donate monthly and receive your daily reading every day of the month.",
+    pLabel:"The process",pTitle:"How it works",payLabel:"Donation methods",payTitle:"Secure donations,<br>your way",
+    ctaTitle:"Begin your journey",ctaBody:"Fill out the form and I will contact you to coordinate your consultation.",
+    flName:"Full name",flDob:"Date of birth",flEmail:"Email",flService:"Service",flPayment:"Donation method",flDiscount:"Discount code (optional)",flMsg:"Question (optional)",btnSubmit:"Send my consultation",currLabel:"View suggested donation in:",
+    instant:[
+      {icon:"✦",name:"Tarot Card Reading",desc:"The Traveler consults time and delivers your reading immediately.",badge:"INSTANT",img:"tirada de cartas.png"},
+      {icon:"ᚱ",name:"Rune Reading",desc:"The ancient Nordic oracle answers your most urgent questions.",badge:"INSTANT",img:"TIRADA DE RUNAS.png"},
+      {icon:"✦ᚱ",name:"Cards + Runes Combo",desc:"The complete reading. Cards and Runes together for maximum clarity.",badge:"SAVE U$S 5",img:"combo-cartas-runas.png"},
+    ],
+    services:[
+      {num:"01",name:"3 Concrete Questions",desc:"Three direct yes or no answers.",extra:null,img:"3 Preguntas Concretas.jpg"},
+      {num:"02",name:"Extended Consultation (written)",desc:"Deep reading by message. No fixed schedule.",extra:null,img:"Consulta Extendida (escrita).jpg"},
+      {num:"03",name:"Extended Consultation (call)",desc:"Live session by phone call.",extra:null,img:"Consulta Extendida (llamada).jpg"},
+      {num:"04",name:"Improve Personal Economy",desc:"Receive precise guidance from what the cards reveal. Results in 21 to 70 days.",extra:null,img:"ECONOMIA.png"},
+      {num:"05",name:"Return of a Partner",desc:"Exact guidance from what time reveals. Results in 21 to 70 days.",extra:"pareja",img:"Regreso de Pareja.jpg"},
+      {num:"06",name:"Find Love",desc:"The cards reveal the path to the love you seek.",extra:null,img:"Encontrar el Amor.jpg"},
+      {num:"07",name:"Legal Matters",desc:"In less than 2 hours you receive your full reading.",extra:null,img:"JUDICIAL.jpg"},
+      {num:"08",name:"Fertility & New Beginning",desc:"Personalized guidance on rituals, habits and astral alignment.",extra:"pareja",img:"FERTILIDAD.jpg"},
+      {num:"09",name:"Blessing & Protection for the Journey",desc:"A protection and blessing reading for your new path.",extra:null,img:"Bendición y Protección.jpg"},
+      {num:"10",name:"Astral & Aura Cleansing",desc:"Release the energies holding you back.",extra:null,img:"Limpieza Astral.jpg"},
+      {num:"11",name:"Basic Birth Chart",desc:"Sun, Moon and Ascendant.",extra:"natal",img:"Carta Natal Básica.jpg"},
+      {num:"12",name:"Extended Birth Chart",desc:"Complete map: 10 planets, astrological houses, aspects and life purpose analysis.",extra:"natal",img:"Carta Natal Extendida.jpg"},
+    ],
+    planes:[
+      {name:"Basic",price:25,period:"monthly donation",badge:null,features:["1 daily tarot reading","Automatic email delivery","Access to Telegram channel"]},
+      {name:"Premium",price:45,period:"monthly donation",badge:"Most popular",features:["1 daily tarot reading","1 daily rune reading","Automatic email delivery","Access to Telegram channel","1 written consultation per month"]},
+      {name:"VIP",price:75,period:"monthly donation",badge:null,features:["Unlimited daily readings","Access to private VIP channel","2 written consultations per month","Priority responses","Personalized follow-up"]},
+    ],
+    steps:[
+      {n:"I",title:"Choose your consultation",desc:"Select the type of reading and payment method."},
+      {n:"II",title:"Complete your details",desc:"Fill out the form with your personal information."},
+      {n:"III",title:"We confirm the appointment",desc:"I'll contact you by email to coordinate date and time."},
+      {n:"IV",title:"The reading",desc:"We hold the consultation. You receive your full reading."},
+    ],
+  }
+};
+let modalIsInstant=false,currentModalService='';
+// Formularios específicos por servicio
+const precisionNote='Esta información es para ser más preciso en la lectura del Viajero.';
+const serviceFormsConfig={
+  '3 Preguntas Concretas':{
+    title:'Tus 3 preguntas para el Viajero',
+    subtitle:'Escribí tus preguntas con claridad. Si consultás sobre otra persona, completá sus datos para mayor precisión.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-p1',label:'Pregunta 1',placeholder:'Escribí tu primera pregunta...',type:'text'},
+      {id:'sf-p2',label:'Pregunta 2',placeholder:'Escribí tu segunda pregunta...',type:'text'},
+      {id:'sf-p3',label:'Pregunta 3',placeholder:'Escribí tu tercera pregunta...',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre completo de la otra persona (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Cualquier detalle que sientas importante...',type:'textarea'},
+    ]
+  },
+  'Consulta Extendida (escrita)':{
+    title:'Consulta Extendida por Escrito',
+    subtitle:'El Viajero preparará una lectura profunda y te la enviará por email. Cuanto más detallés, más precisa será.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-area',label:'¿Sobre qué área consultás?',placeholder:'Amor, dinero, salud, trabajo...',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre completo de otra persona involucrada (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-detalle',label:'Contame tu situación',placeholder:'Cuanto más detallés, más precisa será la lectura...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Algo más que quieras que el Viajero sepa...',type:'textarea'},
+    ]
+  },
+  'Consulta Extendida (llamada)':{
+    title:'Reservá tu llamada con Alfonso',
+    subtitle:'El Viajero te llamará en el horario que elijas. No necesitás llamar vos.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-plataforma',label:'¿Por dónde preferís recibir la llamada?',type:'select',options:['Telegram','Instagram']},
+      {id:'sf-usuario',label:'Tu usuario en esa plataforma',placeholder:'@usuario — el Viajero te llamará ahí',type:'text'},
+      {id:'sf-horario',label:'Elegí tu horario disponible',type:'agenda'},
+      {id:'sf-otra-nombre',label:'Nombre completo de otra persona involucrada (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'¿Sobre qué querés que el Viajero se enfoque?',type:'textarea'},
+    ],
+    agenda:true
+  },
+  'Mejorar Economía Personal':{
+    title:'Consulta de Economía Personal',
+    subtitle:'El Viajero preparará tu guía. Podés elegir recibirla por escrito o coordinar una llamada de 10 minutos.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-modalidad',label:'¿Cómo preferís recibirla?',type:'select',options:['Por escrito (email)','Por llamada (10 min)']},
+      {id:'sf-usuario',label:'Tu usuario Telegram o Instagram (si elegís llamada)',placeholder:'@usuario',type:'text'},
+      {id:'sf-detalle',label:'Describí tu situación económica actual',placeholder:'¿Qué está trabando tu economía?',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Cualquier detalle que sientas importante...',type:'textarea'},
+    ]
+  },
+  'Regreso de Pareja':{
+    title:'Consulta de Regreso de Pareja',
+    subtitle:'El Viajero necesita los datos de ambas personas para leer los hilos del tiempo con precisión.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-pareja',label:'Nombre completo de tu pareja',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-fnac2',label:'Fecha de nacimiento de tu pareja',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-historia',label:'Contá lo que pasó entre ustedes',placeholder:'Cuánto tiempo estuvieron, qué pasó, cuándo se separaron...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Algo más que quieras que el Viajero sepa...',type:'textarea'},
+    ]
+  },
+  'Encontrar el Amor':{
+    title:'Encontrar el Amor',
+    subtitle:'Las cartas revelan el camino. Resultados concretos entre 21 y 70 días. Cuanto más preciso seas, más exacta será la lectura.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre de alguien en particular (si lo hay)',placeholder:'Nombre completo o "No hay nadie en mente"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-detalle',label:'¿Qué buscás en una relación? ¿Qué ha pasado hasta ahora?',placeholder:'Contame tu historia...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Cualquier detalle que sientas importante...',type:'textarea'},
+    ]
+  },
+  'Temas Judiciales':{
+    title:'Consulta de Temas Judiciales',
+    subtitle:'Completá tus datos. En menos de 2 horas recibís tu lectura completa. Cuanto más detallés, más precisa será.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-otra-nombre',label:'Nombre de la otra parte involucrada (si aplica)',placeholder:'Nombre y apellido o "No aplica"',type:'text'},
+      {id:'sf-otra-fnac',label:'Fecha de nacimiento de esa persona (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-detalle',label:'Describí tu situación judicial',placeholder:'Qué tipo de caso, en qué etapa está, qué necesitás saber...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Algo más que consideres importante...',type:'textarea'},
+    ]
+  },
+  'Fertilidad & Nuevo Comienzo':{
+    title:'Fertilidad & Nuevo Comienzo',
+    subtitle:'El Viajero puede orientarte por escrito o por llamada. Esta información es para ser más preciso en la lectura.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Tu fecha de nacimiento',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-modalidad',label:'¿Cómo preferís la consulta?',type:'select',options:['Por escrito (email)','Por llamada']},
+      {id:'sf-pareja',label:'Nombre completo de tu pareja (si aplica)',placeholder:'Nombre completo o "No aplica"',type:'text'},
+      {id:'sf-fnac2',label:'Fecha de nacimiento de tu pareja (si la sabés)',placeholder:'DD/MM/AAAA — para mayor precisión',type:'text'},
+      {id:'sf-detalle',label:'Contame tu situación',placeholder:'Cuánto tiempo llevan intentándolo, qué han consultado antes...',type:'textarea'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'Cualquier detalle que sientas importante...',type:'textarea'},
+    ]
+  },
+  'Carta Natal Básica':{
+    title:'Carta Natal Básica',
+    subtitle:'Sol, Luna y Ascendente. Tu mapa personal revelado. Esta información es esencial para la precisión de tu carta.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-hnac',label:'Hora de nacimiento',placeholder:'Ej: 14:30 — cuanto más exacta, más precisa la lectura',type:'text'},
+      {id:'sf-lnac',label:'Lugar de nacimiento',placeholder:'Ciudad, País',type:'text'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'¿Hay algo en particular que quieras explorar en tu carta?',type:'textarea'},
+    ]
+  },
+  'Carta Natal Extendida':{
+    title:'Carta Natal Extendida',
+    subtitle:'Mapa completo: 10 planetas, casas astrológicas y propósito de vida. Esta información es esencial para la precisión.',
+    fields:[
+      {id:'sf-nombre',label:'Tu nombre completo',placeholder:'Nombre y apellido',type:'text'},
+      {id:'sf-email',label:'Tu email',placeholder:'tu@email.com',type:'email'},
+      {id:'sf-fnac',label:'Fecha de nacimiento',placeholder:'DD/MM/AAAA',type:'text'},
+      {id:'sf-hnac',label:'Hora de nacimiento',placeholder:'Ej: 14:30 — cuanto más exacta, más precisa la lectura',type:'text'},
+      {id:'sf-lnac',label:'Lugar de nacimiento',placeholder:'Ciudad, País',type:'text'},
+      {id:'sf-obs',label:'Observación adicional',placeholder:'¿Hay algo específico que quieras explorar en tu carta natal?',type:'textarea'},
+    ]
+  },
+};
+
+const inputStyle='width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:Montserrat,sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;';
+const labelStyle='font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;';
+
+function buildServiceForm(name){
+  const cfg=serviceFormsConfig[name];
+  if(!cfg)return false;
+  document.getElementById('form-title').textContent=cfg.title;
+  document.getElementById('form-subtitle').textContent=cfg.subtitle;
+  const container=document.getElementById('form-fields');
+  container.innerHTML=cfg.fields.map(f=>{
+    if(f.type==='textarea') return `<div><label style="${labelStyle}">${f.label}</label><textarea id="${f.id}" placeholder="${f.placeholder}" rows="3" style="${inputStyle}resize:none;"></textarea></div>`;
+    if(f.type==='select') return `<div><label style="${labelStyle}">${f.label}</label><select id="${f.id}" style="${inputStyle}"><option value="">— Elegí una opción —</option>${f.options.map(o=>`<option value="${o}">${o}</option>`).join('')}</select></div>`;
+    if(f.type==='agenda') return `<div id="agenda-container"><label style="${labelStyle}">${f.label}</label><div id="agenda-slots" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem;"></div><input id="${f.id}" type="hidden" value=""></div>`;
+    return `<div><label style="${labelStyle}">${f.label}</label><input id="${f.id}" type="${f.type}" placeholder="${f.placeholder}" style="${inputStyle}"></div>`;
+  }).join('');
+  // Si hay campo agenda, cargar slots
+  if(cfg.fields.find(f=>f.type==='agenda')){
+    setTimeout(()=>loadAgendaSlots(), 100);
+  }
+  return true;
+}
+
+// ===== SISTEMA DE AGENDA =====
+// Horario disponible: 17:00 a 20:30 hora Argentina (GMT-3)
+// Días disponibles: lunes a jueves + domingos (sin viernes ni sábados)
+function getAvailableSlots(){
+  const now = new Date();
+  // Convertir "ahora" a hora Argentina
+  const arOffset = -3 * 60; // GMT-3 en minutos
+  const arNow = new Date(now.getTime() + (now.getTimezoneOffset() + arOffset) * 60000);
+  
+  const slots = [];
+  // Generar slots para los próximos 7 días
+  for(let d = 0; d < 10; d++){
+    const date = new Date(arNow);
+    date.setDate(arNow.getDate() + d);
+    const dow = date.getDay(); // 0=dom,1=lun,2=mar,3=mie,4=jue,5=vie,6=sab
+    
+    // Excluir viernes (5) y sábados (6)
+    if(dow === 5 || dow === 6) continue;
+    
+    // Generar slots de 15 min entre 17:00 y 20:30 AR
+    for(let h = 17; h < 21; h++){
+      for(let m = 0; m < 60; m += 15){
+        if(h === 20 && m > 15) break; // último slot 20:15 (termina 20:30)
+        
+        const slotAR = new Date(date);
+        slotAR.setHours(h, m, 0, 0);
+        
+        // Si es hoy, solo mostrar slots futuros (con 1h de anticipación)
+        if(d === 0 && slotAR <= new Date(arNow.getTime() + 60*60000)) continue;
+        
+        slots.push(slotAR);
+      }
+    }
+    if(slots.length >= 20) break; // máximo 20 slots visibles
+  }
+  return slots;
+}
+
+function formatSlotLocal(slotAR){
+  // slotAR es la hora en Argentina — convertir a hora local del usuario
+  const arOffset = -3 * 60;
+  const utcMs = slotAR.getTime() - arOffset * 60000;
+  const localDate = new Date(utcMs - slotAR.getTimezoneOffset() * 60000);
+  
+  const days = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  
+  const dayName = days[localDate.getDay()];
+  const dayNum = localDate.getDate();
+  const month = months[localDate.getMonth()];
+  const hours = String(localDate.getHours()).padStart(2,'0');
+  const mins = String(localDate.getMinutes()).padStart(2,'0');
+  
+  // Zona horaria del usuario
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const offset = -localDate.getTimezoneOffset()/60;
+  const tzLabel = offset >= 0 ? `GMT+${offset}` : `GMT${offset}`;
+  
+  return {
+    display: `${dayName} ${dayNum} ${month} — ${hours}:${mins}`,
+    tz: tzLabel,
+    ar: `${['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][slotAR.getDay()]} ${slotAR.getDate()} — ${String(slotAR.getHours()).padStart(2,'0')}:${String(slotAR.getMinutes()).padStart(2,'0')} AR`,
+    key: slotAR.getTime()
+  };
+}
+
+async function loadAgendaSlots(){
+  const container = document.getElementById('agenda-slots');
+  if(!container) return;
+  container.innerHTML = '<span style="font-size:0.7rem;color:var(--text-muted);">Cargando horarios...</span>';
+  
+  // Obtener slots bloqueados de Firebase
+  let bookedSlots = {};
+  try{
+    const snap = await db.ref('agenda_slots').once('value');
+    bookedSlots = snap.val() || {};
+  }catch(e){ bookedSlots = {}; }
+  
+  const slots = getAvailableSlots();
+  const btnStyle = 'padding:0.5rem 0.7rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:Montserrat,sans-serif;font-size:0.62rem;cursor:pointer;transition:all 0.2s;text-align:left;';
+  const btnSelectedStyle = 'padding:0.5rem 0.7rem;background:rgba(201,168,76,0.15);border:0.5px solid var(--gold);color:var(--gold);font-family:Montserrat,sans-serif;font-size:0.62rem;cursor:pointer;transition:all 0.2s;text-align:left;';
+  
+  if(!slots.length){
+    container.innerHTML = '<span style="font-size:0.7rem;color:var(--text-muted);">No hay horarios disponibles. Escribile al Viajero por Telegram.</span>';
+    return;
+  }
+  
+  container.innerHTML = slots.map(slot => {
+    const fmt = formatSlotLocal(slot);
+    const isBooked = bookedSlots[fmt.key] && bookedSlots[fmt.key].status === 'booked';
+    if(isBooked) return '';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('data-key', fmt.key);
+    btn.setAttribute('data-display', fmt.display);
+    btn.setAttribute('data-ar', fmt.ar);
+    btn.style.cssText = btnStyle;
+    btn.innerHTML = '<div>' + fmt.display + '</div><div style="font-size:0.55rem;color:var(--text-muted);margin-top:2px;">' + fmt.tz + '</div>';
+    btn.onclick = function(){ selectSlot(this, this.getAttribute('data-key'), this.getAttribute('data-display'), this.getAttribute('data-ar')); };
+    return btn.outerHTML;
+  }).join('');
+}
+
+let selectedSlotKey = null;
+let selectedSlotDisplay = null;
+let selectedSlotAR = null;
+
+function selectSlot(btn, key, display, ar){
+  // Deseleccionar todos
+  document.querySelectorAll('#agenda-slots button').forEach(b=>{
+    b.style.cssText = 'padding:0.5rem 0.7rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:Montserrat,sans-serif;font-size:0.62rem;cursor:pointer;transition:all 0.2s;text-align:left;';
+  });
+  // Seleccionar este
+  btn.style.cssText = 'padding:0.5rem 0.7rem;background:rgba(201,168,76,0.15);border:0.5px solid var(--gold);color:var(--gold);font-family:Montserrat,sans-serif;font-size:0.62rem;cursor:pointer;transition:all 0.2s;text-align:left;';
+  selectedSlotKey = key;
+  selectedSlotDisplay = display;
+  selectedSlotAR = ar;
+  document.getElementById('sf-horario').value = display + ' | ' + ar;
+}
+
+async function enviarFormularioServicio(){
+  const cfg=serviceFormsConfig[currentModalService];
+  if(!cfg)return;
+  const datos={};
+  let valido=true;
+  cfg.fields.forEach(f=>{
+    const el=document.getElementById(f.id);
+    if(el){
+      datos[f.label]=el.value.trim();
+      if(!el.value.trim()&&f.id!=='sf-usuario'&&f.id!=='sf-pareja'&&f.id!=='sf-hnac'){valido=false;}
+    }
+  });
+  if(!valido){const msg=document.getElementById('form-msg');msg.style.display='block';msg.style.color='#e5a000';msg.textContent='Por favor completá los campos obligatorios.';return;}
+  const nombre=Object.values(datos)[0]||'';
+  const email=datos['Tu email']||'';
+  // Bloquear slot si es consulta por llamada
+  if(selectedSlotKey && currentModalService.includes('llamada')){
+    try{
+      await db.ref('agenda_slots/'+selectedSlotKey).set({
+        status:'booked',
+        nombre,email,
+        slotAR:selectedSlotAR,
+        ts:Date.now()
+      });
+    }catch(e){console.log('Slot block error:',e);}
+  }
+  let msgTg=`✦ NUEVA CONSULTA — ${currentModalService}\n\n`;
+  Object.entries(datos).forEach(([k,v])=>{if(v)msgTg+=`${k}: ${v}\n`;});
+  if(selectedSlotAR) msgTg+=`\n📞 HORARIO: ${selectedSlotAR} (hora Argentina)\n⚠️ EL VIAJERO LLAMA — no el consultante`;
+  const botToken='7745791437:AAEzJPVXBUgLNRr0G-gsFPtLPpDSREd1-bI';
+  const chatId='-1002840755524';
+  const btn=document.querySelector('#modal-step-form button');
+  btn.textContent='Enviando...';btn.disabled=true;
+  try{
+    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatId,text:msgTg,parse_mode:'HTML'})});
+    const msg=document.getElementById('form-msg');
+    msg.style.display='block';msg.style.color='var(--gold)';
+    msg.textContent='✦ El Viajero recibió tu consulta. Te responderá a la brevedad.';
+    btn.style.display='none';
+  }catch(e){
+    const msg=document.getElementById('form-msg');
+    msg.style.display='block';msg.style.color='#e5a000';
+    msg.textContent='Hubo un inconveniente. Intentá nuevamente.';
+    btn.textContent='✦ Enviar al Viajero';btn.disabled=false;
+  }
+}
+
+function openModal(name,usdPrice,isInstant=false){
+  modalIsInstant=isInstant;currentModalService=name;
+  document.getElementById('modal-service-name').textContent=name;
+  const finalPrice=discountApplied?usdPrice*(1-DISCOUNT_PCT):usdPrice;
+  document.getElementById('modal-amount').textContent='U$S '+Math.round(finalPrice)+(discountApplied?' (−10%)':'');
+  document.getElementById('qr-section').style.display='none';
+  document.getElementById('modal-next-btn').style.display=isInstant?'block':'none';
+  document.getElementById('modal-step-links').style.display=isInstant?'block':'none';
+  showModalStep('a');
+  document.getElementById('payModal').classList.add('open');
+}
+function showModalStep(step){['a','b','c','form'].forEach(s=>{const el=document.getElementById('modal-step-'+s);if(el)el.style.display=s===step?'block':'none';});}
+function closeModal(){document.getElementById('payModal').classList.remove('open');selectedSlotKey=null;selectedSlotDisplay=null;selectedSlotAR=null;}
+function showQR(){document.getElementById('qr-section').style.display='block';}
+function copyPaypal(){
+  navigator.clipboard.writeText('el.viajero.del.tiempook@gmail.com');
+  const detail=document.querySelector('#modal-step-a .modal-method:nth-child(1) .modal-method-detail');
+  if(detail){const orig=detail.textContent;detail.textContent='✓ Copiado!';detail.style.color='var(--gold)';setTimeout(()=>{detail.textContent=orig;detail.style.color='';},1500);}
+  setTimeout(()=>showModalStep('b'),600);
+}
+function copyAlias(){
+  navigator.clipboard.writeText('ELVIAJERODELTIEMPO');
+  const detail=document.querySelector('#modal-step-a .modal-method:nth-child(2) .modal-method-detail');
+  if(detail){const orig=detail.textContent;detail.textContent='✓ Alias copiado!';detail.style.color='var(--gold)';setTimeout(()=>{detail.textContent=orig;detail.style.color='';},1500);}
+  setTimeout(()=>showModalStep('b'),600);
+}
+function copyAddress(){
+  navigator.clipboard.writeText('TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG');
+  const btn=event.target;btn.textContent='✓ Copiado';setTimeout(()=>{btn.textContent='Copiar dirección';},1500);
+}
+function enviarComprobante(){
+  const nombre=document.getElementById('comp-nombre').value.trim();
+  const email=document.getElementById('comp-email').value.trim();
+  const texto=document.getElementById('comp-texto').value.trim();
+  const fileInput=document.getElementById('comp-file');
+  const msg=document.getElementById('comp-msg');
+  if(!nombre){alert('Por favor ingresá tu nombre o seudónimo.');return;}
+  if(!email||!email.includes('@')){alert('Por favor ingresá un email válido.');return;}
+  const id='req_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+  const processRequest=()=>{
+    const req={id,ts:Date.now(),nombre,email,servicio:currentModalService,monto:document.getElementById('modal-amount').textContent,metodo:'—',comprobante:texto||'Sin descripción',comprobante_type:'text',status:'pending'};
+    db.ref('requests/'+id).set(req).then(()=>console.log('Firebase OK')).catch(e=>console.log('Firebase error:',e));
+    const tgToken='8626615964:AAFq3HGRDbtc5ItvGTV-WlNWjwY_0Qo5Oco';
+    const tgChat='8207523849';
+    const tgMsg=`✦ NUEVA DONACIÓN\n\nNombre: ${nombre}\nEmail: ${email}\nServicio: ${currentModalService}\nMonto: ${document.getElementById('modal-amount').textContent}\nDescripción: ${texto||'Sin descripción'}\nID: ${id}\n\n→ Panel: https://elviajerodeltiempo.net/admin.html`;
+    fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:tgChat,text:tgMsg})}).catch(()=>{});
+    msg.style.display='block';msg.style.color='var(--gold-light)';
+    msg.innerHTML='✦ Tu solicitud fue enviada.<br>El Viajero la revisará personalmente y recibirás tu código por email.<br><br><em style="font-size:0.65rem;color:var(--text-muted)">Tiempo estimado: menos de 1 hora</em>';
+    setTimeout(()=>{
+      if(buildServiceForm(currentModalService)){
+        const sf=document.getElementById('sf-nombre');if(sf)sf.value=nombre;
+        const se=document.getElementById('sf-email');if(se)se.value=email;
+        showModalStep('form');
+      }else{showModalStep('c');}
+    },2500);
+  };
+  if(fileInput.files&&fileInput.files[0]){
+    const reader=new FileReader();
+    reader.onload=()=>processRequest();
+    reader.readAsDataURL(fileInput.files[0]);
+  }else{processRequest();}
+}
+
+// ===== FIX: checkKeywordA — activa el widget correctamente =====
+function checkKeywordA(){
+  const inputEl=document.getElementById('keyword-input-a')||document.getElementById('keyword-input');
+  const val=inputEl.value.trim().toUpperCase();
+  const msgId=document.getElementById('keyword-input-a')?'keyword-msg-a':'keyword-msg';
+  const msg=document.getElementById(msgId);
+  msg.style.display='block';
+  if(!val||val.length<4){msg.textContent='Ingresá tu código de acceso.';msg.style.color='#e74c3c';return;}
+  msg.textContent='Verificando...';msg.style.color='var(--text-muted)';
+  db.ref('codes/'+val).once('value').then(snap=>{
+    const codeObj=snap.val();
+    if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
+    if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
+    if(!codeObj.expiry||Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
+    db.ref('codes/'+val).update({used:true,used_at:Date.now()});tiradaPaga=true;resolverTipoPagado(codeObj,val);
+    msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
+    setTimeout(()=>{
+      closeModal();
+      resetTirada();
+      if(codeObj.nombre){
+        tiradaData.nombre=codeObj.nombre;
+        document.getElementById('t-nombre').value=codeObj.nombre;
+        document.getElementById('step-1').classList.remove('active');
+        document.getElementById('step-2').classList.add('active');
+        currentStep=2;
+        updateProgress();
+      }
+      setTimeout(()=>document.getElementById('tirada').scrollIntoView({behavior:'smooth'}),100);
+    },900);
+  }).catch(()=>{msg.textContent='Error de conexión. Intentá nuevamente.';msg.style.color='#e74c3c';});
+}
+function checkKeyword(){
+  const inputEl=document.getElementById('keyword-input');
+  const val=inputEl.value.trim().toUpperCase();
+  const msg=document.getElementById('keyword-msg');
+  msg.style.display='block';
+  if(!val||val.length<4){msg.textContent='Ingresá tu código de acceso.';msg.style.color='#e74c3c';return;}
+  msg.textContent='Verificando...';msg.style.color='var(--text-muted)';
+  db.ref('codes/'+val).once('value').then(snap=>{
+    const codeObj=snap.val();
+    if(!codeObj){msg.textContent='Código no válido. Verificá tu email.';msg.style.color='#e74c3c';return;}
+    if(codeObj.used){msg.textContent='Este código ya fue utilizado.';msg.style.color='#e74c3c';return;}
+    if(!codeObj.expiry||Date.now()>codeObj.expiry){msg.textContent='Este código expiró. Contactá al Viajero.';msg.style.color='#e74c3c';return;}
+    db.ref('codes/'+val).update({used:true,used_at:Date.now()});tiradaPaga=true;resolverTipoPagado(codeObj,val);
+    msg.textContent='✦ Código verificado. El Viajero te espera...';msg.style.color='var(--gold)';
+    setTimeout(()=>{
+      closeModal();
+      resetTirada();
+      if(codeObj.nombre){
+        tiradaData.nombre=codeObj.nombre;
+        document.getElementById('t-nombre').value=codeObj.nombre;
+        document.getElementById('step-1').classList.remove('active');
+        document.getElementById('step-2').classList.add('active');
+        currentStep=2;
+        updateProgress();
+      }
+      setTimeout(()=>document.getElementById('tirada').scrollIntoView({behavior:'smooth'}),100);
+    },900);
+  }).catch(()=>{msg.textContent='Error de conexión. Intentá nuevamente.';msg.style.color='#e74c3c';});
+}
+
+function setCurrency(c){
+  cur=c;
+  document.querySelectorAll('.currency-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+c+"'")));
+  renderInstant(content[lang]);renderServices(content[lang]);renderPlanes(content[lang]);renderServiceSelect(content[lang]);
+}
+function renderInstant(c){
+  document.getElementById('instant-grid').innerHTML=c.instant.map((s,i)=>`
+    <div class="instant-card" style="padding:0;overflow:hidden;">
+      ${s.img?`<img src="${s.img}" alt="${s.name}" style="width:100%;height:160px;object-fit:cover;filter:brightness(0.75) saturate(0.85);display:block;" onerror="this.style.display='none'">`:''}
+      <div style="padding:1.5rem;">
+        <div class="instant-badge">${s.badge}</div>
+        <div class="instant-icon">${s.icon}</div>
+        <div class="instant-name">${s.name}</div>
+        <div class="instant-desc">${s.desc}</div>
+        <div class="instant-price">${fmt(iP[i],cur)}</div>
+        <button class="pay-btn" onclick="openModal('${s.name}',${iP[i]},true)"><span>${lang==='es'?'Donar':'Donate'}</span></button>
+      </div>
+    </div>`).join('');
+}
+function renderServices(c){
+  document.getElementById('services-grid').innerHTML=c.services.map((s,i)=>{
+    const imgTag=s.img?`<img class="service-img" src="${s.img}" alt="${s.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="service-img-placeholder" style="display:none">✦</div>`:`<div class="service-img-placeholder">✦</div>`;
+    return`<div class="service-card">${imgTag}<div class="service-body"><div class="service-num">${s.num}</div><div class="service-name">${s.name}</div><div class="service-desc">${s.desc}</div><div class="service-price"><strong>${fmt(sP[i],cur)}</strong></div><button class="pay-btn" onclick="openModal('${s.name}',${sP[i]})"><span>${lang==='es'?'Donar':'Donate'}</span></button></div></div>`;
+  }).join('');
+}
+function renderPlanes(c){
+  document.getElementById('planes-grid').innerHTML=c.planes.map((p,i)=>`
+    <div class="plan-card ${p.badge?'destacado':''}">
+      ${p.badge?`<div class="plan-badge">${p.badge}</div>`:''}
+      <div class="plan-name">${p.name}</div>
+      <div class="plan-price">${fmt(planesPrices[i],cur)}</div>
+      <div class="plan-period">${p.period}</div>
+      <ul class="plan-features">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <button class="pay-btn" onclick="openModal('Plan ${p.name}',${planesPrices[i]})"><span>${lang==='es'?'Donar mensualmente':'Donate monthly'}</span></button>
+    </div>`).join('');
+}
+function renderSteps(c){
+  document.getElementById('process-steps').innerHTML=c.steps.map(s=>`<div class="process-step"><div class="step-circle">${s.n}</div><div class="step-title">${s.title}</div><div class="step-desc">${s.desc}</div></div>`).join('');
+}
+function renderServiceSelect(c){
+  const all=[...c.instant.map((s,i)=>({name:s.name,price:iP[i],extra:null})),...c.services.map((s,i)=>({name:s.name,price:sP[i],extra:s.extra})),...c.planes.map((s,i)=>({name:'Plan '+s.name,price:planesPrices[i],extra:null}))];
+  document.getElementById('f-service').innerHTML=`<option value="">— ${lang==='es'?'Seleccioná':'Select'} —</option>`+all.map((s,i)=>`<option value="${i}" data-extra="${s.extra||''}">${s.name} — ${fmt(s.price,cur)}</option>`).join('');
+}
+function showExtraFields(){
+  const sel=document.getElementById('f-service');
+  const extra=sel.options[sel.selectedIndex]?.dataset.extra||'';
+  const c=document.getElementById('extra-fields');
+  const es=lang==='es';
+  if(extra==='pareja'){c.innerHTML=`<div class="form-row"><div class="form-field"><label class="form-label">${es?'Nombre (otra persona)':'Full name (other person)'}</label><input class="form-input" type="text" required></div><div class="form-field"><label class="form-label">${es?'Fecha de nacimiento (otra persona)':'Date of birth (other person)'}</label><input class="form-input" type="date" required></div></div>`;}
+  else if(extra==='natal'){c.innerHTML=`<div class="form-row"><div class="form-field"><label class="form-label">${es?'Hora de nacimiento':'Time of birth'}</label><input class="form-input" type="time" required></div><div class="form-field"><label class="form-label">${es?'Lugar de nacimiento':'Place of birth'}</label><input class="form-input" type="text" required></div></div>`;}
+  else{c.innerHTML='';}
+}
+function setLang(l){
+  lang=l;const c=content[l];
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  document.getElementById('hero-sub').textContent=c.heroSub;document.getElementById('hero-tag').textContent=c.heroTag;document.getElementById('hero-tag-sub').textContent=c.heroTagSub;document.getElementById('hero-btn').textContent=c.heroBtn;
+  document.getElementById('nav-instant').textContent=c.navInstant;document.getElementById('nav-services').textContent=c.navServices;document.getElementById('nav-planes').textContent=c.navPlanes;document.getElementById('nav-pay').textContent=c.navPay;document.getElementById('nav-booking').textContent=c.navDonateing;
+  document.getElementById('sm-label').textContent=c.smLabel;document.getElementById('sm-body').textContent=c.smBody;document.getElementById('sm-quote').textContent=c.smQuote;
+  document.getElementById('i-label').textContent=c.iLabel;document.getElementById('i-title').textContent=c.iTitle;document.getElementById('i-body').textContent=c.iBody;
+  document.getElementById('s-label').textContent=c.sLabel;document.getElementById('s-title').innerHTML=c.sTitle;document.getElementById('s-body').textContent=c.sBody;
+  document.getElementById('pl-label').textContent=c.plLabel;document.getElementById('pl-title').innerHTML=c.plTitle;document.getElementById('pl-body').textContent=c.plBody;
+  document.getElementById('p-label').textContent=c.pLabel;document.getElementById('p-title').textContent=c.pTitle;
+  document.getElementById('pay-label').textContent=c.payLabel;document.getElementById('pay-title').innerHTML=c.payTitle;
+  document.getElementById('cta-title').textContent=c.ctaTitle;document.getElementById('cta-body').textContent=c.ctaBody;
+  document.getElementById('fl-name').textContent=c.flName;document.getElementById('fl-dob').textContent=c.flDob;document.getElementById('fl-email').textContent=c.flEmail;document.getElementById('fl-service').textContent=c.flService;document.getElementById('fl-payment').textContent=c.flPayment;document.getElementById('fl-discount').textContent=c.flDiscount;document.getElementById('fl-msg').textContent=c.flMsg;document.getElementById('btn-submit').textContent=c.btnSubmit;
+  document.getElementById('curr-label').textContent=c.currLabel;
+  renderInstant(c);renderServices(c);renderPlanes(c);renderSteps(c);renderServiceSelect(c);
+}
+function handleSubmit(e){
+  e.preventDefault();
+  const btn=document.querySelector('.submit-btn span');
+  btn.textContent=lang==='es'?'✓ Solicitud enviada':'✓ Request sent';
+  setTimeout(()=>{btn.textContent=content[lang].btnSubmit;e.target.reset();document.getElementById('extra-fields').innerHTML='';discountApplied=false;document.getElementById('discount-msg').style.display='none';},3000);
+}
+document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+setLang('es');
+
+// ============ TIRADAS ============
+let tiradaData={nombre:'',fechaNacimiento:'',tipo:'',tirada:'',tipoLectura:'',pregunta:''};
+let currentStep=1;
+const totalSteps=4;
+function updateProgress(){
+  document.getElementById('tirada-progress').innerHTML=Array.from({length:totalSteps},(_,i)=>`<div class="tirada-dot ${i<currentStep?'active':''}"></div>`).join('');
+}
+function selectOption(btn,val){
+  btn.closest('.tirada-options').querySelectorAll('.tirada-option').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  if(currentStep===2)tiradaData.tipo=val;
+  if(currentStep===3){tiradaData.tirada=val;filtrarFormas();}
+}
+function selectTipoLectura(el,val){
+  document.querySelectorAll('#step-3b .tirada-option').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');tiradaData.tipoLectura=val;
+}
+function nextStep(step){
+  if(step===1){
+    const nombre=document.getElementById('t-nombre').value.trim();
+    if(!nombre){alert('Por favor ingresá tu nombre o seudónimo');return;}
+    tiradaData.nombre=nombre;
+    document.getElementById('tq-1b').textContent=`"El tiempo necesita un punto de anclaje... ¿cuándo entraste a este mundo, ${nombre}?"`;
+    document.getElementById('tq-2').textContent=`"${nombre}, ¿sobre qué área de tu vida querés que el tiempo hable hoy?"`;
+    document.getElementById('tq-3').textContent=`"${nombre}, ¿qué tipo de lectura sentís que necesitás hoy?"`;
+    document.getElementById('tq-3b').textContent=`"${nombre}, ¿qué forma de lectura resuena con lo que estás viviendo?"`;
+    document.getElementById('tq-4').textContent=`"${nombre}, ¿hay algo específico que querés preguntarle al tiempo?"`;
+  }
+  if(step==='1b'){
+    const dia=document.getElementById('t-dia').value.trim();
+    const mes=document.getElementById('t-mes').value.trim();
+    const anio=document.getElementById('t-anio').value.trim();
+    if(!dia||!mes||!anio){alert('Por favor ingresá tu fecha de nacimiento completa');return;}
+    tiradaData.fechaNacimiento=`${dia}/${mes}/${anio}`;
+  }
+  if(step===2&&!tiradaData.tipo){alert('Por favor elegí un área');return;}
+  if(step===3&&!tiradaData.tirada){alert('Por favor elegí un tipo de tirada');return;}
+  if(step==='3b'&&!tiradaData.tipoLectura){alert('Por favor elegí un tipo de lectura');return;}
+  document.getElementById(`step-${step}`).classList.remove('active');
+  if(step===1){document.getElementById('step-1b').classList.add('active');}
+  else if(step==='1b'){currentStep=2;document.getElementById('step-2').classList.add('active');}
+  else if(step===3){document.getElementById('step-3b').classList.add('active');}
+  else if(step==='3b'){currentStep=4;document.getElementById('step-4').classList.add('active');}
+  else{currentStep=step+1;document.getElementById(`step-${currentStep}`).classList.add('active');}
+  updateProgress();
+}
+const cartasTarot=[
+  {nombre:'El Loco',emoji:'🌀',pos:'Pasado',significado_corto:'Estás a un centímetro del precipicio y creés que es libertad.',mensaje:'Detenete hoy. No des ni un paso más hasta que sepas por qué estás huyendo.'},
+  {nombre:'El Mago',emoji:'🎩',pos:'Presente',significado_corto:'Tenés todas las herramientas, pero te da pánico usarlas.',mensaje:'Ejecutá ese proyecto que tenés encajonado. Sin excusas.'},
+  {nombre:'La Sacerdotisa',emoji:'🌙',pos:'Presente',significado_corto:'Tu silencio no es sabiduría, es un secreto que te está pudriendo.',mensaje:'Tu intuición te gritó hace meses lo que tenías que hacer.'},
+  {nombre:'La Emperatriz',emoji:'🌺',pos:'Abundancia',significado_corto:'Estás pariendo proyectos ajenos mientras lo tuyo muere de hambre.',mensaje:'Decí "no" a un favor que te pidan hoy. Observá quién se enoja.'},
+  {nombre:'El Emperador',emoji:'👑',pos:'Autoridad',significado_corto:'Tu estructura es una armadura que te impide respirar.',mensaje:'Delegá una tarea importante y no supervises el resultado.'},
+  {nombre:'El Hierofante',emoji:'🏛️',pos:'Tradición',significado_corto:'Seguís reglas que no escribiste para encajar en un lugar que odiás.',mensaje:'Cuestioná una tradición familiar que siempre te pareció absurda.'},
+  {nombre:'Los Enamorados',emoji:'💞',pos:'Elección',significado_corto:'No es amor, es la necesidad de no estar solo con vos mismo.',mensaje:'Tomá la decisión que venís postergando. Hoy. Sin vueltas.'},
+  {nombre:'El Carro',emoji:'🏆',pos:'Acción',significado_corto:'Vas a toda velocidad hacia una pared que vos mismo levantaste.',mensaje:'Cancelá una cita de negocios y pasá la tarde en silencio.'},
+  {nombre:'La Fuerza',emoji:'🦁',pos:'Consejo',significado_corto:'Estás domando un león que ya te mordió el corazón.',mensaje:'Gritá en un lugar donde nadie te escuche. Sacá la bestia.'},
+  {nombre:'El Ermitaño',emoji:'🕯️',pos:'Pasado',significado_corto:'Tu aislamiento no es espiritual, es miedo al rechazo.',mensaje:'Llamá a alguien y decile que necesitás hablar. Rompé el exilio.'},
+  {nombre:'La Rueda',emoji:'🎡',pos:'Destino',significado_corto:'El azar te va a quitar lo que no supiste cuidar.',mensaje:'Dejá de culpar al destino. Lo que viene es resultado de tu inercia.'},
+  {nombre:'La Justicia',emoji:'⚖️',pos:'Consejo',significado_corto:'Te llegó la factura de tus propios actos.',mensaje:'Pedí perdón de forma honesta a esa persona que dañaste.'},
+  {nombre:'El Colgado',emoji:'🔄',pos:'Pausa',significado_corto:'Tu sacrificio es una forma de manipulación.',mensaje:'Hacé algo drástico que rompa tu parálisis. Movete.'},
+  {nombre:'La Muerte',emoji:'💀',pos:'Transformación',significado_corto:'Lo que estás intentando salvar ya está podrido.',mensaje:'Cortá hoy mismo con esa situación que sabés que no tiene futuro.'},
+  {nombre:'La Templanza',emoji:'🌊',pos:'Equilibrio',significado_corto:'Estás mezclando agua con veneno y esperás un milagro.',mensaje:'Tomá una posición radical en un conflicto actual. Elegí un bando.'},
+  {nombre:'El Diablo',emoji:'🔥',pos:'Obstáculo',significado_corto:'La cadena que te ata tiene el candado abierto por dentro.',mensaje:'Identificá tu mayor tentación y no cedas a ella por 24 horas.'},
+  {nombre:'La Torre',emoji:'⚡',pos:'Ruptura',significado_corto:'Tu mentira era demasiado alta para sostenerse.',mensaje:'Dejá que todo explote. No intentes dar explicaciones.'},
+  {nombre:'La Estrella',emoji:'⭐',pos:'Esperanza',significado_corto:'Tu esperanza es una venda para no ver las heridas.',mensaje:'Mostrá tu vulnerabilidad a alguien en quien no confíes del todo.'},
+  {nombre:'La Luna',emoji:'🌛',pos:'Ilusión',significado_corto:'Tus monstruos son reales porque vos los alimentás.',mensaje:'Ese engaño que sospechás es cierto. El mayor mentiroso sos vos.'},
+  {nombre:'El Sol',emoji:'☀️',pos:'Resultado',significado_corto:'Tu éxito te está cegando y no ves a quién pisás.',mensaje:'Dales el crédito de un logro tuyo a otras personas.'},
+  {nombre:'El Juicio',emoji:'🎺',pos:'Renacimiento',significado_corto:'La llamada que ignoraste volvió a sonar. Atendé.',mensaje:'Hacé hoy esa llamada que te da terror hacer.'},
+  {nombre:'El Mundo',emoji:'🌍',pos:'Cierre',significado_corto:'Llegaste a la cima, pero estás completamente solo.',mensaje:'Abrí tu círculo. Invitá a alguien nuevo a tu espacio más íntimo.'},
+];
+const runasNordicas=[
+  {nombre:'Fehu',emoji:'ᚠ',pos:'Prosperidad',significado_corto:'Tu cuenta bancaria está llena, pero tu espíritu está en quiebra.',mensaje:'Regalá algo valioso hoy. Sin que nadie sepa que fuiste vos.'},
+  {nombre:'Uruz',emoji:'ᚢ',pos:'Fuerza',significado_corto:'Esa fuerza salvaje que reprimís te va a terminar enfermando.',mensaje:'Hacé un esfuerzo físico extremo hoy. Sentí el dolor de estar vivo.'},
+  {nombre:'Thurisaz',emoji:'ᚦ',pos:'Protección',significado_corto:'Estás a un paso de atacar a quien solo intenta ayudarte.',mensaje:'No reacciones. Ante la primera provocación de hoy, hacé silencio absoluto.'},
+  {nombre:'Ansuz',emoji:'ᚨ',pos:'Mensaje',significado_corto:'Tus palabras son mentiras elegantes para convencerte a vos mismo.',mensaje:'Pasá una hora escuchando el ruido de la calle sin decir una sola palabra.'},
+  {nombre:'Raidho',emoji:'ᚱ',pos:'Camino',significado_corto:'Estás viajando rápido, pero no tenés idea de a dónde vas.',mensaje:'Cambiá tu ruta habitual hoy. Perdete a propósito en tu propia ciudad.'},
+  {nombre:'Kenaz',emoji:'ᚲ',pos:'Conocimiento',significado_corto:'Tu luz está quemando a los que tenés cerca.',mensaje:'Apagá las luces de tu casa esta noche y quedate a oscuras hasta que sientas incomodidad.'},
+  {nombre:'Gebo',emoji:'ᚷ',pos:'Intercambio',significado_corto:'Ese regalo tiene un hilo invisible que te tiene atado del cuello.',mensaje:'Pagá el café de un extraño y retirate antes de que te puedan dar las gracias.'},
+  {nombre:'Wunjo',emoji:'ᚹ',pos:'Alegría',significado_corto:'Tu alegría es una máscara de plástico que se está derritiendo.',mensaje:'Admití algo que te hace profundamente infeliz hoy, frente a un espejo.'},
+  {nombre:'Hagalaz',emoji:'ᚺ',pos:'Transformación',significado_corto:'El granizo viene a destruir tu castillo de arena.',mensaje:'Tirá a la basura algo que esté roto y que guardes "por las dudas".'},
+  {nombre:'Naudhiz',emoji:'ᚾ',pos:'Necesidad',significado_corto:'Tu necesidad es un pozo sin fondo que devora a quien se acerca.',mensaje:'Pasá un día entero sin pedirle absolutamente nada a nadie.'},
+  {nombre:'Isa',emoji:'ᛁ',pos:'Pausa',significado_corto:'Estás congelado por miedo a cometer un error.',mensaje:'Hacé algo impulsivo hoy. Algo que no hayas planeado en absoluto.'},
+  {nombre:'Jera',emoji:'ᛃ',pos:'Ciclo',significado_corto:'Estás cosechando exactamente el veneno que sembraste.',mensaje:'Plantá una semilla real en tierra hoy y cuidala como si fuera tu redención.'},
+  {nombre:'Eihwaz',emoji:'ᛇ',pos:'Muerte/Renacimiento',significado_corto:'La muerte es el único puente que te queda por cruzar.',mensaje:'Cambiá radicalmente tu apariencia hoy. Que alguien no te reconozca.'},
+  {nombre:'Perthro',emoji:'ᛈ',pos:'Destino',significado_corto:'Tu secreto mejor guardado está a punto de ser revelado.',mensaje:'Contale una verdad incómoda a alguien que no esperes que te perdone.'},
+  {nombre:'Algiz',emoji:'ᛉ',pos:'Protección',significado_corto:'Tu protección es una mentira si no tenés el valor de pelear.',mensaje:'Establecé un límite verbal claro hoy con alguien que te invade.'},
+  {nombre:'Sowilo',emoji:'ᛊ',pos:'Éxito',significado_corto:'Tu éxito te está cegando y vas a chocar de frente.',mensaje:'Tomate un descanso total de pantallas y redes sociales por 12 horas.'},
+  {nombre:'Tiwaz',emoji:'ᛏ',pos:'Justicia',significado_corto:'Tu sacrificio es solo una excusa para sentirte un mártir.',mensaje:'Cedé en una discusión hoy, incluso si tenés la razón absoluta.'},
+  {nombre:'Berkano',emoji:'ᛒ',pos:'Crecimiento',significado_corto:'Algo está creciendo en vos y te aterra la responsabilidad.',mensaje:'Cuidá de algo o alguien hoy sin quejarte ni una sola vez.'},
+  {nombre:'Ehwaz',emoji:'ᛖ',pos:'Movimiento',significado_corto:'Tu socio es tu espejo, y no te gusta lo que ves.',mensaje:'Hacé una actividad en equipo donde no tengas el mando absoluto.'},
+  {nombre:'Mannaz',emoji:'ᛗ',pos:'Humanidad',significado_corto:'Te sentís solo en la multitud porque sos un extraño para vos.',mensaje:'Pasá una hora mirándote fijamente a los ojos en un espejo.'},
+  {nombre:'Laguz',emoji:'ᛚ',pos:'Flujo',significado_corto:'Te estás ahogando en tus emociones y decís que es "fluir".',mensaje:'Sumergí tu cabeza en agua fría hoy hasta que el pensamiento se detenga.'},
+  {nombre:'Ingwaz',emoji:'ᛜ',pos:'Potencial',significado_corto:'Estás encerrado en tu propio capullo y te estás asfixiando.',mensaje:'Mostrá un resultado final de algo que hayas estado ocultando.'},
+  {nombre:'Dagaz',emoji:'ᛞ',pos:'Amanecer',significado_corto:'La claridad te va a cegar porque preferís vivir en las sombras.',mensaje:'Abrí todas las cortinas de tu casa apenas salga el sol mañana.'},
+  {nombre:'Othala',emoji:'ᛟ',pos:'Herencia',significado_corto:'Tu herencia es una cadena de deudas emocionales.',mensaje:'Deshazte de un objeto familiar que te genere culpa o peso emocional.'},
+];
+function getRandom(arr,n){return[...arr].sort(()=>Math.random()-0.5).slice(0,n);}
+var tiradaPaga=false;
+var tiradaPermitida=null;
+function tipoDesdeTexto(t){t=(t||'').toLowerCase();if(t.includes('combo'))return 'combo';if(t.includes('runa')||t.includes('rune'))return 'runas';if(t.includes('carta')||t.includes('card')||t.includes('tarot'))return 'cartas';return null;}
+async function resolverTipoPagado(codeObj,codigo){
+  codeObj=codeObj||{};let tipo=null,origen='';
+  for(const k of ['servicio','service','serviceName','servicioNombre','producto','tipo','tirada']){
+    if(typeof codeObj[k]==='string'){tipo=tipoDesdeTexto(codeObj[k]);if(tipo){origen='codigo.'+k;break;}}
+  }
+  if(!tipo){
+    try{const snap=await db.ref('requests').once('value');
+      const reqs=Object.values(snap.val()||{});
+      const porCodigo=reqs.find(r=>r&&Object.values(r).some(v=>typeof v==='string'&&v.toUpperCase()===String(codigo||'').toUpperCase()));
+      if(porCodigo){tipo=tipoDesdeTexto(porCodigo.servicio);origen='solicitud con el codigo';}
+      if(!tipo&&codeObj.email){
+        const mias=reqs.filter(r=>r&&r.email===codeObj.email&&tipoDesdeTexto(r.servicio)).sort((a,b)=>(b.ts||0)-(a.ts||0));
+        const aprob=mias.filter(r=>/aprob|approv/i.test(r.status||''));
+        const r=(aprob[0]||mias[0]);if(r){tipo=tipoDesdeTexto(r.servicio);origen='ultima solicitud del email';}
+      }
+    }catch(e){console.log('Tipo: error leyendo solicitudes',e);}
+  }
+  tiradaPermitida=tipo||'cartas';
+  console.log('Tirada habilitada:',tiradaPermitida,'| origen:',origen||'por defecto','| datos del codigo:',codeObj);
+  aplicarBloqueoTipo();
+}
+function nuevaTirada(){
+  if(!tiradaPaga){
+    alert(lang==='es'?'✦ Cada lectura es única. Para una nueva tirada, elegí tu lectura y realizá tu donación: el Viajero te enviará un nuevo código.':'✦ Each reading is unique. For a new reading, choose it and make your donation: the Traveler will email you a new code.');
+    const sec=document.getElementById('instantaneas');if(sec)sec.scrollIntoView({behavior:'smooth'});
+    return;
+  }
+  resetTirada();
+}
+const FORMAS_CARTAS=['tres','cruz','estrella','diamante','guerrero','parejas','proyectos','caminante','salud','pentaculo','triskel'];
+function filtrarFormas(){
+  const t=tiradaData.tirada;
+  document.querySelectorAll('#step-3b .tirada-option').forEach(b=>{
+    const m=(b.getAttribute('onclick')||'').match(/'([a-z_]+)'\)/);const v=m&&m[1];
+    if(!b.dataset.orig)b.dataset.orig=b.textContent;
+    const ok=(t!=='cartas')||FORMAS_CARTAS.includes(v);
+    b.style.display=ok?'':'none';
+    if(!ok&&b.classList.contains('selected')){b.classList.remove('selected');tiradaData.tipoLectura='';}
+    if(v==='tres')b.textContent=t==='cartas'?'🔮 Tres Cartas':b.dataset.orig;
+  });
+}
+function aplicarBloqueoTipo(){
+  document.querySelectorAll('#step-3 .tirada-option').forEach(b=>{
+    const m=(b.getAttribute('onclick')||'').match(/'(cartas|runas|combo)'/);const v=m&&m[1];
+    if(tiradaPermitida){const ok=v===tiradaPermitida;b.style.display=ok?'':'none';b.classList.toggle('selected',ok);}
+    else{b.style.display='';}
+  });
+  if(tiradaPermitida)tiradaData.tirada=tiradaPermitida;
+  filtrarFormas();
+}
+async function generarTirada(){
+  if(!tiradaPaga){
+    const idx={cartas:0,runas:1,combo:2}[tiradaData.tirada]??0;
+    const srv=content[lang].instant[idx];
+    alert(lang==='es'?'✦ Para recibir tu lectura, primero realizá tu donación. El Viajero te enviará tu código de acceso por email.':'✦ To receive your reading, please make your donation first. The Traveler will email you your access code.');
+    openModal(srv.name,iP[idx],true);
+    return;
+  }
+  if(tiradaPermitida)tiradaData.tirada=tiradaPermitida;
+  tiradaPaga=false;tiradaPermitida=null;
+  tiradaData.pregunta=document.getElementById('t-pregunta').value.trim();
+  document.getElementById('step-4').classList.remove('active');
+  document.getElementById('tirada-result').classList.add('show');
+  document.getElementById('tirada-loading').style.display='block';
+  document.getElementById('tirada-content').style.display='none';
+  let simbolos=[];
+  if(tiradaData.tirada==='cartas'||tiradaData.tirada==='combo')simbolos=[...simbolos,...getRandom(cartasTarot,tiradaData.tirada==='combo'?2:3)];
+  if(tiradaData.tirada==='runas'||tiradaData.tirada==='combo')simbolos=[...simbolos,...getRandom(runasNordicas,tiradaData.tirada==='combo'?1:3)];
+  // Cartas boca abajo — el usuario las toca para revelar
+  window._totalCards=simbolos.length;
+  window._flippedCount=0;
+  window._doReading=doReading;
+  document.getElementById('tirada-cards').innerHTML=simbolos.map((s,i)=>`
+    <div class="tirada-card tirada-card-reveal" id="card-${i}" style="animation-delay:${i*0.3}s;" onclick="flipCard(${i})">
+      <div class="tirada-card-inner">
+        <div class="tirada-card-front">
+          <div style="font-size:2.8rem;color:var(--gold);opacity:0.2;">✦</div>
+          <div style="font-size:0.6rem;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:1rem;">Tocá para revelar</div>
+        </div>
+        <div class="tirada-card-back">
+          <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;">
+            <span style="font-size:2rem;">${s.emoji}</span>
+            <div><div style="font-family:Cormorant Garamond,serif;font-size:1.1rem;color:var(--gold);">${s.nombre}</div><div style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);">${s.pos}</div></div>
+          </div>
+          ${s.significado_corto?`<div style="font-family:Cormorant Garamond,serif;font-size:0.9rem;font-style:italic;color:var(--text);margin-bottom:0.8rem;line-height:1.5;">"${s.significado_corto}"</div>`:''}
+          ${s.mensaje?`<div style="font-size:0.7rem;color:var(--text-muted);line-height:1.7;border-top:0.5px solid var(--border);padding-top:0.8rem;">→ ${s.mensaje}</div>`:''}
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('tirada-loading').style.display='none';document.getElementById('tirada-content').style.display='block';document.getElementById('tirada-reading').textContent='';window.flipCard=function(i){
+    const card=document.getElementById('card-'+i);
+    if(card.classList.contains('flipped'))return;
+    card.classList.add('flipped');
+    window._flippedCount++;
+    if(window._flippedCount===window._totalCards){
+      setTimeout(()=>{
+        document.getElementById('tirada-loading').style.display='block';
+        document.getElementById('tirada-loading').textContent='El Viajero está interpretando los símbolos...';
+        window._doReading(simbolos);
+      },1000);
+    }
+  };
+  async function doReading(simbolos){
+  const tipoTexto={amor:'amor y relaciones',dinero:'dinero y economía',salud:'salud y bienestar',general:'consulta general'};
+  const tiradaTexto={cartas:'tirada de tarot',runas:'tirada de runas nórdicas',combo:'tirada combinada de tarot y runas'};
+  const lecturaTexto={runa_unica:'Runa Única',tres:'Tres Runas',cruz:'Cruz',estrella:'Estrella',diamante:'Diamante',guerrero:'Guerrero',parejas:'Parejas',freyja:'Freyja',proyectos:'Proyectos',yggdrasil:'Yggdrasil',caminante:'Caminante',lanza_odin:'Lanza de Odín',martillo:'Martillo de Thor',salud:'Salud',siete:'Siete Runas',pentaculo:'Pentáculo',triskel:'Triskel',rasgos:'Rasgos Heredados',varas:'Varas'};
+  const simbolosTexto=simbolos.map(s=>`${s.nombre} (${s.pos}) — "${s.significado_corto||''}"`).join('\n');
+  const prompt=`Eres El Viajero del Tiempo, un ser ancestral de más de 90 años que tiene el don de viajar al pasado y al futuro. Eres psicólogo, antropólogo y mercadólogo. Vives en Atenas, Grecia. Tu misión es ayudar a las personas con sabiduría, respeto y amor profundo.\n\nLa persona que consulta se llama ${tiradaData.nombre}.\nÁrea de consulta: ${tipoTexto[tiradaData.tipo]}.\nTipo de tirada: ${tiradaTexto[tiradaData.tirada]}.\nForma de lectura elegida: ${lecturaTexto[tiradaData.tipoLectura]||tiradaData.tipoLectura}.\n${tiradaData.pregunta?`Pregunta específica: "${tiradaData.pregunta}".`:'Lectura abierta sin pregunta específica.'}\nSímbolos que salieron:\n${simbolosTexto}.\n\nInstrucciones:\n- Dirijite a la persona por su nombre "${tiradaData.nombre}" al menos una vez.\n- NO menciones nunca que eres una IA.\n- Interpretá cada símbolo en relación al área consultada.\n- Sé profundo, sabio y esperanzador. NUNCA cierres con negatividad.\n- Al final mencioná sutilmente que puede hacer una donación mayor para una consulta personalizada.\n- Usá la palabra "donación" en lugar de "pago".\n- Tono cálido, íntimo, poético pero concreto. Máximo 250 palabras.\n- Escribí en español neutro latinoamericano.`;
+  try{
+    const response=await fetch('/api/lectura',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const data=await response.json();
+    const texto=data.text||'El tiempo guarda silencio por ahora. Intenta de nuevo.';
+    document.getElementById('tirada-loading').style.display='none';
+    document.getElementById('tirada-content').style.display='block';
+    document.getElementById('tirada-reading').textContent=texto;
+    const upsells={
+      amor:`${tiradaData.nombre}... hay algo más que vi y que no pude mostrarte aquí. Algo que tiene que ver con lo que más deseás en este momento. Si querés que lo vea con vos, escribime. Solo hace falta que me lo pidas.`,
+      dinero:`${tiradaData.nombre}... lo que está llegando para vos es real, pero tiene una puerta que todavía no encontraste. Yo la vi. Si querés que te la muestre, podemos hablar. Solo hace falta dar el primer paso.`,
+      salud:`${tiradaData.nombre}... el tiempo me mostró algo sobre tu energía que no pude decirte aquí. No es algo negativo — es algo que podés cambiar si lo sabés. Si querés que lo veamos juntos, buscame.`,
+      general:`${tiradaData.nombre}... hay algo que el tiempo quiso mostrarte hoy y no llegó a revelarse del todo. Si sentís que esta lectura tocó algo real en vos, podemos ir más profundo. Solo escribime.`
+    };
+    const upsellEl=document.getElementById('tirada-upsell');
+    const upsellText=upsells[tiradaData.tipo]||upsells.general;
+    const upsellDiv=document.createElement('div');
+    const upsellP=document.createElement('p');
+    upsellP.style.cssText='font-family:Cormorant Garamond,serif;font-size:1rem;font-style:italic;line-height:1.8;margin-bottom:1.2rem;';
+    upsellP.textContent=upsellText;
+    const upsellBtns=document.createElement('div');
+    upsellBtns.style.cssText='display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;margin-top:1rem;';
+    upsellBtns.innerHTML='<a href="https://t.me/Elviajerodeltiempook" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--gold);color:var(--gold);font-family:Montserrat,sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">✦ Escribirle al Viajero</a><a href="https://www.instagram.com/el.viajero.del.tiempook/" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--border);color:var(--text-muted);font-family:Montserrat,sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Seguir en Instagram</a><a href="https://www.tiktok.com/@el.viajero.del.tiempook" target="_blank" style="padding:0.7rem 1.5rem;border:0.5px solid var(--border);color:var(--text-muted);font-family:Montserrat,sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Seguir en TikTok</a>';
+    upsellDiv.appendChild(upsellP);upsellDiv.appendChild(upsellBtns);
+    upsellEl.innerHTML='';upsellEl.appendChild(upsellDiv);
+  }catch(e){
+    document.getElementById('tirada-loading').style.display='none';
+    document.getElementById('tirada-content').style.display='block';
+    document.getElementById('tirada-reading').textContent='El tiempo guarda silencio por un instante... Algo poderoso está por revelarse. Volvé a intentarlo en unos momentos.';
+  }
+  }
+}
+function resetTirada(){
+  ['tirada-cards','tirada-reading','tirada-upsell'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
+  const ld=document.getElementById('tirada-loading');if(ld){ld.style.display='block';ld.innerHTML='<div style="font-size:2rem;margin-bottom:1rem;">🔮</div>El Viajero está consultando el tiempo...';}
+  const ct=document.getElementById('tirada-content');if(ct)ct.style.display='none';
+  tiradaData={nombre:'',tipo:'',tirada:'',tipoLectura:'',pregunta:''};
+  currentStep=1;
+  document.getElementById('tirada-result').classList.remove('show');
+  document.querySelectorAll('.tirada-step').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tirada-option').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('t-nombre').value='';
+  document.getElementById('t-pregunta').value='';
+  document.getElementById('step-1').classList.add('active');
+  updateProgress();
+  aplicarBloqueoTipo();
+}
+updateProgress();
+</script>
+
+
+<!-- MODALES DE TUTORIAL DE PAGO -->
+<div id="tutorial-overlay" onclick="closeTutorial()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:10000;"></div>
+
+<div id="tutorial-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;width:min(520px,95vw);background:var(--surface);border:0.5px solid var(--gold);padding:2.5rem;max-height:85vh;overflow-y:auto;">
+  <button onclick="closeTutorial()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;">✕</button>
+  <div id="tutorial-content"></div>
+</div>
+
+<script>
+const tutorials = {
+  paypal: `
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">💳</div>
+      <h3 style="font-family:Cormorant Garamond,serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo donar con PayPal</h3>
+      <p style="font-size:0.72rem;color:var(--text-muted);">No necesitás tener cuenta PayPal. Podés pagar con tu tarjeta directamente.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">1</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Hacé clic en <strong style="color:var(--gold)">Donar con PayPal</strong></p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Se abre la página de PayPal con el destinatario ya cargado.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">2</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto en dólares (USD)</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Podés ingresar el monto que desees. PayPal lo convierte a tu moneda local automáticamente.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">3</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">¿Sin cuenta PayPal? Sin problema</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">En la pantalla de PayPal buscá la opción <strong style="color:var(--gold)">"Pagar con tarjeta de débito o crédito"</strong>. Ingresás los datos de tu tarjeta y listo — sin registrarte.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">4</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Tomá captura del comprobante</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Volvé aquí y enviá el comprobante. El Viajero te enviará tu código a la brevedad.</p>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem;">
+      <p style="font-size:0.65rem;color:var(--text-muted);text-align:center;margin-bottom:0.8rem;letter-spacing:0.08em;text-transform:uppercase;">▶ Video tutorial</p>
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+        <iframe src="https://www.youtube.com/embed/GGB6bL8UwkA" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0.5px solid var(--border);" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+    <a href="https://www.paypal.com/send?recipient=el.viajero.del.tiempook@gmail.com" target="_blank" style="display:block;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:Montserrat,sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">Ir a PayPal ahora →</a>
+  `,
+
+  ars: `
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">🇦🇷</div>
+      <h3 style="font-family:Cormorant Garamond,serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo transferir en Pesos AR</h3>
+      <p style="font-size:0.72rem;color:var(--text-muted);">Desde cualquier banco o billetera argentina. Mercado Pago, Lemon, BBVA, Santander, Brubank, lo que tengas.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">1</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Abrí tu app bancaria o billetera</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Mercado Pago, Lemon, tu banco, Brubank, MODO o cualquier otra.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">2</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ir a <strong style="color:var(--gold)">Transferir → Por alias</strong></p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Buscá la opción de transferir o enviar dinero y elegí la opción "por alias" o "CVU/alias".</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">3</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el alias exacto</p>
+          <div style="background:var(--deep);border:0.5px solid var(--gold);padding:0.6rem 1rem;margin-top:0.4rem;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:Montserrat,sans-serif;color:var(--gold);font-size:0.8rem;letter-spacing:0.05em;">ELVIAJERODELTIEMPO</span>
+            <button onclick="copyAlias();this.textContent='✓'" style="background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.6rem;cursor:pointer;font-family:Montserrat,sans-serif;">Copiar</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">4</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto y confirmá</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">El monto sugerido aparece en la página según tu moneda. Tomá captura del comprobante y envialo aquí.</p>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem;">
+      <p style="font-size:0.65rem;color:var(--text-muted);text-align:center;margin-bottom:0.8rem;letter-spacing:0.08em;text-transform:uppercase;">▶ Video tutorial</p>
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+        <iframe src="https://www.youtube.com/embed/3gVI1mufXSM" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0.5px solid var(--border);" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+    <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:Montserrat,sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
+  `,
+  usdt: `
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">₮</div>
+      <h3 style="font-family:Cormorant Garamond,serif;color:var(--gold);font-size:1.4rem;margin-bottom:0.3rem;">Cómo enviar USDT</h3>
+      <p style="font-size:0.72rem;color:var(--text-muted);">Desde cualquier país del mundo. Si ya tenés una billetera cripto, esto te lleva 2 minutos.</p>
+    </div>
+
+    <div style="background:rgba(212,175,55,0.08);border:0.5px solid var(--gold);padding:1rem;margin-bottom:1.2rem;">
+      <p style="font-size:0.7rem;color:var(--gold);margin-bottom:0.3rem;font-family:Montserrat,sans-serif;letter-spacing:0.08em;">⚠ IMPORTANTE</p>
+      <p style="font-size:0.7rem;color:var(--text-muted);line-height:1.6;">Enviá únicamente <strong style="color:var(--text)">USDT en red TRC20 (Tron)</strong>. Si enviás por otra red (ERC20, BEP20) el dinero se puede perder.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">1</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Abrí tu billetera cripto</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Funciona con cualquier billetera: <strong style="color:var(--text)">Lemon · Binance · Ripio · Belo · Trust Wallet · Metamask · Bitget · OKX · Coinbase</strong> o cualquier otra que tengas.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">2</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ir a <strong style="color:var(--gold)">Enviar → USDT → Red TRC20</strong></p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Buscá la opción "Enviar" o "Withdraw". Seleccioná USDT y asegurate de elegir la red <strong style="color:var(--gold)">TRC20</strong>.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">3</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Pegá la dirección o escaneá el QR</p>
+          <div style="background:var(--deep);border:0.5px solid var(--gold);padding:0.6rem 1rem;margin-top:0.4rem;">
+            <p style="font-size:0.6rem;color:var(--text-muted);margin-bottom:0.3rem;">Dirección USDT TRC20:</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">
+              <span style="font-family:monospace;color:var(--gold);font-size:0.65rem;word-break:break-all;">TEw4FcM4RyXcZ1TzVnTmCyXTUYJbGGXbvG</span>
+              <button onclick="copyAddress();this.textContent='✓'" style="min-width:50px;background:none;border:0.5px solid var(--gold);color:var(--gold);padding:0.3rem 0.6rem;font-size:0.6rem;cursor:pointer;font-family:Montserrat,sans-serif;">Copiar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="min-width:32px;height:32px;border:0.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:0.8rem;font-family:Montserrat,sans-serif;">4</div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text);margin-bottom:0.2rem;">Ingresá el monto y confirmá</p>
+          <p style="font-size:0.7rem;color:var(--text-muted);">Tomá captura del hash de transacción o del comprobante. Envialo aquí y El Viajero te enviará tu código.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.2rem;padding:0.8rem;border:0.5px solid var(--border);background:var(--surface2);">
+      <p style="font-size:0.68rem;color:var(--text-muted);line-height:1.6;text-align:center;">¿No tenés USDT todavía? Podés comprarlo en <strong style="color:var(--text)">Lemon Cash · Binance · Ripio · Belo</strong> con tu tarjeta o transferencia bancaria local.</p>
+    </div>
+
+    <div style="margin-top:1.5rem;">
+      <p style="font-size:0.65rem;color:var(--text-muted);text-align:center;margin-bottom:0.8rem;letter-spacing:0.08em;text-transform:uppercase;">▶ Video tutorial</p>
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+        <iframe src="https://www.youtube.com/embed/MjO0jnHMBOg" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0.5px solid var(--border);" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+    <button onclick="closeTutorial();document.getElementById('btn-enviar-comprobante')?.click();" style="display:block;width:100%;text-align:center;margin-top:1.8rem;padding:0.8rem;background:var(--gold);color:var(--deep);font-family:Montserrat,sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;">Enviar comprobante →</button>
+  `
+};
+
+function openTutorial(type) {
+  document.getElementById('tutorial-content').innerHTML = tutorials[type];
+  document.getElementById('tutorial-overlay').style.display = 'block';
+  document.getElementById('tutorial-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTutorial() {
+  document.getElementById('tutorial-overlay').style.display = 'none';
+  document.getElementById('tutorial-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+</script>
+
+
+<!-- MODAL AGENDA -->
+<div id="agenda-overlay" onclick="closeAgenda()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10000;"></div>
+<div id="agenda-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;width:min(540px,95vw);background:var(--surface);border:0.5px solid var(--gold);padding:2.5rem;max-height:90vh;overflow-y:auto;">
+  <button onclick="closeAgenda()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;">✕</button>
+  
+  <div style="text-align:center;margin-bottom:1.8rem;">
+    <div style="font-size:2rem;margin-bottom:0.5rem;">📞</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1.5rem;margin-bottom:0.4rem;">Llamada con El Viajero</h3>
+    <p style="font-size:0.72rem;color:var(--text-muted);line-height:1.7;">Una conversación directa. Sin video. Solo su voz y la tuya.<br>Por Meet o Instagram — vos elegís.</p>
+  </div>
+
+  <!-- DISPONIBILIDAD -->
+  <div style="background:rgba(212,175,55,0.06);border:0.5px solid var(--gold);padding:1rem 1.2rem;margin-bottom:1.5rem;text-align:center;">
+    <p style="font-size:0.65rem;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem;">Disponibilidad esta semana</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text);">⚠ Queda <strong style="color:var(--gold)">1 lugar disponible</strong></p>
+    <p style="font-size:0.65rem;color:var(--text-muted);margin-top:0.2rem;">La agenda del Viajero se completa rápido. Reservá ahora.</p>
+  </div>
+
+  <!-- SELECTOR DE HORARIO -->
+  <div style="margin-bottom:1.5rem;">
+    <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.8rem;">Elegí tu horario</label>
+    <div id="slots-container" style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;"></div>
+    <p style="font-size:0.62rem;color:var(--text-muted);margin-top:0.6rem;text-align:center;">Los horarios se muestran en tu zona horaria local 🌍</p>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div style="display:flex;flex-direction:column;gap:0.8rem;margin-bottom:1.5rem;">
+    <div>
+      <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Nombre completo</label>
+      <input id="ag-nombre" type="text" placeholder="Tu nombre" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;">
+    </div>
+    <div>
+      <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Email</label>
+      <input id="ag-email" type="email" placeholder="tu@email.com" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;">
+    </div>
+    <div>
+      <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Tu usuario de TikTok o Instagram</label>
+      <input id="ag-social" type="text" placeholder="@tuusuario" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;">
+    </div>
+    <div>
+      <label style="font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Plataforma de llamada</label>
+      <select id="ag-plataforma" style="width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;outline:none;box-sizing:border-box;">
+        <option value="">— Elegí una —</option>
+        <option value="meet">Google Meet</option>
+        <option value="instagram">Instagram</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="ag-msg" style="display:none;font-size:0.72rem;margin-bottom:1rem;text-align:center;"></div>
+
+  <button onclick="confirmarAgenda()" style="width:100%;padding:0.9rem;background:var(--gold);color:var(--deep);border:none;font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;font-weight:500;">✦ Confirmar mi llamada</button>
+</div>
+
+<script>
+// ── AGENDA ──────────────────────────────────────────────
+// Horarios disponibles en hora Argentina (ART, UTC-3)
+const SLOTS_ART = [
+  {day:1, h:9,  m:30},
+  {day:1, h:10, m:30},
+  {day:2, h:9,  m:30},
+  {day:2, h:18, m:0 },
+  {day:3, h:10, m:0 },
+  {day:3, h:19, m:0 },
+  {day:4, h:9,  m:30},
+  {day:4, h:20, m:0 },
+  {day:5, h:10, m:0 },
+  {day:5, h:18, m:30},
+];
+
+const DIAS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const DIAS_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+let selectedSlot = null;
+
+function getNextSlots() {
+  const now = new Date();
+  // Offset ART = UTC-3
+  const artOffset = -3 * 60;
+  const localOffset = -now.getTimezoneOffset();
+  const diffMin = artOffset - localOffset;
+
+  const slots = [];
+  for(let d = 0; d <= 14; d++) {
+    const date = new Date(now);
+    date.setDate(date.getDate() + d);
+    const dayOfWeek = date.getDay(); // 0=Dom
+    if(dayOfWeek === 0 || dayOfWeek === 6) continue; // solo lun-vie
+
+    const matchSlots = SLOTS_ART.filter(s => s.day === dayOfWeek);
+    for(const s of matchSlots) {
+      // Crear fecha en ART
+      const artDate = new Date(date);
+      artDate.setHours(s.h, s.m, 0, 0);
+      // Convertir a local
+      const localDate = new Date(artDate.getTime() + diffMin * 60000);
+      if(localDate > now) {
+        slots.push({artDate, localDate});
+      }
+    }
+    if(slots.length >= 4) break;
+  }
+  return slots.slice(0, 3); // máximo 3 slots visibles (escasez)
+}
+
+function formatSlot(localDate) {
+  const dia = DIAS_ES[localDate.getDay()];
+  const d = localDate.getDate();
+  const mes = localDate.toLocaleString('es', {month:'short'});
+  const hh = String(localDate.getHours()).padStart(2,'0');
+  const mm = String(localDate.getMinutes()).padStart(2,'0');
+  return `${dia} ${d} ${mes} · ${hh}:${mm}hs`;
+}
+
+function renderSlots() {
+  const container = document.getElementById('slots-container');
+  const slots = getNextSlots();
+  container.innerHTML = '';
+  slots.forEach((slot, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = formatSlot(slot.localDate);
+    btn.style.cssText = 'padding:0.7rem 0.5rem;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);font-family:"Montserrat",sans-serif;font-size:0.65rem;cursor:pointer;text-align:center;transition:all 0.2s;';
+    btn.onclick = function() {
+      document.querySelectorAll('#slots-container button').forEach(b => {
+        b.style.borderColor = 'var(--border)';
+        b.style.color = 'var(--text)';
+        b.style.background = 'var(--surface2)';
+      });
+      this.style.borderColor = 'var(--gold)';
+      this.style.color = 'var(--gold)';
+      this.style.background = 'rgba(212,175,55,0.08)';
+      selectedSlot = slot;
+    };
+    container.appendChild(btn);
+  });
+}
+
+function openAgenda() {
+  selectedSlot = null;
+  renderSlots();
+  document.getElementById('agenda-overlay').style.display = 'block';
+  document.getElementById('agenda-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAgenda() {
+  document.getElementById('agenda-overlay').style.display = 'none';
+  document.getElementById('agenda-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function confirmarAgenda() {
+  const nombre = document.getElementById('ag-nombre').value.trim();
+  const email = document.getElementById('ag-email').value.trim();
+  const social = document.getElementById('ag-social').value.trim();
+  const plataforma = document.getElementById('ag-plataforma').value;
+  const msg = document.getElementById('ag-msg');
+
+  if(!nombre || !email || !social || !plataforma) {
+    msg.style.display='block';msg.style.color='#e74c3c';
+    msg.textContent='Por favor completá todos los campos.';return;
+  }
+  if(!selectedSlot) {
+    msg.style.display='block';msg.style.color='#e74c3c';
+    msg.textContent='Elegí un horario para tu llamada.';return;
+  }
+
+  const slotLabel = formatSlot(selectedSlot.localDate);
+  const artLabel = selectedSlot.artDate.toLocaleString('es-AR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}) + ' (hora Argentina)';
+
+  msg.style.display='block';msg.style.color='var(--text-muted)';
+  msg.textContent='Confirmando...';
+
+  try {
+    // Guardar en Firebase
+    await db.ref('citas').push({
+      nombre, email, social, plataforma,
+      slot_local: slotLabel,
+      slot_art: artLabel,
+      ts: Date.now()
+    });
+
+    // Notificar por Telegram
+    const BOT_TOKEN = '7645656241:AAGmmL1GYn5GDEGpVfOo0T7g5O96oMK76as';
+    const CHAT_ID = '6218222481';
+    const texto = `📞 NUEVA CITA AGENDADA\n\n👤 ${nombre}\n📧 ${email}\n📱 ${social}\n🔗 Plataforma: ${plataforma}\n🕐 Horario (local): ${slotLabel}\n🇦🇷 En Argentina: ${artLabel}`;
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:CHAT_ID,text:texto})
+    });
+
+    // Email de confirmación al cliente
+    await emailjs.send('service_wxw598b','template_mytxxce',{
+      to_email: email,
+      to_name: nombre,
+      slot: slotLabel,
+      plataforma: plataforma === 'meet' ? 'Google Meet' : 'Instagram',
+      social: social
+    });
+
+    msg.style.color='var(--gold)';
+    msg.innerHTML='✦ ¡Tu llamada está confirmada!<br><small style="color:var(--text-muted)">Revisá tu email. El Viajero te contactará antes de la llamada.</small>';
+    document.querySelector('#agenda-modal button[onclick="confirmarAgenda()"]').style.display='none';
+
+  } catch(e) {
+    msg.style.color='#e74c3c';
+    msg.textContent='Error al confirmar. Escribinos por Telegram.';
+  }
+}
+</script>
+
+<!-- AUDIO AMBIENTE -->
+<audio id="bg-audio" loop preload="auto" style="display:none;">
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<!-- BOTÓN FLOTANTE DE MÚSICA -->
+<a href="https://t.me/Elviajerodeltiempook" target="_blank" id="tg-btn" title="Escribir al Viajero" style="
+  position:fixed;bottom:24px;left:24px;z-index:9999;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(20,10,40,0.85);border:1px solid var(--gold);
+  color:var(--gold);font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 12px rgba(212,175,55,0.3);
+  text-decoration:none;
+  transition:all 0.3s ease;
+">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>
+</a>
+
+<button id="audio-btn" onclick="toggleAudio()" title="Música" style="
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(20,10,40,0.85);border:1px solid var(--gold);
+  color:var(--gold);font-size:1.2rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 12px rgba(212,175,55,0.3);
+  transition:all 0.3s ease;
+">🔊</button>
+
+<script>
+(function(){
+  const audio = document.getElementById('bg-audio');
+  const btn = document.getElementById('audio-btn');
+  let playing = false;
+
+  // Intentar autoplay al primer click/touch en cualquier parte de la página
+  function startAudio(){
+    if(!playing){
+      audio.volume = 0.35;
+      audio.play().then(()=>{
+        playing = true;
+        btn.textContent = '🔊';
+      }).catch(()=>{});
+    }
+    document.removeEventListener('click', startAudio);
+    document.removeEventListener('touchstart', startAudio);
+  }
+
+  document.addEventListener('click', startAudio);
+  document.addEventListener('touchstart', startAudio);
+
+  // Intentar autoplay directo (funciona en algunos navegadores)
+  audio.volume = 0.35;
+  audio.play().then(()=>{ playing = true; }).catch(()=>{});
+
+  window.toggleAudio = function(){
+    if(playing){
+      audio.pause();
+      playing = false;
+      btn.textContent = '🔇';
+    } else {
+      audio.play();
+      playing = true;
+      btn.textContent = '🔊';
+    }
+  };
+})();
+</script>
+
+</body>
+</html>
