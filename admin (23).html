@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!-- v3.0 login con Firebase Auth -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>El Viajero — Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyDD6aDKcBWuABNCyjamSt8-Uj2wgeNC4P8",authDomain:"elviajerodeltiempo-a3d4c.firebaseapp.com",databaseURL:"https://elviajerodeltiempo-a3d4c-default-rtdb.firebaseio.com",projectId:"elviajerodeltiempo-a3d4c",storageBucket:"elviajerodeltiempo-a3d4c.firebasestorage.app",messagingSenderId:"242221363221",appId:"1:242221363221:web:0b06570abc8994378b9e1c"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+</script>
+<style>
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--deep:#0A0612;--surface:#130D2A;--surface2:#1C1438;--text:#F0EAD6;--text-muted:#A89CC0;--border:rgba(201,168,76,0.25);--red:#c0392b;--green:#1a7a4a;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--deep);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:300;min-height:100vh;}
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.2em;margin-bottom:0.5rem;}
+.login-sub{font-size:0.65rem;color:var(--text-muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:3rem;}
+.login-box{width:100%;max-width:320px;background:var(--surface);border:0.5px solid var(--border);padding:2rem;}
+.login-label{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;display:block;}
+.login-input{width:100%;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.9rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;margin-bottom:1rem;}
+.login-btn{width:100%;padding:0.9rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;}
+.login-btn:active{background:var(--gold);color:var(--deep);}
+.login-error{font-size:0.7rem;color:#e74c3c;margin-top:0.5rem;display:none;text-align:center;}
+#panel-screen{display:none;min-height:100vh;}
+.panel-header{background:var(--surface);border-bottom:0.5px solid var(--border);padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
+.panel-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold);letter-spacing:0.1em;}
+.panel-logout{font-size:0.6rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;background:none;border:0.5px solid var(--border);padding:0.35rem 0.7rem;cursor:pointer;font-family:'Montserrat',sans-serif;}
+.panel-tabs{display:flex;border-bottom:0.5px solid var(--border);background:var(--surface);}
+.tab-btn{flex:1;padding:0.8rem;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;background:none;border:none;color:var(--text-muted);cursor:pointer;font-family:'Montserrat',sans-serif;border-bottom:2px solid transparent;transition:all 0.2s;}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-badge{display:inline-block;background:var(--gold);color:var(--deep);font-size:0.55rem;padding:0.1rem 0.4rem;border-radius:10px;margin-left:0.3rem;font-weight:500;}
+.panel-body{padding:1rem;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.request-card{background:var(--surface);border:0.5px solid var(--border);padding:1.2rem;margin-bottom:1rem;position:relative;}
+.request-card.approved{border-color:var(--green);opacity:0.6;}
+.request-card.rejected{border-color:var(--red);opacity:0.6;}
+.req-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.8rem;}
+.req-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);}
+.req-time{font-size:0.6rem;color:var(--text-muted);}
+.req-row{display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:flex-start;}
+.req-label{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);min-width:70px;padding-top:1px;}
+.req-val{font-size:0.75rem;color:var(--text);flex:1;word-break:break-all;}
+.req-service{color:var(--gold-light);}
+.req-comprobante{margin-top:0.8rem;}
+.comp-img{width:100%;max-height:200px;object-fit:contain;border:0.5px solid var(--border);background:var(--surface2);cursor:pointer;}
+.comp-text{font-size:0.72rem;color:var(--text-muted);background:var(--surface2);padding:0.6rem;border:0.5px solid var(--border);line-height:1.6;}
+.req-actions{display:flex;gap:0.8rem;margin-top:1rem;}
+.btn-approve{flex:1;padding:0.8rem;background:var(--green);border:none;color:#fff;font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;}
+.btn-approve:active{opacity:0.8;}
+.btn-reject{flex:1;padding:0.8rem;background:none;border:1px solid var(--red);color:var(--red);font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;}
+.btn-reject:active{background:var(--red);color:#fff;}
+.status-badge{position:absolute;top:0.8rem;right:0.8rem;font-size:0.58rem;letter-spacing:0.1em;padding:0.2rem 0.6rem;border-radius:2px;}
+.badge-approved{background:rgba(26,122,74,0.2);color:#4caf84;border:0.5px solid var(--green);}
+.badge-rejected{background:rgba(192,57,43,0.2);color:#e57373;border:0.5px solid var(--red);}
+.badge-pending{background:rgba(201,168,76,0.1);color:var(--gold);border:0.5px solid var(--border);}
+.empty-state{text-align:center;padding:3rem 1rem;}
+.empty-icon{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:rgba(201,168,76,0.2);margin-bottom:1rem;}
+.empty-text{font-size:0.75rem;color:var(--text-muted);}
+.code-card{background:var(--surface);border:0.5px solid var(--border);padding:1rem;margin-bottom:0.8rem;}
+.code-val{font-family:monospace;font-size:1rem;color:var(--gold);letter-spacing:0.15em;margin:0.5rem 0;}
+.code-meta{font-size:0.65rem;color:var(--text-muted);}
+.code-used{opacity:0.4;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.5rem;}
+.stat-box{background:var(--surface);border:0.5px solid var(--border);padding:1rem;text-align:center;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);}
+.stat-label{font-size:0.6rem;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.2rem;}
+.img-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:100;align-items:center;justify-content:center;}
+.img-modal.open{display:flex;}
+.img-modal img{max-width:95vw;max-height:90vh;object-fit:contain;}
+.img-modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;}
+.refresh-btn{width:100%;padding:0.7rem;background:none;border:0.5px solid var(--border);color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:1rem;}
+.refresh-btn:active{border-color:var(--gold);color:var(--gold);}
+.sending-msg{font-size:0.7rem;color:var(--gold);text-align:center;margin-top:0.5rem;display:none;}
+.validate-section{background:var(--surface);border:0.5px solid var(--border);padding:1.2rem;margin-bottom:1rem;}
+.validate-title{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.8rem;}
+.validate-row{display:flex;gap:0.5rem;}
+.validate-input{flex:1;background:var(--surface2);border:0.5px solid var(--border);color:var(--text);padding:0.8rem 1rem;font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:500;letter-spacing:0.1em;outline:none;text-transform:uppercase;}
+.validate-btn{padding:0.8rem 1.2rem;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.validate-btn:active{background:var(--gold);color:var(--deep);}
+.validate-result{margin-top:0.8rem;font-size:0.75rem;padding:0.7rem;display:none;}
+.validate-ok{background:rgba(26,122,74,0.15);border:0.5px solid var(--green);color:#4caf84;}
+.validate-fail{background:rgba(192,57,43,0.15);border:0.5px solid var(--red);color:#e57373;}
+</style>
+</head>
+  <body>
+<div id="login-screen">
+  <div class="login-logo">El Viajero del Tiempo</div>
+  <div class="login-sub">Panel de administración</div>
+  <div class="login-box">
+    <form onsubmit="doLogin();return false;" autocomplete="on">
+      <label class="login-label">Email</label>
+      <input class="login-input" type="email" id="email-input" name="username" value="el.viajero.del.tiempook@gmail.com" autocomplete="username">
+      <label class="login-label">Contraseña de acceso</label>
+      <input class="login-input" type="password" id="pwd-input" name="password" placeholder="••••••••" autocomplete="current-password">
+      <button type="submit" class="login-btn">Entrar</button>
+    </form>
+    <div class="login-error" id="login-error">Email o contraseña incorrectos</div>
+  </div>
+</div>
+<div id="panel-screen">
+  <div class="panel-header">
+    <div class="panel-title">✦ Panel del Viajero</div>
+    <button class="panel-logout" onclick="logout()">Salir</button>
+  </div>
+  <div class="panel-tabs">
+    <button class="tab-btn active" onclick="showTab('pendientes',this)">Pendientes <span class="tab-badge" id="badge-pend">0</span></button>
+    <button class="tab-btn" onclick="showTab('historial',this)">Historial</button>
+    <button class="tab-btn" onclick="showTab('codigos',this)">Códigos</button>
+    <button class="tab-btn" onclick="showTab('stats',this)">Stats</button>
+  </div>
+  <div class="panel-body">
+    <div class="tab-content active" id="tab-pendientes">
+      <button class="refresh-btn" onclick="loadRequests()">↻ Actualizar solicitudes</button>
+      <div id="list-pendientes"></div>
+    </div>
+    <div class="tab-content" id="tab-historial">
+      <button class="refresh-btn" onclick="loadRequests()">↻ Actualizar</button>
+      <div id="list-historial"></div>
+    </div>
+    <div class="tab-content" id="tab-codigos">
+      <div class="validate-section">
+        <div class="validate-title">Validar código en sesión</div>
+        <div class="validate-row">
+          <input class="validate-input" id="validate-input" type="text" placeholder="VJT-XXXXXX">
+          <button class="validate-btn" onclick="validateCode()">Verificar</button>
+        </div>
+        <div class="validate-result" id="validate-result"></div>
+      </div>
+      <div id="list-codigos"></div>
+    </div>
+    <div class="tab-content" id="tab-stats">
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total solicitudes</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-pend">—</div><div class="stat-label">Pendientes</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-aprov">—</div><div class="stat-label">Aprobadas</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-codes">—</div><div class="stat-label">Códigos activos</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="img-modal" id="img-modal" onclick="closeImgModal()">
+  <button class="img-modal-close">✕</button>
+  <img id="img-modal-src" src="" alt="">
+</div>
+    <script>
+emailjs.init('vheByficzrg5tvPG5');
+
+function mostrarPanel(on){
+  document.getElementById('login-screen').style.display=on?'none':'flex';
+  document.getElementById('panel-screen').style.display=on?'block':'none';
+}
+
+function doLogin(){
+  const email=document.getElementById('email-input').value.trim();
+  const pwd=document.getElementById('pwd-input').value;
+  const err=document.getElementById('login-error');
+  err.style.display='none';
+  firebase.auth().signInWithEmailAndPassword(email,pwd).catch(()=>{
+    err.style.display='block';
+    document.getElementById('pwd-input').value='';
+  });
+}
+
+function logout(){
+  firebase.auth().signOut();
+  document.getElementById('pwd-input').value='';
+}
+
+firebase.auth().onAuthStateChanged(user=>{
+  if(user){ mostrarPanel(true); loadRequests(); }
+  else { mostrarPanel(false); }
+});
+
+function showTab(name,btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='codigos') loadCodes();
+  if(name==='stats') loadStats();
+}
+
+let allRequests=[];
+
+function loadRequests(){
+  db.ref('requests').once('value').then(snap=>{
+    allRequests=[];
+    snap.forEach(c=>{
+      const r=c.val(); r._key=c.key;
+      if(!r.status) r.status='pending';
+      r.status=r.status.toString().trim().toLowerCase();
+      allRequests.push(r);
+    });
+    allRequests.sort((a,b)=>b.ts-a.ts);
+    renderRequests();
+  });
+}
+
+function renderRequests(){
+  const pending=allRequests.filter(r=>r.status==='pending');
+  const hist=allRequests.filter(r=>r.status!=='pending');
+  document.getElementById('badge-pend').textContent=pending.length;
+  document.getElementById('list-pendientes').innerHTML=pending.length===0
+    ?'<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin solicitudes pendientes</div></div>'
+    :pending.map(r=>cardHTML(r)).join('');
+  document.getElementById('list-historial').innerHTML=hist.length===0
+    ?'<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin historial aún</div></div>'
+    :hist.map(r=>cardHTML(r)).join('');
+}
+
+function cardHTML(r){
+  const fecha=r.ts?new Date(r.ts).toLocaleString('es-AR'):'—';
+  const sLabel=r.status==='approved'?'Aprobado':r.status==='rejected'?'Rechazado':'Pendiente';
+  const sClass=r.status==='approved'?'badge-approved':r.status==='rejected'?'badge-rejected':'badge-pending';
+  const cClass=r.status==='approved'?'approved':r.status==='rejected'?'rejected':'';
+  const comp=r.comprobante_type==='image'&&r.comprobante
+    ?`<img class="comp-img" src="${r.comprobante}" onclick="openImgModal('${r.comprobante}')">`
+    :`<div class="comp-text">${r.comprobante||'Sin descripción'}</div>`;
+  const nom=(r.nombre||'').replace(/'/g,"\\'");
+  const em=(r.email||'').replace(/'/g,"\\'");
+  const sv=(r.servicio||'').replace(/'/g,"\\'");
+  const actions=r.status==='pending'
+    ?`<div class="req-actions">
+        <button class="btn-approve" onclick="approveRequest('${r._key}','${nom}','${em}','${sv}')">✓ Aprobar y enviar código</button>
+        <button class="btn-reject" onclick="rejectRequest('${r._key}')">✕ Rechazar</button>
+       </div>
+       <div class="sending-msg" id="msg-${r._key}"></div>`:'';
+  return `<div class="request-card ${cClass}" id="card-${r._key}">
+    <span class="status-badge ${sClass}">${sLabel}</span>
+    <div class="req-header"><div class="req-name">${r.nombre||'Sin nombre'}</div><div class="req-time">${fecha}</div></div>
+    <div class="req-row"><span class="req-label">Email</span><span class="req-val">${r.email||'—'}</span></div>
+    <div class="req-row"><span class="req-label">Servicio</span><span class="req-val req-service">${r.servicio||'—'}</span></div>
+    <div class="req-row"><span class="req-label">Monto</span><span class="req-val">${r.monto||'—'}</span></div>
+    <div class="req-comprobante">${comp}</div>
+    ${actions}
+  </div>`;
+}
+
+function generateCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let c='VJT-';
+  for(let i=0;i<6;i++) c+=chars[Math.floor(Math.random()*chars.length)];
+  return c;
+}
+
+function approveRequest(key,nombre,email,servicio){
+  const code=generateCode();
+  const expiry=Date.now()+7*24*60*60*1000;
+  const msgEl=document.getElementById('msg-'+key);
+  if(msgEl){msgEl.style.display='block';msgEl.textContent='Enviando código...';}
+  db.ref('codes/'+code).set({code,email,nombre,servicio,ts:Date.now(),expiry,used:false});
+  db.ref('requests/'+key).update({status:'approved',code_sent:code});
+  emailjs.send('service_wxw598b','template_kuo9m7a',{
+    to_email:email,to_name:nombre||'Viajero',codigo:code,servicio:servicio||'tu consulta',expiry_days:'7'
+  }).then(()=>{
+    if(msgEl){msgEl.textContent='✓ Código enviado: '+code;msgEl.style.color='var(--gold)';}
+    setTimeout(()=>loadRequests(),1500);
+  }).catch(()=>{
+    if(msgEl){msgEl.textContent='⚠ Email falló. Código: '+code+' — envialo manualmente a '+email;msgEl.style.color='#e5a000';}
+    setTimeout(()=>loadRequests(),3000);
+  });
+}
+
+function rejectRequest(key){
+  if(!confirm('¿Rechazar esta solicitud?')) return;
+  db.ref('requests/'+key).update({status:'rejected'});
+  loadRequests();
+}
+
+function loadCodes(){
+  db.ref('codes').once('value').then(snap=>{
+    const codes=[];
+    snap.forEach(c=>{const v=c.val();v._key=c.key;codes.push(v);});
+    codes.sort((a,b)=>b.ts-a.ts);
+    const el=document.getElementById('list-codigos');
+    if(!codes.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">Sin códigos generados</div></div>';return;}
+    el.innerHTML=codes.map(c=>{
+      const fecha=c.ts?new Date(c.ts).toLocaleString('es-AR'):'—';
+      const exp=c.expiry?new Date(c.expiry).toLocaleDateString('es-AR'):'—';
+      const expired=c.expiry&&Date.now()>c.expiry;
+      return `<div class="code-card ${c.used||expired?'code-used':''}">
+        <div class="code-val">${c.code||c._key}</div>
+        <div class="code-meta">Para: ${c.nombre||'—'} · ${c.email||'—'}</div>
+        <div class="code-meta">Servicio: ${c.servicio||'—'}</div>
+        <div class="code-meta">Expira: ${exp} · ${c.used?'✓ Usado':expired?'⚠ Expirado':'● Activo'}</div>
+        <div class="code-meta">Generado: ${fecha}</div>
+      </div>`;
+    }).join('');
+  });
+}
+
+function validateCode(){
+  const val=document.getElementById('validate-input').value.trim().toUpperCase();
+  const res=document.getElementById('validate-result');
+  if(!val){res.style.display='none';return;}
+  res.style.display='block';res.className='validate-result';res.textContent='Verificando...';
+  db.ref('codes/'+val).once('value').then(snap=>{
+    const c=snap.val();
+    if(!c){res.className='validate-result validate-fail';res.textContent='✕ Código no encontrado.';return;}
+    if(c.used){res.className='validate-result validate-fail';res.textContent='✕ Ya utilizado por '+(c.nombre||'usuario desconocido')+'.';return;}
+    if(c.expiry&&Date.now()>c.expiry){res.className='validate-result validate-fail';res.textContent='✕ Expirado el '+new Date(c.expiry).toLocaleDateString('es-AR')+'.';return;}
+    res.className='validate-result validate-ok';
+    res.textContent='✓ Válido · Para: '+(c.nombre||'—')+' · Servicio: '+(c.servicio||'—');
+  }).catch(()=>{res.className='validate-result validate-fail';res.textContent='Error de conexión.';});
+}
+
+function loadStats(){
+  db.ref('requests').once('value').then(snap=>{
+    let total=0,pend=0,aprov=0;
+    snap.forEach(c=>{const r=c.val();total++;const s=(r.status||'pending').toLowerCase();if(s==='pending')pend++;if(s==='approved')aprov++;});
+    document.getElementById('stat-total').textContent=total;
+    document.getElementById('stat-pend').textContent=pend;
+    document.getElementById('stat-aprov').textContent=aprov;
+  });
+  db.ref('codes').once('value').then(snap=>{
+    let active=0;
+    snap.forEach(c=>{const v=c.val();if(!v.used&&(!v.expiry||Date.now()<v.expiry))active++;});
+    document.getElementById('stat-codes').textContent=active;
+  });
+}
+
+function openImgModal(src){document.getElementById('img-modal-src').src=src;document.getElementById('img-modal').classList.add('open');}
+function closeImgModal(){document.getElementById('img-modal').classList.remove('open');}
+</script>
+</body>
+</html>
